@@ -1,3 +1,1 @@
 # SpyXComponent.js
-
-Test push
