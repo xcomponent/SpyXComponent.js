@@ -3,8 +3,8 @@ import { getApiList, selectApi, formSubmit } from "actions/configForm";
 import { GET_API_LIST, SELECT_API, FORM_SUBMIT } from "actions/configForm";
 import { configFormReducer } from "reducers/configForm";
 
-describe('Test configForm reducer', () => {
-    it('When an GET_API_LIST action is received, it should update the apis array', () => {
+describe("Test configForm reducer", () => {
+    it("When an GET_API_LIST action is received, it should update the apis array", () => {
         let stateBefore = {
             apis: [],
             selectedApi: undefined,
@@ -30,7 +30,7 @@ describe('Test configForm reducer', () => {
         ).toEqual(stateAfter);
     });
 
-    it('When an SELECT_API action is received, it should update the selectedApi field', () => {
+    it("When an SELECT_API action is received, it should update the selectedApi field", () => {
         let selectedApi = "Hello.xcApi";
         let serverUrl = "wss://localhost:443";        
         let apis = ["Hello.xcApi", "GoodBye.xcApi"];
@@ -58,7 +58,7 @@ describe('Test configForm reducer', () => {
         ).toEqual(stateAfter);
     });
 
-    it('When an FORM_SUBMIT action is received, it should update the formSubmited field', () => {
+    it("When an FORM_SUBMIT action is received, it should update the formSubmited field", () => {
         let selectedApi = "Hello.xcApi";
         let serverUrl = "wss://localhost:443";        
         let apis = ["Hello.xcApi", "GoodBye.xcApi"];

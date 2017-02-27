@@ -8,28 +8,44 @@ import ConfigForm from "./components/ConfigForm";
 import { SpyReducer } from "./reducers/SpyReducer";
 import * as logger from "redux-logger";
 import thunk from "redux-thunk";
-import Spy from "./components/Spy";
+import CompositionModel from "./components/CompositionModel";
+import { setCompositionModel } from "actions/compositionModel";
 
 const middleware = applyMiddleware(thunk, logger());
 const store = createStore(SpyReducer, middleware);
 
-let App = (mapState) => {
-  if (mapState.submitted)
+let App = (props) => {
+  if (!props.submitted) {
     return (
-      <Spy serverUrl={mapState.serverUrl} api={mapState.selectedApi}/>
+      <ConfigForm />
     );
+  }
+  if (props.submitted && !props.compositionModel.initialized) {
+    props.setCompositionModel(props.selectedApi, props.serverUrl);
+    return (
+      <ConfigForm />
+    );
+  }
   return (
-    <ConfigForm />
+    <CompositionModel compositionModel={props.compositionModel.value} />
   );
 };
 const mapStateToProps = (state) => {
   return {
     submitted: state.configForm.formSubmited,
     selectedApi: state.configForm.selectedApi,
-    serverUrl: state.configForm.serverUrl
+    serverUrl: state.configForm.serverUrl,
+    compositionModel: state.compositionModel
   };
 };
-App = connect(mapStateToProps)(App);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setCompositionModel: (xcApiName, serverUrl) => {
+      dispatch(setCompositionModel(xcApiName, serverUrl));
+    }
+  };
+};
+App = connect(mapStateToProps, mapDispatchToProps)(App);
 
 ReactDOM.render(
   <Provider store={store} >
