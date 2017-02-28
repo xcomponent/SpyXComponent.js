@@ -1,4 +1,4 @@
-import xcomponentapi from "reactivexcomponent.js/dist/xcomponentapi.js";
+import xcomponentapi from "reactivexcomponent.js/lib/xcomponentapi.js";
 
 export const INIT_COMPOSITION_MODEL = "INIT_COMPOSITION_MODEL";
 

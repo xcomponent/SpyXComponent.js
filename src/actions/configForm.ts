@@ -1,4 +1,4 @@
-import xcomponentapi from "reactivexcomponent.js/dist/xcomponentapi.js";
+import xcomponentapi from "reactivexcomponent.js/lib/xcomponentapi.js";
 
 export const GET_API_LIST = "GET_API_LIST";
 export const SELECT_API = "SELECT_API";

@@ -41,11 +41,12 @@
     "@types/react-dom": "^0.14.19",
     "deep-freeze": "0.0.1",
     "es6-shim": "^0.35.2",
+    "gojs": "^1.7.1",
     "grommet": "^1.1.0",
     "react": "^15.4.1",
     "react-dom": "^15.4.1",
     "react-redux": "^5.0.2",
-    "reactivexcomponent.js": "^1.1.12",
+    "reactivexcomponent.js": "git+https://github.com/xcomponent/ReactiveXComponent.js.git#reactiveXC_50",
     "redux": "^3.6.0",
     "redux-logger": "^2.8.1",
     "redux-thunk": "^2.2.0"
