@@ -34,7 +34,7 @@
     "unmockedModulePathPatterns": [
       "./node_modules/jasmine-reporters"
     ],
-    "testEnvironment": "node"
+    "testEnvironment": "jsdom"
   },
   "author": "XComponent <dev@xcomponent.com> (http://www.xcomponent.com)",
   "license": "UNLICENSED",
