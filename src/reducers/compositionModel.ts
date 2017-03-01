@@ -5,7 +5,13 @@ const initialState = {
     value: undefined
 };
 
-export const compositionModelReducer = (state = initialState, action) => {
+const defaultAction = {
+    type: undefined,
+    initialized: undefined,
+    compositionModel: undefined
+};
+
+export const compositionModelReducer = (state = initialState, action = defaultAction) => {
     switch (action.type) {
         case INIT_COMPOSITION_MODEL:
             return {

@@ -17,7 +17,8 @@ describe("Test configForm reducer", () => {
         let action = {
             type: GET_API_LIST,
             serverUrl,
-            apis
+            apis,
+            selectedApi: undefined
         };
         let stateAfter = {
             apis,
@@ -32,7 +33,7 @@ describe("Test configForm reducer", () => {
 
     it("When an SELECT_API action is received, it should update the selectedApi field", () => {
         let selectedApi = "Hello.xcApi";
-        let serverUrl = "wss://localhost:443";        
+        let serverUrl = "wss://localhost:443";
         let apis = ["Hello.xcApi", "GoodBye.xcApi"];
 
         let stateBefore = {
@@ -41,17 +42,19 @@ describe("Test configForm reducer", () => {
             selectedApi: "random",
             formSubmited: false
         };
-        
+
         deepFreeze(stateBefore);
         let action = {
             type: SELECT_API,
             selectedApi,
+            serverUrl: undefined,
+            apis: undefined
         };
         let stateAfter = {
             apis,
             serverUrl,
             selectedApi,
-            formSubmited: false            
+            formSubmited: false
         };
         expect(
             configFormReducer(stateBefore, action)
@@ -60,7 +63,7 @@ describe("Test configForm reducer", () => {
 
     it("When an FORM_SUBMIT action is received, it should update the formSubmited field", () => {
         let selectedApi = "Hello.xcApi";
-        let serverUrl = "wss://localhost:443";        
+        let serverUrl = "wss://localhost:443";
         let apis = ["Hello.xcApi", "GoodBye.xcApi"];
 
         let stateBefore = {
@@ -69,17 +72,19 @@ describe("Test configForm reducer", () => {
             selectedApi,
             formSubmited: false
         };
-        
+
         deepFreeze(stateBefore);
         let action = {
             type: FORM_SUBMIT,
             selectedApi,
+            serverUrl: undefined,
+            apis: undefined
         };
         let stateAfter = {
             apis,
             serverUrl,
             selectedApi,
-            formSubmited: true            
+            formSubmited: true
         };
         expect(
             configFormReducer(stateBefore, action)

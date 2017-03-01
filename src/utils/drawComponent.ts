@@ -1,24 +1,27 @@
 
 import * as go from "gojs";
+import { Parser } from "utils/parser";
 
 export class DrawComponent {
 
-    diagram: any;
+    private $: any;
+    public diagram: go.Diagram;
 
     constructor() {
     }
 
-    draw(parser, divId) {
-        let $ = go.GraphObject.make;
-        this.diagram = this.createDiagram($, divId);
-        this.diagram.nodeTemplate = this.getNodeTemplate($);
-        this.diagram.nodeTemplateMap.add("LinkLabel", this.getLinkLabelTemplate($));
-        this.diagram.groupTemplate = this.getGroupTemplate($);
-        this.diagram.linkTemplate = this.getLinkTemplate($);
-        this.diagram.model = this.getModel(parser);
+    draw(parser: Parser, divId: string) {
+        this.$ = go.GraphObject.make;
+        this.diagram = this.createDiagram(divId);
+        this.diagram.nodeTemplate = this.getNodeTemplate();
+        this.diagram.nodeTemplateMap.add("LinkLabel", this.getLinkLabelTemplate());
+        this.diagram.groupTemplate = this.getGroupTemplate();
+        this.diagram.linkTemplate = this.getLinkTemplate();
+        this.diagram.model = this.getModel(parser.nodeDataArray, parser.linkDataArray);
     }
 
-    private createDiagram($, divId) {
+    private createDiagram(divId: string): go.Diagram {
+        let $ = this.$;
         let thisObject = this;
         let diagram =
             $(go.Diagram, divId,
@@ -29,9 +32,8 @@ export class DrawComponent {
         return diagram;
     }
 
-
-    private loadControls(diagram) {
-        diagram.links.each(function (link) {
+    private loadControls(diagram): void {
+        diagram.links.each((link) => {
             let arr = link.data.controls;
             if (!Array.isArray(arr) || arr.length < 4) return;
             let from = link.fromPort;
@@ -63,12 +65,12 @@ export class DrawComponent {
         });
     }
 
-    private getLinkLabelTemplate($) {
+    private getLinkLabelTemplate(): go.Part {
+        let $ = this.$;
         let linkLabelTemplate = $(go.Node,
             {
                 locationSpot: go.Spot.Center,  // Node.location is the center of the Shape
-                layerName: "Foreground",
-                selectionAdorned: false
+                layerName: "Foreground"
             },  // always have link label nodes in front of Links
             $(go.TextBlock,                   // this is a Link label
                 new go.Binding("text", "text"))
@@ -78,13 +80,13 @@ export class DrawComponent {
 
 
 
-    private getNodeTemplate($) {
+    private getNodeTemplate(): go.Part {
+        let $ = this.$;
         let nodeTemplate =
             $(go.Node, "Vertical",
                 {
                     locationSpot: go.Spot.Center,  // Node.location is the center of the Shape
-                    locationObjectName: "SHAPE",
-                    selectionAdorned: false
+                    locationObjectName: "SHAPE"
                 },
                 $(go.TextBlock, { stroke: "white", margin: 2 },
                     new go.Binding("text"), new go.Binding("numberOfInstances")),
@@ -102,7 +104,8 @@ export class DrawComponent {
         return nodeTemplate;
     }
 
-    private getGroupTemplate($) {
+    private getGroupTemplate(): go.Group {
+        let $ = this.$;
         let groupTemplate =
             $(go.Group, "Auto",
                 $(go.Shape, "Rectangle",
@@ -121,7 +124,8 @@ export class DrawComponent {
     }
 
 
-    private getLinkTemplate($) {
+    private getLinkTemplate(): go.Link {
+        let $ = this.$;
         let linkTemplate =
             $(go.Link,
                 { curve: go.Link.Bezier, adjusting: go.Link.Stretch, reshapable: true },
@@ -131,12 +135,12 @@ export class DrawComponent {
         return linkTemplate;
     }
 
-    private getModel(parser) {
+    private getModel(nodeDataArray, linkDataArray): go.Model {
         let data = {
             "class": "go.GraphLinksModel",
             "linkLabelKeysProperty": "labelKeys",
-            "nodeDataArray": parser.nodeDataArray,
-            "linkDataArray": parser.linkDataArray
+            "nodeDataArray": nodeDataArray,
+            "linkDataArray": linkDataArray
         };
         return go.Model.fromJson(data);
     }

@@ -25,7 +25,8 @@ describe("Test components reducer", () => {
             type: INITIALIZATION,
             componentProperties,
             currentComponent,
-            projectName
+            projectName,
+            initialized
         };
         let stateAfter = {
             componentProperties,
@@ -60,6 +61,9 @@ describe("Test components reducer", () => {
         let action = {
             type: SET_CURRENT_COMPONENT,
             currentComponent,
+            componentProperties: undefined,
+            projectName: undefined,
+            initialized: undefined          
         };
         let stateAfter = {
             componentProperties,

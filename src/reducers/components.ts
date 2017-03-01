@@ -14,7 +14,15 @@ const initialState = {
     initialized: false
 };
 
-export const componentsReducer = (state = initialState, action) => {
+const defaultAction = {
+    type: undefined,
+    componentProperties: undefined,
+    currentComponent: undefined,
+    projectName: undefined,
+    initialized: undefined
+};
+
+export const componentsReducer = (state = initialState, action = defaultAction) => {
     switch (action.type) {
         case INITIALIZATION:
             return {

@@ -12,7 +12,8 @@ describe("Test components reducer", () => {
         let value = "randomValue";
         let action = {
             type: INIT_COMPOSITION_MODEL,
-            compositionModel: value
+            compositionModel: value,
+            initialized: undefined
         };
         let stateAfter = {
             initialized: true,

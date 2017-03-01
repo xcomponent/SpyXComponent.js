@@ -7,7 +7,14 @@ const initialState = {
     formSubmited: false
 };
 
-export const configFormReducer = (state = initialState, action) => {
+const defaultAction = {
+    type: undefined,
+    serverUrl: undefined,
+    apis: undefined,
+    selectedApi: undefined
+};
+
+export const configFormReducer = (state = initialState, action = defaultAction) => {
     switch (action.type) {
         case GET_API_LIST:
             return {
