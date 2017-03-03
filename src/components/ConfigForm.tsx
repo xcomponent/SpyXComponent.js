@@ -73,7 +73,7 @@ let ConfigForm = ({
                     </FormField>
                     <FormField>
                         <fieldset>
-                            <label htmlFor="api">Api Name:</label>
+                            <label htmlFor="API">API Name:</label>
                             <Select placeHolder="None"
                                 options={apis}
                                 value={apis[0]}

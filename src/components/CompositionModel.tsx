@@ -10,6 +10,11 @@ import SideBar from "components/SideBar";
 import * as Split from "grommet/components/Split";
 import * as Box from "grommet/components/Box";
 import Footer from "components/Footer";
+import * as Anchor from "grommet/components/Anchor";
+import * as Menu from "grommet/components/Menu";
+import { showPopUp, hidePopUp } from "actions/popUpStateMachine";
+import PopUpStateMachine from "components/PopUpStateMachine";
+import MenuSpy from "components/MenuSpy";
 
 const mapStateToProps = (state) => {
     return {
@@ -31,6 +36,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     return {
         initialization: (componentProperties, currentComponent, projectName) => {
             dispatch(initialization(componentProperties, currentComponent, projectName));
+        },
+        showPopUpStateMachine: (stateMachine) => {
+            dispatch(showPopUp(stateMachine));
         }
     };
 };
@@ -46,14 +54,20 @@ class CompositionModel extends React.Component<any, any> {
         let comps = props.compositionModel.components;
         let componentProperties = {};
         for (let i = 0; i < comps.length; i++) {
-            let parser = new Parser();
-            parser.parseGraphical(comps[i].graphical);
-            parser.parseModel(comps[i].model);
+            let parser = new Parser(comps[i]);
+            parser.parse();
             let drawComponent = new DrawComponent();
             drawComponent.draw(parser, comps[i].name);
             componentProperties[comps[i].name] = {
                 drawComponent: drawComponent
             };
+            drawComponent.diagram.addDiagramListener("ObjectDoubleClicked", (function (ev) {
+                let data = ev.subject.part.data;
+                console.error(data);
+                if (data.isGroup) { // it is a stateMachine
+                    props.showPopUpStateMachine(data.key);
+                }
+            }).bind(this));
         }
         props.initialization(componentProperties, comps[0].name, props.compositionModel.projectName);
     }
@@ -76,9 +90,8 @@ class CompositionModel extends React.Component<any, any> {
                         "backgroundColor": "LightGrey"
                     }}></div>
             );
-            try {
+            if (drawComponent) {
                 drawComponent.diagram.requestUpdate();
-            } catch (e) {
             }
         }
         return divs;
@@ -87,18 +100,23 @@ class CompositionModel extends React.Component<any, any> {
     render() {
         const props = this.props;
         return (
-            <Box direction="column">
-                <Box>
-                    <Split flex="right">
-                        <SideBar />
-                        <Box full={true}>
-                            {this.getContainersForGraphs(props.getDrawComponent())}
-                        </Box>
-                    </Split>
+            <Split flex="right">
+                <SideBar />
+                <Box full={true} direction="column">
+                    <Box >
+                        <MenuSpy />
+                    </Box>
+                    <Box>
+                        {this.getContainersForGraphs(props.getDrawComponent())}
+                    </Box>
+                    <Box >
+                        <Footer />
+                    </Box>
+                    <Box >
+                        {<PopUpStateMachine />}
+                    </Box>
                 </Box>
-                <Box>
-                </Box>
-            </Box>
+            </Split>
         );
     }
 }

@@ -39,29 +39,24 @@ export class DrawComponent {
             let from = link.fromPort;
             let to = link.toPort;
             if (from === null || to === null) return;
+            let firstPoint, firstControlPoint, secondControlPoint, lastPoint;
             if (arr.length === 4) {
-                let c1 = new go.Point(arr[0], arr[1]);
-                let c2 = new go.Point(arr[2], arr[3]);
-                let p1 = link.getLinkPointFromPoint(from.part, from, from.getDocumentPoint(go.Spot.Center), c1, true);
-                let p2 = link.getLinkPointFromPoint(to.part, to, to.getDocumentPoint(go.Spot.Center), c2, false);
-                let list = new go.List();
-                list.add(p1);
-                list.add(c1);
-                list.add(c2);
-                list.add(p2);
-                link.points = list;
+                firstControlPoint = new go.Point(arr[0], arr[1]);
+                secondControlPoint = new go.Point(arr[2], arr[3]);
+                firstPoint = link.getLinkPointFromPoint(from.part, from, from.getDocumentPoint(go.Spot.Center), firstControlPoint, true);
+                lastPoint = link.getLinkPointFromPoint(to.part, to, to.getDocumentPoint(go.Spot.Center), secondControlPoint, false);
             } else if (arr.length === 6) {
-                let c1 = new go.Point(arr[0], arr[1]);
-                let c2 = new go.Point(arr[2], arr[3]);
-                let p2 = new go.Point(arr[4], arr[5]);
-                let p1 = link.getLinkPointFromPoint(from.part, from, from.getDocumentPoint(go.Spot.Center), c1, true);
-                let list = new go.List();
-                list.add(p1);
-                list.add(c1);
-                list.add(c2);
-                list.add(p2);
-                link.points = list;
+                firstControlPoint = new go.Point(arr[0], arr[1]);
+                secondControlPoint = new go.Point(arr[2], arr[3]);
+                lastPoint = new go.Point(arr[4], arr[5]);
+                firstPoint = link.getLinkPointFromPoint(from.part, from, from.getDocumentPoint(go.Spot.Center), firstControlPoint, true);
             }
+            let list = new go.List();
+            list.add(firstPoint);
+            list.add(firstControlPoint);
+            list.add(secondControlPoint);
+            list.add(lastPoint);
+            link.points = list;
         });
     }
 

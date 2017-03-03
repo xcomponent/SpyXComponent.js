@@ -19,7 +19,7 @@ export const modelTags: { [key: string]: string } = {
     // state
     IsEntryPoint: "IsEntryPoint",
     State: "State",
-    separator: "&"
+    Separator: "&"
 };
 
 export const graphicalTags: { [key: string]: string } = {

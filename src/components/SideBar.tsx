@@ -13,9 +13,11 @@ import * as CloseIcon from "grommet/components/icons/base/Close";
 import * as User from "grommet/components/icons/base/User";
 import { connect } from "react-redux";
 import { setCurrentComponent } from "actions/components";
+import { hideSideBar } from "actions/sideBar";
 
 const mapStateToProps = (state) => {
     return {
+        active: state.sideBar,
         initialized: state.components.initialized,
         components: state.components.componentProperties,
         currentComponent: state.components.currentComponent,
@@ -27,6 +29,9 @@ const mapDispatchToProps = (dispatch) => {
     return {
         setCurrentComponent: (currentComponent) => {
             dispatch(setCurrentComponent(currentComponent));
+        },
+        hideSideBar: () => {
+            dispatch(hideSideBar());
         }
     };
 };
@@ -40,14 +45,14 @@ class SideBar extends React.Component<any, any> {
 
     getTitle() {
         return (
-            <Header size="large" justify="between" pad={{ horizontal: "medium" }}>
+            <Header size="large" justify="between">
                 <Title>
                     {this.props.projectName}
                 </Title>
+                <Button icon={<CloseIcon />} onClick={this.props.hideSideBar} plain={true} />
             </Header>
         );
     }
-    //                <Link to="/rfq" activeClassName="active">{t("rfqMenu")}</Link>
 
     getComponentList() {
         let list = [];
@@ -56,6 +61,7 @@ class SideBar extends React.Component<any, any> {
         for (let i = 0; i < components.length; i++) {
             list.push(
                 <Anchor
+                    primary={true}
                     key={components[i]}
                     value={components[i]}
                     className={(props.currentComponent === components[i]) ? "active" : ""}
@@ -71,12 +77,12 @@ class SideBar extends React.Component<any, any> {
     }
 
     render() {
-        if (!this.props.initialized)
+        if (!this.props.initialized || !this.props.active)
             return null;
         return (
             <GrommetSidebar fixed={true} colorIndex="neutral-1">
                 {this.getTitle()}
-                <Menu primary={true}>
+                <Menu >
                     {this.getComponentList()}
                 </Menu>
             </GrommetSidebar>

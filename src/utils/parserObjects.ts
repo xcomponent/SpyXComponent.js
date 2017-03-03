@@ -4,10 +4,10 @@ export interface Point {
 };
 
 export interface Curve {
-    p1: Point;
-    c1: Point;
-    c2: Point;
-    p2: Point;
+    firstPoint: Point;
+    firstControlPoint: Point;
+    secondControlPoint: Point;
+    lastPoint: Point;
 };
 
 export interface StateMachine {
@@ -20,4 +20,9 @@ export interface State {
     group: string;
     key: string;
     isFinal: boolean;
+};
+
+export interface ComponentGraphicalModel {
+    model: string;
+    graphical: string;
 };
