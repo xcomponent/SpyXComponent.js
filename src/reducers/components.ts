@@ -1,4 +1,5 @@
-import { INITIALIZATION, SET_CURRENT_COMPONENT } from "actions/components";
+import { INITIALIZATION, SET_CURRENT_COMPONENT, UPDATE_STATE_MACHINE } from "actions/components";
+import * as go from "gojs";
 /*
 componentProperties: {
     componentName: {
@@ -22,7 +23,7 @@ const defaultAction = {
     initialized: undefined
 };
 
-export const componentsReducer = (state = initialState, action = defaultAction) => {
+export const componentsReducer = (state = initialState, action) => {
     switch (action.type) {
         case INITIALIZATION:
             return {
@@ -37,6 +38,15 @@ export const componentsReducer = (state = initialState, action = defaultAction) 
                 ...state,
                 currentComponent: action.currentComponent
             };
+        case UPDATE_STATE_MACHINE:
+            let diagram: go.Diagram = state.componentProperties[action.component].drawComponent.diagram;
+            diagram.model.startTransaction(UPDATE_STATE_MACHINE);
+            let data = diagram.findNodeForKey(action.stateMachine).data;
+            diagram.model.setDataProperty(data, "numberOfInstances", data.numberOfInstances + 1);
+            diagram.model.setDataProperty(data, "text", data.key + " (" + data.numberOfInstances + ")");
+            diagram.model.commitTransaction(UPDATE_STATE_MACHINE);
+            return state;
+
     }
     return state;
 };

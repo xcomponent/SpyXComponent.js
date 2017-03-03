@@ -10,6 +10,7 @@ import * as logger from "redux-logger";
 import thunk from "redux-thunk";
 import CompositionModel from "./components/CompositionModel";
 import { setCompositionModel } from "actions/compositionModel";
+import sessionXCSpy from "utils/sessionXCSpy";
 
 const middleware = applyMiddleware(thunk, logger());
 const store = createStore(SpyReducer, middleware);
@@ -26,6 +27,7 @@ let App = (props) => {
       <ConfigForm />
     );
   }
+  sessionXCSpy.init(props.selectedApi, props.serverUrl);
   return (
     <CompositionModel compositionModel={props.compositionModel.value} />
   );

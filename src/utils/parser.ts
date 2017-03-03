@@ -8,13 +8,13 @@ export class Parser {
     private controlPointTransition: { [key: string]: Curve };
     private controlPointTriggerable: { [key: string]: Curve };
     private stateMachines: { [key: string]: StateMachine };
-    private stateMachineNames: Array<String>;
     private states: { [key: string]: State };
     private entryPoints: Array<String>;
     private finalStates: Array<String>;
     private linksLabel: Array<LinkLabelTemplate>;
     private componentGraphicalModel: ComponentGraphicalModel;
 
+    public stateMachineNames: Array<String>;
     public linkDataArray: Array<TransitionTemplate | TriggerableTransitionTemplate>;
     public nodeDataArray: Array<StateMachineTemplate | StateTemplate | LinkLabelTemplate>;
 

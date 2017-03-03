@@ -45,6 +45,7 @@
     "@types/react": "^0.14.55",
     "@types/react-dom": "^0.14.19",
     "deep-freeze": "0.0.1",
+    "es6-promisify": "^5.0.0",
     "es6-shim": "^0.35.2",
     "gojs": "^1.7.1",
     "grommet": "^1.1.0",

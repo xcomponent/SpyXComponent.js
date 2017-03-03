@@ -8,6 +8,7 @@ import * as Form from "grommet/components/Form";
 import * as FormField from "grommet/components/FormField";
 import * as Button from "grommet/components/Button";
 import * as Footer from "grommet/components/Footer";
+import sessionXCSpy from "utils/sessionXCSpy";
 
 const mapStateToProps = (state) => {
     return {
@@ -69,7 +70,14 @@ const PopUpStateMachine = ({
                 </FormField>
 
                 <Footer></Footer>
-                <Button primary={true} type="button" label="Snapshot" onClick={() => { }} />
+                <Button primary={true} type="button" label="Snapshot" onClick={() => {
+                    sessionXCSpy.getPromiseCreateSession()
+                        .then((session) => {
+                            session.createSubscriber().getSnapshot(currentComponent, stateMachine, (items) => {
+                                console.error(items);
+                            });
+                        });
+                }} />
                 <Button primary={true} type="button" label="Clear" onClick={() => { }} />
             </Form >
         </Layer>

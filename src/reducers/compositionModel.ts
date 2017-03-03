@@ -1,3 +1,4 @@
+import * as go from "gojs";
 import { INIT_COMPOSITION_MODEL } from "actions/compositionModel";
 
 const initialState = {
@@ -8,10 +9,12 @@ const initialState = {
 const defaultAction = {
     type: undefined,
     initialized: undefined,
-    compositionModel: undefined
+    compositionModel: undefined,
+    component: undefined,
+    stateMachine: undefined
 };
 
-export const compositionModelReducer = (state = initialState, action = defaultAction) => {
+export const compositionModelReducer = (state = initialState, action) => {
     switch (action.type) {
         case INIT_COMPOSITION_MODEL:
             return {

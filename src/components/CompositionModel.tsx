@@ -2,7 +2,8 @@ import "grommet/grommet-hpinc.min.css";
 import * as React from "react";
 import { connect } from "react-redux";
 import { getApiList, selectApi, formSubmit } from "actions/configForm";
-import { setCompositionModel } from "actions/compositionModel";
+import { setCompositionModel,  } from "actions/compositionModel";
+import { updateStateMachine } from "actions/components";
 import { Parser } from "../utils/parser";
 import { DrawComponent } from "../utils/drawComponent";
 import { initialization } from "actions/components";
@@ -15,6 +16,7 @@ import * as Menu from "grommet/components/Menu";
 import { showPopUp, hidePopUp } from "actions/popUpStateMachine";
 import PopUpStateMachine from "components/PopUpStateMachine";
 import MenuSpy from "components/MenuSpy";
+import sessionXCSpy from "utils/sessionXCSpy";
 
 const mapStateToProps = (state) => {
     return {
@@ -39,6 +41,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         },
         showPopUpStateMachine: (stateMachine) => {
             dispatch(showPopUp(stateMachine));
+        },
+        updateStateMachine: (component, stateMachine) => {
+            dispatch(updateStateMachine(component, stateMachine));
         }
     };
 };
@@ -47,6 +52,36 @@ class CompositionModel extends React.Component<any, any> {
     constructor(props: any) {
         super(props);
         this.getContainersForGraphs = this.getContainersForGraphs.bind(this);
+        this.addDiagramEventClick = this.addDiagramEventClick.bind(this);
+        this.subscribeAllStateMachines = this.subscribeAllStateMachines.bind(this);
+    }
+
+    addDiagramEventClick(drawComponent) {
+        drawComponent.diagram.addDiagramListener("ObjectDoubleClicked", (function (ev) {
+            let data = ev.subject.part.data;
+            console.error(data);
+            if (data.isGroup) { // it is a stateMachine
+                this.props.showPopUpStateMachine(data.key);
+            }
+        }).bind(this));
+    }
+
+    subscribeAllStateMachines(component, stateMachines) {
+        let props = this.props;
+        sessionXCSpy.getPromiseCreateSession()
+            .then((session) => {
+                let subscriber = session.createSubscriber();
+                for (let j = 0; j < stateMachines.length; j++) {
+                    if (!subscriber.canSubscribe(component, stateMachines[j]))
+                        continue;
+                    ((stateMachine) => {
+                        subscriber.subscribe(component, stateMachine, (data) => {
+                            console.error(data);
+                            props.updateStateMachine(component, stateMachine);
+                        });
+                    })(stateMachines[j]);
+                }
+            });
     }
 
     componentDidMount() {
@@ -61,13 +96,8 @@ class CompositionModel extends React.Component<any, any> {
             componentProperties[comps[i].name] = {
                 drawComponent: drawComponent
             };
-            drawComponent.diagram.addDiagramListener("ObjectDoubleClicked", (function (ev) {
-                let data = ev.subject.part.data;
-                console.error(data);
-                if (data.isGroup) { // it is a stateMachine
-                    props.showPopUpStateMachine(data.key);
-                }
-            }).bind(this));
+            this.addDiagramEventClick(drawComponent);
+            this.subscribeAllStateMachines(comps[i].name, parser.stateMachineNames);
         }
         props.initialization(componentProperties, comps[0].name, props.compositionModel.projectName);
     }

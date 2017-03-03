@@ -2,6 +2,7 @@ import xcomponentapi from "reactivexcomponent.js/lib/xcomponentapi.js";
 
 export const INIT_COMPOSITION_MODEL = "INIT_COMPOSITION_MODEL";
 
+
 export const setCompositionModel = (xcApiName, serverUrl) => {
     return (dispatch) => {
         xcomponentapi.getModel(xcApiName, serverUrl, (connection, compositionModel) => {
