@@ -61,6 +61,7 @@ class CompositionModel extends React.Component<any, any> {
         this.addDiagramEventClick = this.addDiagramEventClick.bind(this);
         this.subscribeAllStateMachines = this.subscribeAllStateMachines.bind(this);
         this.getFirstId = this.getFirstId.bind(this);
+        this.snapshotEntryPoint = this.snapshotEntryPoint.bind(this);
     }
 
     getFirstId(stateMachine) {
@@ -95,6 +96,21 @@ class CompositionModel extends React.Component<any, any> {
             });
     }
 
+    snapshotEntryPoint(component, entryPoints) {
+        let props = this.props;
+        sessionXCSpy.getPromiseCreateSession()
+            .then((session) => {
+                for (let j = 0; j < entryPoints.length; j++) {
+                    session.createSubscriber().getSnapshot(component, entryPoints[j], (items) => {
+                        for (let i = 0; i < items.length; i++) {
+                            props.updateGraphic(component, entryPoints[j], items[i]);
+                        }
+                        console.log(items);
+                    });
+                }
+            });
+    }
+
     componentDidMount() {
         const props = this.props;
         let comps = props.compositionModel.components;
@@ -114,6 +130,7 @@ class CompositionModel extends React.Component<any, any> {
             };
             this.addDiagramEventClick(drawComponent.diagram);
             this.subscribeAllStateMachines(comps[i].name, parser.stateMachineNames);
+            this.snapshotEntryPoint(comps[i].name, parser.entryPoints);
         }
         props.initialization(componentProperties, comps[0].name, props.compositionModel.projectName);
     }
