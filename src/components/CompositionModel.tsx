@@ -2,8 +2,8 @@ import "grommet/grommet-hpinc.min.css";
 import * as React from "react";
 import { connect } from "react-redux";
 import { getApiList, selectApi, formSubmit } from "actions/configForm";
-import { setCompositionModel,  } from "actions/compositionModel";
-import { updateStateMachine } from "actions/components";
+import { setCompositionModel, } from "actions/compositionModel";
+import { updateGraphic } from "actions/components";
 import { Parser } from "../utils/parser";
 import { DrawComponent } from "../utils/drawComponent";
 import { initialization } from "actions/components";
@@ -13,23 +13,29 @@ import * as Box from "grommet/components/Box";
 import Footer from "components/Footer";
 import * as Anchor from "grommet/components/Anchor";
 import * as Menu from "grommet/components/Menu";
-import { showPopUp, hidePopUp } from "actions/popUpStateMachine";
-import PopUpStateMachine from "components/PopUpStateMachine";
+import { showStateMachineProperties } from "actions/stateMachineProperties";
+import StateMachineProperties from "components/StateMachineProperties";
 import MenuSpy from "components/MenuSpy";
 import sessionXCSpy from "utils/sessionXCSpy";
+import * as go from "gojs";
 
 const mapStateToProps = (state) => {
     return {
         currentComponent: state.components.currentComponent,
-        getDrawComponent: () => {
+        getDiagram: () => {
             let initialized = state.components.initialized;
             if (!initialized) {
                 return null;
             } else {
                 let currentComponent = state.components.currentComponent;
                 let componentProperties = state.components.componentProperties;
-                return componentProperties[currentComponent].drawComponent;
+                return componentProperties[currentComponent].diagram;
             }
+        },
+        getFirstId: (stateMachine) => {
+            let componentProperties = state.components.componentProperties;
+            let currentComponent = state.components.currentComponent;
+            return Object.keys(componentProperties[currentComponent].stateMachineProperties[stateMachine])[0];
         }
     };
 };
@@ -39,11 +45,11 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         initialization: (componentProperties, currentComponent, projectName) => {
             dispatch(initialization(componentProperties, currentComponent, projectName));
         },
-        showPopUpStateMachine: (stateMachine) => {
-            dispatch(showPopUp(stateMachine));
+        showStateMachineProperties: (stateMachine, id) => {
+            dispatch(showStateMachineProperties(stateMachine, id));
         },
-        updateStateMachine: (component, stateMachine) => {
-            dispatch(updateStateMachine(component, stateMachine));
+        updateGraphic: (component, stateMachine, data) => {
+            dispatch(updateGraphic(component, stateMachine, data));
         }
     };
 };
@@ -54,14 +60,19 @@ class CompositionModel extends React.Component<any, any> {
         this.getContainersForGraphs = this.getContainersForGraphs.bind(this);
         this.addDiagramEventClick = this.addDiagramEventClick.bind(this);
         this.subscribeAllStateMachines = this.subscribeAllStateMachines.bind(this);
+        this.getFirstId = this.getFirstId.bind(this);
     }
 
-    addDiagramEventClick(drawComponent) {
-        drawComponent.diagram.addDiagramListener("ObjectDoubleClicked", (function (ev) {
-            let data = ev.subject.part.data;
-            console.error(data);
+    getFirstId(stateMachine) {
+        return this.props.getFirstId(stateMachine);
+    }
+
+    addDiagramEventClick(diagram) {
+        let props = this.props;
+        diagram.addDiagramListener("ObjectDoubleClicked", (function (diagramEvent: go.DiagramEvent) {
+            let data = diagramEvent.subject.part.data;
             if (data.isGroup) { // it is a stateMachine
-                this.props.showPopUpStateMachine(data.key);
+                props.showStateMachineProperties(data.key, this.getFirstId(data.key));
             }
         }).bind(this));
     }
@@ -77,7 +88,7 @@ class CompositionModel extends React.Component<any, any> {
                     ((stateMachine) => {
                         subscriber.subscribe(component, stateMachine, (data) => {
                             console.error(data);
-                            props.updateStateMachine(component, stateMachine);
+                            props.updateGraphic(component, stateMachine, data);
                         });
                     })(stateMachines[j]);
                 }
@@ -93,16 +104,21 @@ class CompositionModel extends React.Component<any, any> {
             parser.parse();
             let drawComponent = new DrawComponent();
             drawComponent.draw(parser, comps[i].name);
+            let stateMachineProperties = {};
+            for (let k = 0; k < parser.stateMachineNames.length; k++) {
+                stateMachineProperties[parser.stateMachineNames[k]] = {};
+            }
             componentProperties[comps[i].name] = {
-                drawComponent: drawComponent
+                diagram: drawComponent.diagram,
+                stateMachineProperties
             };
-            this.addDiagramEventClick(drawComponent);
+            this.addDiagramEventClick(drawComponent.diagram);
             this.subscribeAllStateMachines(comps[i].name, parser.stateMachineNames);
         }
         props.initialization(componentProperties, comps[0].name, props.compositionModel.projectName);
     }
 
-    getContainersForGraphs(drawComponent) {
+    getContainersForGraphs(diagram) {
         let props = this.props;
         let divs = [];
         let comps = props.compositionModel.components;
@@ -120,8 +136,8 @@ class CompositionModel extends React.Component<any, any> {
                         "backgroundColor": "LightGrey"
                     }}></div>
             );
-            if (drawComponent) {
-                drawComponent.diagram.requestUpdate();
+            if (diagram) {
+                diagram.requestUpdate();
             }
         }
         return divs;
@@ -137,13 +153,13 @@ class CompositionModel extends React.Component<any, any> {
                         <MenuSpy />
                     </Box>
                     <Box>
-                        {this.getContainersForGraphs(props.getDrawComponent())}
+                        {this.getContainersForGraphs(props.getDiagram())}
                     </Box>
                     <Box >
                         <Footer />
                     </Box>
                     <Box >
-                        {<PopUpStateMachine />}
+                        {<StateMachineProperties />}
                     </Box>
                 </Box>
             </Split>

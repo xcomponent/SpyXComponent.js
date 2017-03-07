@@ -1,5 +1,7 @@
-import { INITIALIZATION, SET_CURRENT_COMPONENT, UPDATE_STATE_MACHINE } from "actions/components";
+import { INITIALIZATION, SET_CURRENT_COMPONENT, UPDATE_GRAPHIC } from "actions/components";
 import * as go from "gojs";
+import { DrawComponent } from "utils/drawComponent";
+import { modelTags } from "utils/configurationParser";
 /*
 componentProperties: {
     componentName: {
@@ -7,7 +9,28 @@ componentProperties: {
         instances: {...}
     }
 }
+private locations: { [key: string]: Point };
 */
+/*
+{"id": {"jsonMessage" : {"key": value} , "stateMachineRef": {...}} }
+*/
+interface Instance {
+    jsonMessage: any;
+    stateMachineRef: any;
+};
+
+interface ComponentProperties {
+    diagram: go.Diagram;
+    stateMachineProperties: { [name: string]: { [id: number]: Instance } };
+};
+
+interface Components {
+    componentProperties: { [componentName: string]: ComponentProperties };
+    currentComponent: string;
+    projectName: string;
+    initialized: boolean;
+};
+
 const initialState = {
     componentProperties: {},
     currentComponent: undefined,
@@ -15,12 +38,20 @@ const initialState = {
     initialized: false
 };
 
-const defaultAction = {
-    type: undefined,
-    componentProperties: undefined,
-    currentComponent: undefined,
-    projectName: undefined,
-    initialized: undefined
+const updateState = (diagram, stateKey, increment) => {
+    let data = diagram.findNodeForKey(stateKey).data;
+    let oldValue = data.numberOfStates;
+    let newValue = oldValue + increment;
+    diagram.model.setDataProperty(data, "numberOfStates", newValue);
+    diagram.model.setDataProperty(data, "text", data.stateName + " (" + data.numberOfStates + ")");
+    // Must change color in those cases if (oldValue === 0 || newValue === 0) {
+    if (newValue === 0) {
+        diagram.model.setDataProperty(data, "fill", "lightgray");
+        diagram.model.setDataProperty(data, "stroke", "black");
+    } else {
+        diagram.model.setDataProperty(data, "fill", "red");
+        diagram.model.setDataProperty(data, "stroke", "red");
+    }
 };
 
 export const componentsReducer = (state = initialState, action) => {
@@ -38,15 +69,32 @@ export const componentsReducer = (state = initialState, action) => {
                 ...state,
                 currentComponent: action.currentComponent
             };
-        case UPDATE_STATE_MACHINE:
-            let diagram: go.Diagram = state.componentProperties[action.component].drawComponent.diagram;
-            diagram.model.startTransaction(UPDATE_STATE_MACHINE);
-            let data = diagram.findNodeForKey(action.stateMachine).data;
-            diagram.model.setDataProperty(data, "numberOfInstances", data.numberOfInstances + 1);
-            diagram.model.setDataProperty(data, "text", data.key + " (" + data.numberOfInstances + ")");
-            diagram.model.commitTransaction(UPDATE_STATE_MACHINE);
-            return state;
-
+        case UPDATE_GRAPHIC:
+            let componentProperties = { ...state.componentProperties };
+            let diagram: go.Diagram = componentProperties[action.component].diagram;
+            let stateMachineId = action.data.stateMachineRef.StateMachineId;
+            let instances = componentProperties[action.component].stateMachineProperties[action.stateMachine];
+            let nodeData = diagram.findNodeForKey(action.stateMachine).data;
+            let newState = action.data.stateMachineRef.StateName;
+            diagram.model.startTransaction(UPDATE_GRAPHIC);
+            if (instances[stateMachineId]) {
+                let oldState = instances[stateMachineId].stateMachineRef.StateName;
+                if (oldState !== newState) {
+                    updateState(diagram, action.stateMachine + modelTags.Separator + newState, +1);
+                    updateState(diagram, action.stateMachine + modelTags.Separator + oldState, -1);
+                }
+            } else {
+                diagram.model.setDataProperty(nodeData, "numberOfInstances", nodeData.numberOfInstances + 1);
+                updateState(diagram, action.stateMachine + modelTags.Separator + newState, +1);
+            }
+            instances[stateMachineId] = action.data;
+            diagram.model.setDataProperty(nodeData, "numberOfInstances", nodeData.numberOfInstances);
+            diagram.model.setDataProperty(nodeData, "text", nodeData.key + " (" + nodeData.numberOfInstances + ")");
+            diagram.model.commitTransaction(UPDATE_GRAPHIC);
+            return {
+                ...state,
+                componentProperties: componentProperties
+            };
     }
     return state;
 };

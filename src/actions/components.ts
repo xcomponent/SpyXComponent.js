@@ -1,6 +1,6 @@
 export const INITIALIZATION = "INITIALIZATION";
 export const SET_CURRENT_COMPONENT = "SET_CURRENT_COMPONENT";
-export const UPDATE_STATE_MACHINE = "UPDATE_STATE_MACHINE";
+export const UPDATE_GRAPHIC = "UPDATE_GRAPHIC";
 
 export const initialization = (componentProperties, currentComponent, projectName) => {
     return {
@@ -18,10 +18,11 @@ export const setCurrentComponent = (currentComponent) => {
     };
 };
 
-export const updateStateMachine = (component, stateMachine) => {
+export const updateGraphic = (component, stateMachine, data) => {
     return {
-        type: UPDATE_STATE_MACHINE,
+        type: UPDATE_GRAPHIC,
         component,
-        stateMachine
+        stateMachine,
+        data
     };
 };

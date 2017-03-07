@@ -13,9 +13,8 @@ describe("Test components reducer", () => {
         deepFreeze(stateBefore);
         let componentProperties = {
             "componentName": {
-                "prop1": "prop1",
-                "prop2": "prop2",
-                "prop3": "prop3"
+                "instances": {},
+                "drawComponent": null
             }
         };
         let currentComponent = "currentComponent";
@@ -43,9 +42,8 @@ describe("Test components reducer", () => {
         let oldCurrentComponent = "oldCurrentComponent";
         let componentProperties = {
             "componentName": {
-                "prop1": "prop1",
-                "prop2": "prop2",
-                "prop3": "prop3"
+                "instances": {},
+                "diagram": null
             }
         };
         let projectName = "projectName";
@@ -61,9 +59,7 @@ describe("Test components reducer", () => {
         let action = {
             type: SET_CURRENT_COMPONENT,
             currentComponent,
-            componentProperties: undefined,
-            projectName: undefined,
-            initialized: undefined          
+            componentProperties: undefined
         };
         let stateAfter = {
             componentProperties,
