@@ -19,10 +19,12 @@ export const setCurrentComponent = (currentComponent) => {
 };
 
 export const updateGraphic = (component, stateMachine, data) => {
-    return {
-        type: UPDATE_GRAPHIC,
-        component,
-        stateMachine,
-        data
+    return (dispatch) => {
+        dispatch({
+            type: UPDATE_GRAPHIC,
+            component,
+            stateMachine,
+            data
+        });
     };
 };

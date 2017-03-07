@@ -105,7 +105,6 @@ class CompositionModel extends React.Component<any, any> {
                         for (let i = 0; i < items.length; i++) {
                             props.updateGraphic(component, entryPoints[j], items[i]);
                         }
-                        console.log(items);
                     });
                 }
             });
