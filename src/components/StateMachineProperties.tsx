@@ -35,14 +35,14 @@ const mapStateToProps = (state) => {
             let publicMember = componentProperties[currentComponent].stateMachineProperties[stateMachine][id].jsonMessage;
             return JSON.stringify(publicMember);
         },
-        getState: () => {
+        getStateMachineRef: () => {
             let id = state.stateMachineProperties.id;
             if (!id)
                 return null;
             let componentProperties = state.components.componentProperties;
             let currentComponent = state.components.currentComponent;
             let stateMachine = state.stateMachineProperties.stateMachine;
-            return componentProperties[currentComponent].stateMachineProperties[stateMachine][id].stateMachineRef.StateName;
+            return componentProperties[currentComponent].stateMachineProperties[stateMachine][id].stateMachineRef;
         }
     };
 };
@@ -79,7 +79,7 @@ const StateMachineProperties = ({
     setStateMachineId,
     id,
     getPublicMember,
-    getState
+    getStateMachineRef
 }) => {
     if (!active)
         return null;
@@ -123,10 +123,19 @@ const StateMachineProperties = ({
                 <FormField>
                     <fieldset>
                         <label htmlFor="currentState">Current state : {" "}
-                            {getState()}
+                            {(getStateMachineRef()) ? getStateMachineRef().StateName : null}
                         </label>
                     </fieldset>
                 </FormField>
+
+                <FormField>
+                    <fieldset>
+                        <label htmlFor="agentId">Agent Id : {" "}
+                            {(getStateMachineRef()) ? getStateMachineRef().AgentId : null}
+                        </label>
+                    </fieldset>
+                </FormField>
+
 
                 <Footer></Footer>
                 <Button primary={true} type="button" label="Snapshot" onClick={() => {
