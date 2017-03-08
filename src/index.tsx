@@ -1,4 +1,3 @@
-import "grommet/scss/hpe/index.scss";
 import { Provider, connect } from "react-redux";
 import * as React from "react";
 import * as ReactDOM from "react-dom";

@@ -1,5 +1,4 @@
 
-import "grommet/grommet-hpinc.min.css";
 import * as React from "react";
 import * as Label from "grommet/components/Label";
 import * as Header from "grommet/components/Header";
@@ -53,9 +52,11 @@ let ConfigForm = ({
             <Box pad="medium" align="center" justify="center" flex={true}>
                 <Form>
                     <Header>
-                        <Title>
-                            Configuration form
-                        </Title>
+                        <Box align="center" justify="between" flex={true}>
+                            <Title>
+                                Configuration form
+                            </Title>
+                        </Box>
                     </Header>
                     <FormField>
                         <fieldset>
@@ -96,7 +97,7 @@ let ConfigForm = ({
                         onClick={onClickSubmit} />
                 </Form >
             </Box>
-            <Footer/>
+            <Footer />
         </Box>
     );
 };

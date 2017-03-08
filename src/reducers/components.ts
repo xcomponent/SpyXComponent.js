@@ -2,18 +2,7 @@ import { INITIALIZATION, SET_CURRENT_COMPONENT, UPDATE_GRAPHIC } from "actions/c
 import * as go from "gojs";
 import { DrawComponent } from "utils/drawComponent";
 import { modelTags } from "utils/configurationParser";
-/*
-componentProperties: {
-    componentName: {
-        dc: dc,
-        instances: {...}
-    }
-}
-private locations: { [key: string]: Point };
-*/
-/*
-{"id": {"jsonMessage" : {"key": value} , "stateMachineRef": {...}} }
-*/
+
 interface Instance {
     jsonMessage: any;
     stateMachineRef: any;

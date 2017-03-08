@@ -18,6 +18,8 @@ import StateMachineProperties from "components/StateMachineProperties";
 import MenuSpy from "components/MenuSpy";
 import sessionXCSpy from "utils/sessionXCSpy";
 import * as go from "gojs";
+import TransitionProperties from "components/TransitionProperties";
+import { showTransitionProperties } from "actions/transitionProperties";
 
 const mapStateToProps = (state) => {
     return {
@@ -50,6 +52,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         },
         updateGraphic: (component, stateMachine, data) => {
             dispatch(updateGraphic(component, stateMachine, data));
+        },
+        showTransitionProperties: (stateMachine, messageType) => {
+            dispatch(showTransitionProperties(stateMachine, messageType));
         }
     };
 };
@@ -72,8 +77,11 @@ class CompositionModel extends React.Component<any, any> {
         let props = this.props;
         diagram.addDiagramListener("ObjectDoubleClicked", (function (diagramEvent: go.DiagramEvent) {
             let data = diagramEvent.subject.part.data;
+            console.error(data);
             if (data.isGroup) { // it is a stateMachine
                 props.showStateMachineProperties(data.key, this.getFirstId(data.key));
+            } else if (data.stateMachineTarget) {
+                props.showTransitionProperties(data.stateMachineTarget, data.messageType);
             }
         }).bind(this));
     }
@@ -176,6 +184,9 @@ class CompositionModel extends React.Component<any, any> {
                     </Box>
                     <Box >
                         {<StateMachineProperties />}
+                    </Box>
+                    <Box >
+                        {<TransitionProperties />}
                     </Box>
                 </Box>
             </Split>

@@ -12,6 +12,7 @@ import sessionXCSpy from "utils/sessionXCSpy";
 import { updateGraphic } from "actions/components";
 import * as Select from "grommet/components/Select";
 import { setStateMachineId } from "actions/stateMachineProperties";
+import * as Box from "grommet/components/Box";
 
 const mapStateToProps = (state) => {
     return {
@@ -93,7 +94,9 @@ const StateMachineProperties = ({
             onClose={hideStateMachineProperties}>
             <Form compact={false}>
                 <Header>
-                    <Title>{stateMachine}</Title>
+                    <Box align="center">
+                        <Title>{stateMachine}</Title>
+                    </Box>
                 </Header>
 
                 <FormField>

@@ -51,7 +51,6 @@ const MenuSpy = ({
     currentComponent,
     snapshotAll
 }) => {
-    console.error(getStateMachines());
     return (
         <Menu
             responsive={true}
