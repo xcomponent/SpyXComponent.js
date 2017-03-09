@@ -53,8 +53,8 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         updateGraphic: (component, stateMachine, data) => {
             dispatch(updateGraphic(component, stateMachine, data));
         },
-        showTransitionProperties: (stateMachine, messageType) => {
-            dispatch(showTransitionProperties(stateMachine, messageType));
+        showTransitionProperties: (stateMachine, messageType, jsonMessageString, id) => {
+            dispatch(showTransitionProperties(stateMachine, messageType, jsonMessageString, id));
         }
     };
 };
@@ -81,7 +81,7 @@ class CompositionModel extends React.Component<any, any> {
             if (data.isGroup) { // it is a stateMachine
                 props.showStateMachineProperties(data.key, this.getFirstId(data.key));
             } else if (data.stateMachineTarget) {
-                props.showTransitionProperties(data.stateMachineTarget, data.messageType);
+                props.showTransitionProperties(data.stateMachineTarget, data.messageType, "{}", this.getFirstId(data.stateMachineTarget));
             }
         }).bind(this));
     }

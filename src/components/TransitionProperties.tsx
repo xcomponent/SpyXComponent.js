@@ -13,10 +13,12 @@ import { updateGraphic } from "actions/components";
 import * as Select from "grommet/components/Select";
 import { setStateMachineId } from "actions/stateMachineProperties";
 import * as Box from "grommet/components/Box";
-import { hideTransitionProperties } from "actions/transitionProperties";
+import { hideTransitionProperties, setJsonMessageString, setCurrentId } from "actions/transitionProperties";
 
 const mapStateToProps = (state) => {
     return {
+        id: state.transitionProperties.id,
+        jsonMessageString: state.transitionProperties.jsonMessageString,
         messageType: state.transitionProperties.messageType,
         active: state.transitionProperties.active,
         stateMachine: state.transitionProperties.stateMachine,
@@ -26,12 +28,27 @@ const mapStateToProps = (state) => {
             let currentComponent = state.components.currentComponent;
             let stateMachine = state.transitionProperties.stateMachine;
             return Object.keys(componentProperties[currentComponent].stateMachineProperties[stateMachine]);
+        },
+        getStateMachineRefFromId: (id) => {
+            if (!id) {
+                return null;
+            }
+            let componentProperties = state.components.componentProperties;
+            let currentComponent = state.components.currentComponent;
+            let stateMachine = state.transitionProperties.stateMachine;
+            return componentProperties[currentComponent].stateMachineProperties[stateMachine][id].stateMachineRef;
         }
     };
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
+        setCurrentId: (id) => {
+            dispatch(setCurrentId(id));
+        },
+        setJsonMessageString: (jsonMessageString) => {
+            dispatch(setJsonMessageString(jsonMessageString));
+        },
         hideTransitionProperties: () => {
             dispatch(hideTransitionProperties());
         },
@@ -42,12 +59,26 @@ const mapDispatchToProps = (dispatch) => {
                     let jsonMessage;
                     try {
                         jsonMessage = JSON.parse(jsonMessageString);
+                        publisher.send(component, stateMachine, messageType, jsonMessage);
                     } catch (e) {
                         alert("Json format incorrect");
                         console.error(e);
                     }
-                    publisher.send(component, stateMachine, messageType, jsonMessage);
                 });
+        },
+        sendContext: (stateMachineRef, messageType, jsonMessageString) => {
+            if (!stateMachineRef) {
+                alert("Please select an instance!");
+                return;
+            }
+            let jsonMessage;
+            try {
+                jsonMessage = JSON.parse(jsonMessageString);
+                stateMachineRef.send(messageType, jsonMessage);
+            } catch (e) {
+                alert("Json format incorrect");
+                console.error(e);
+            }
         }
     };
 };
@@ -59,11 +90,16 @@ const TransitionProperties = ({
     stateMachine,
     currentComponent,
     getInstances,
-    send
+    send,
+    sendContext,
+    jsonMessageString,
+    setJsonMessageString,
+    id,
+    setCurrentId,
+    getStateMachineRefFromId
 }) => {
     if (!active)
         return null;
-    let jsonMessageString = "{}";
     return <Layer onClose={hideTransitionProperties} closer={true} align="right">
         <Form compact={false}>
             <Header>
@@ -91,6 +127,7 @@ const TransitionProperties = ({
                 <fieldset>
                     <label htmlFor="instances">Instance identifier:
                         <select onChange={(e) => {
+                            setCurrentId(e.currentTarget.value);
                         }}>
                             {getInstances().map((id) => {
                                 return (
@@ -105,10 +142,10 @@ const TransitionProperties = ({
 
             <FormField >
                 <fieldset>
-                    <label htmlFor="jsonEvent">Json Event:
-                        <textarea onChange={(e) => {
-                            jsonMessageString = e.currentTarget.value;
-                        }}>{jsonMessageString}</textarea>
+                    <label htmlFor="jsonEvent" >Json Event:
+                        <textarea defaultValue={jsonMessageString} onChange={(e) => {
+                            setJsonMessageString(e.currentTarget.value);
+                        }}></textarea>
                     </label>
                 </fieldset>
             </FormField>
@@ -118,6 +155,7 @@ const TransitionProperties = ({
                     send(currentComponent, stateMachine, messageType, jsonMessageString);
                 }} />
                 <Button primary={true} type="button" label="Send context" onClick={() => {
+                    sendContext(getStateMachineRefFromId(id), messageType, jsonMessageString);
                 }} />
             </Footer>
         </Form >
