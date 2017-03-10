@@ -1,6 +1,5 @@
 # SpyXComponent.js
 
-## SpyXComponent
 SpyXComponent is web application made with TypeScript/ReactJS/Redux to monitor in real time microservices generated with XComponent software.
 
 ## Build from source
