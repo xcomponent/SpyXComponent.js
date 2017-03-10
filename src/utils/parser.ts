@@ -9,10 +9,10 @@ export class Parser {
     private controlPointTriggerable: { [key: string]: Curve };
     private stateMachines: { [key: string]: StateMachine };
     private states: { [key: string]: State };
-    private finalStates: Array<String>;
     private linksLabel: Array<LinkLabelTemplate>;
     private componentGraphicalModel: ComponentGraphicalModel;
 
+    public finalStates: Array<String>;
     public entryPoints: Array<String>;
     public stateMachineNames: Array<string>;
     public linkDataArray: Array<TransitionTemplate | TriggerableTransitionTemplate>;

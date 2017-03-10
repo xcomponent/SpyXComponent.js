@@ -126,7 +126,7 @@ const TransitionProperties = ({
             <FormField>
                 <fieldset>
                     <label htmlFor="instances">Instance identifier:
-                        <select onChange={(e) => {
+                            <select onChange={(e) => {
                             setCurrentId(e.currentTarget.value);
                         }}>
                             {getInstances().map((id) => {
@@ -135,7 +135,6 @@ const TransitionProperties = ({
                                 );
                             })}
                         </select>
-
                     </label>
                 </fieldset>
             </FormField>

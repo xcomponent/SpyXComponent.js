@@ -23,6 +23,9 @@ import { showTransitionProperties } from "actions/transitionProperties";
 
 const mapStateToProps = (state) => {
     return {
+        getCurrentComponent: () => {
+            return state.components.currentComponent;
+        },
         currentComponent: state.components.currentComponent,
         getDiagram: () => {
             let initialized = state.components.initialized;
@@ -67,21 +70,33 @@ class CompositionModel extends React.Component<any, any> {
         this.subscribeAllStateMachines = this.subscribeAllStateMachines.bind(this);
         this.getFirstId = this.getFirstId.bind(this);
         this.snapshotEntryPoint = this.snapshotEntryPoint.bind(this);
+        this.getCurrentComponent = this.getCurrentComponent.bind(this);
     }
 
     getFirstId(stateMachine) {
         return this.props.getFirstId(stateMachine);
     }
 
+    getCurrentComponent() {
+        return this.props.getCurrentComponent();
+    }
+
     addDiagramEventClick(diagram) {
         let props = this.props;
-        diagram.addDiagramListener("ObjectDoubleClicked", (function (diagramEvent: go.DiagramEvent) {
+        diagram.addDiagramListener("ObjectDoubleClicked", ((diagramEvent: go.DiagramEvent) => {
             let data = diagramEvent.subject.part.data;
             console.error(data);
             if (data.isGroup) { // it is a stateMachine
                 props.showStateMachineProperties(data.key, this.getFirstId(data.key));
-            } else if (data.stateMachineTarget) {
-                props.showTransitionProperties(data.stateMachineTarget, data.messageType, "{}", this.getFirstId(data.stateMachineTarget));
+            } else if (data.stateMachineTarget) { // it is a transition
+                sessionXCSpy.getPromiseCreateSession()
+                    .then((session) => {
+                        if (session.createPublisher().canPublish(this.getCurrentComponent(), data.stateMachineTarget, data.messageType)) {
+                            props.showTransitionProperties(data.stateMachineTarget, data.messageType, "{}", this.getFirstId(data.stateMachineTarget));
+                        } else {
+                            alert("API cannot send " + data.messageType + " event to " + data.stateMachineTarget);
+                        }
+                    });
             }
         }).bind(this));
     }
@@ -133,7 +148,8 @@ class CompositionModel extends React.Component<any, any> {
             }
             componentProperties[comps[i].name] = {
                 diagram: drawComponent.diagram,
-                stateMachineProperties
+                stateMachineProperties,
+                finalStates: parser.finalStates
             };
             this.addDiagramEventClick(drawComponent.diagram);
             this.subscribeAllStateMachines(comps[i].name, parser.stateMachineNames);

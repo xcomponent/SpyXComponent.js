@@ -9,7 +9,7 @@ import * as FormField from "grommet/components/FormField";
 import * as Button from "grommet/components/Button";
 import * as Footer from "grommet/components/Footer";
 import sessionXCSpy from "utils/sessionXCSpy";
-import { updateGraphic } from "actions/components";
+import { updateGraphic, clearFinalStates } from "actions/components";
 import * as Select from "grommet/components/Select";
 import { setStateMachineId } from "actions/stateMachineProperties";
 import * as Box from "grommet/components/Box";
@@ -20,11 +20,17 @@ const mapStateToProps = (state) => {
         stateMachine: state.stateMachineProperties.stateMachine,
         id: state.stateMachineProperties.id,
         currentComponent: state.components.currentComponent,
-        getInstances: () => {
+        getIds: () => {
             let componentProperties = state.components.componentProperties;
             let currentComponent = state.components.currentComponent;
             let stateMachine = state.stateMachineProperties.stateMachine;
             return Object.keys(componentProperties[currentComponent].stateMachineProperties[stateMachine]);
+        },
+        getInstances: () => {
+            let componentProperties = state.components.componentProperties;
+            let currentComponent = state.components.currentComponent;
+            let stateMachine = state.stateMachineProperties.stateMachine;
+            return componentProperties[currentComponent].stateMachineProperties[stateMachine];
         },
         getPublicMember: () => {
             let id = state.stateMachineProperties.id;
@@ -44,12 +50,21 @@ const mapStateToProps = (state) => {
             let currentComponent = state.components.currentComponent;
             let stateMachine = state.stateMachineProperties.stateMachine;
             return componentProperties[currentComponent].stateMachineProperties[stateMachine][id].stateMachineRef;
+        },
+        getFirstId: (stateMachine) => {
+            let componentProperties = state.components.componentProperties;
+            let currentComponent = state.components.currentComponent;
+            return Object.keys(componentProperties[currentComponent].stateMachineProperties[stateMachine])[0];
         }
+
     };
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
+        clearFinalStates: (component, stateMachine) => {
+            dispatch(clearFinalStates(component, stateMachine));
+        },
         setStateMachineId: (id) => {
             dispatch(setStateMachineId(id));
         },
@@ -70,23 +85,34 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     };
 };
 
+const getStyle = (id, instances) => {
+    let backgroundColor = (id && instances[id].isFinal) ? "#ED0000" : "white";
+    return {
+        "backgroundColor": backgroundColor
+    };
+};
+
 const StateMachineProperties = ({
     updateGraphic,
     hideStateMachineProperties,
     active,
     stateMachine,
     currentComponent,
-    getInstances,
+    getIds,
     setStateMachineId,
     id,
     getPublicMember,
-    getStateMachineRef
+    getStateMachineRef,
+    clearFinalStates,
+    getFirstId,
+    getInstances
 }) => {
     if (!active)
         return null;
-    if (!id && getInstances().length > 0) {
-        setStateMachineId(getInstances()[0]);
+    if (!id && getIds().length > 0) {
+        setStateMachineId(getIds()[0]);
     }
+    let instances = getInstances();
     return (
         <Layer
             closer={true}
@@ -102,12 +128,12 @@ const StateMachineProperties = ({
                 <FormField>
                     <fieldset>
                         <label htmlFor="instances">Instance identifier:
-                        <select onChange={(e) => {
+                        <select style={getStyle(id, instances)} onChange={(e) => {
                                 setStateMachineId(e.currentTarget.value);
                             }}>
-                                {getInstances().map((id) => {
+                                {Object.keys(instances).map((id) => {
                                     return (
-                                        <option key={id} value={id}>{id}</option>
+                                        <option key={id} value={id} style={getStyle(id, instances)}>#{id}</option>
                                     );
                                 })}
                             </select>
@@ -144,7 +170,10 @@ const StateMachineProperties = ({
                 <Button primary={true} type="button" label="Snapshot" onClick={() => {
                     updateGraphic(currentComponent, stateMachine);
                 }} />
-                <Button primary={true} type="button" label="Clear" onClick={() => { }} />
+                <Button primary={true} type="button" label="Clear" onClick={() => {
+                    clearFinalStates(currentComponent, stateMachine);
+                    setStateMachineId(getFirstId(stateMachine));
+                }} />
             </Form >
         </Layer>
     );

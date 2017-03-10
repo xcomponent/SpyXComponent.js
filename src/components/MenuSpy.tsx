@@ -5,7 +5,7 @@ import * as Actions from "grommet/components/icons/base/Actions";
 import { connect } from "react-redux";
 import { showSideBar } from "actions/sideBar";
 import sessionXCSpy from "utils/sessionXCSpy";
-import { updateGraphic } from "actions/components";
+import { updateGraphic, clearFinalStates } from "actions/components";
 
 const mapStateToProps = (state) => {
     return {
@@ -23,6 +23,11 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
+        clearFinalStates: (component, stateMachines) => {
+            for (let i = 0; i < stateMachines.length; i++) {
+                dispatch(clearFinalStates(component, stateMachines[i]));
+            }
+        },
         showSideBar: () => {
             dispatch(showSideBar());
         },
@@ -49,7 +54,8 @@ const MenuSpy = ({
     showSideBar,
     getStateMachines,
     currentComponent,
-    snapshotAll
+    snapshotAll,
+    clearFinalStates
 }) => {
     return (
         <Menu
@@ -62,7 +68,9 @@ const MenuSpy = ({
             }}>
                 Snapshot All
             </Anchor>
-            <Anchor href="#">
+            <Anchor href="#" onClick={() => {
+                clearFinalStates(currentComponent, getStateMachines());
+            }}>
                 Clear All
             </Anchor>
             <Anchor href="#" onClick={showSideBar}>
