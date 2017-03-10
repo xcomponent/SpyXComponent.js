@@ -8,7 +8,7 @@ Download the source code and execute the following commands:
 npm install
 npm start
 ```
-Then connect to localhost:8080 and don't forget to ignore certificate errors by connecting to https://localhost:443 if the address of our websocket server is wss://localhost:443
+Then connect via the browser to localhost:8080 and don't forget to ignore certificate errors by connecting to https://localhost:443 if the address of our websocket server is wss://localhost:443
 ## Run unit tests
 Execute the following command:
 ``` 
