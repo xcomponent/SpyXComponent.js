@@ -14,6 +14,7 @@ import * as Select from "grommet/components/Select";
 import { setStateMachineId } from "actions/stateMachineProperties";
 import * as Box from "grommet/components/Box";
 import { hideTransitionProperties, setJsonMessageString, setCurrentId } from "actions/transitionProperties";
+import Instances from "components/Instances";
 
 const mapStateToProps = (state) => {
     return {
@@ -23,12 +24,6 @@ const mapStateToProps = (state) => {
         active: state.transitionProperties.active,
         stateMachine: state.transitionProperties.stateMachine,
         currentComponent: state.components.currentComponent,
-        getInstances: () => {
-            let componentProperties = state.components.componentProperties;
-            let currentComponent = state.components.currentComponent;
-            let stateMachine = state.transitionProperties.stateMachine;
-            return Object.keys(componentProperties[currentComponent].stateMachineProperties[stateMachine]);
-        },
         getStateMachineRefFromId: (id) => {
             if (!id) {
                 return null;
@@ -36,7 +31,11 @@ const mapStateToProps = (state) => {
             let componentProperties = state.components.componentProperties;
             let currentComponent = state.components.currentComponent;
             let stateMachine = state.transitionProperties.stateMachine;
-            return componentProperties[currentComponent].stateMachineProperties[stateMachine][id].stateMachineRef;
+            let instance = componentProperties[currentComponent].stateMachineProperties[stateMachine][id];
+            if (instance.isFinal) {
+                return null;
+            }
+            return instance.stateMachineRef;
         }
     };
 };
@@ -89,7 +88,6 @@ const TransitionProperties = ({
     hideTransitionProperties,
     stateMachine,
     currentComponent,
-    getInstances,
     send,
     sendContext,
     jsonMessageString,
@@ -126,18 +124,11 @@ const TransitionProperties = ({
             <FormField>
                 <fieldset>
                     <label htmlFor="instances">Instance identifier:
-                            <select onChange={(e) => {
-                            setCurrentId(e.currentTarget.value);
-                        }}>
-                            {getInstances().map((id) => {
-                                return (
-                                    <option key={id} value={id}>{id}</option>
-                                );
-                            })}
-                        </select>
+                        <Instances onChange={setCurrentId} stateMachine={stateMachine} id={id}/>
                     </label>
                 </fieldset>
             </FormField>
+
 
             <FormField >
                 <fieldset>

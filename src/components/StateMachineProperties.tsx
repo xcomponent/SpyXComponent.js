@@ -13,6 +13,7 @@ import { updateGraphic, clearFinalStates } from "actions/components";
 import * as Select from "grommet/components/Select";
 import { setStateMachineId } from "actions/stateMachineProperties";
 import * as Box from "grommet/components/Box";
+import Instances from "components/Instances";
 
 const mapStateToProps = (state) => {
     return {
@@ -25,12 +26,6 @@ const mapStateToProps = (state) => {
             let currentComponent = state.components.currentComponent;
             let stateMachine = state.stateMachineProperties.stateMachine;
             return Object.keys(componentProperties[currentComponent].stateMachineProperties[stateMachine]);
-        },
-        getInstances: () => {
-            let componentProperties = state.components.componentProperties;
-            let currentComponent = state.components.currentComponent;
-            let stateMachine = state.stateMachineProperties.stateMachine;
-            return componentProperties[currentComponent].stateMachineProperties[stateMachine];
         },
         getPublicMember: () => {
             let id = state.stateMachineProperties.id;
@@ -104,15 +99,13 @@ const StateMachineProperties = ({
     getPublicMember,
     getStateMachineRef,
     clearFinalStates,
-    getFirstId,
-    getInstances
+    getFirstId
 }) => {
     if (!active)
         return null;
     if (!id && getIds().length > 0) {
         setStateMachineId(getIds()[0]);
     }
-    let instances = getInstances();
     return (
         <Layer
             closer={true}
@@ -128,15 +121,7 @@ const StateMachineProperties = ({
                 <FormField>
                     <fieldset>
                         <label htmlFor="instances">Instance identifier:
-                        <select style={getStyle(id, instances)} onChange={(e) => {
-                                setStateMachineId(e.currentTarget.value);
-                            }}>
-                                {Object.keys(instances).map((id) => {
-                                    return (
-                                        <option key={id} value={id} style={getStyle(id, instances)}>#{id}</option>
-                                    );
-                                })}
-                            </select>
+                            <Instances onChange={setStateMachineId} stateMachine={stateMachine} id={id} />
                         </label>
                     </fieldset>
                 </FormField>
