@@ -10,7 +10,13 @@ const mapStateToProps = (state, ownProps) => {
             return componentProperties[currentComponent].stateMachineProperties[stateMachine];
         },
         onChange: ownProps.onChange,
-        id: ownProps.id
+        getId: () => {
+            if (state.transitionProperties.active) {
+                return state.transitionProperties.id;
+            } else {
+                return state.stateMachineProperties.id;
+            }
+        }
     };
 };
 
@@ -31,10 +37,11 @@ const getStyle = (id, instances) => {
 const Instances = ({
     onChange,
     getInstances,
-    id
+    getId
  }) => {
+    let id = getId();
     return (
-        <select style={getStyle(id, getInstances())} onChange={(e) => {
+        <select style={getStyle(id, getInstances())} value={id} onChange={(e) => {
             onChange(e.currentTarget.value);
         }}>
             {Object.keys(getInstances()).map((id) => {

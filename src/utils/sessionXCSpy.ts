@@ -1,4 +1,5 @@
-import xcomponentapi from "reactivexcomponent.js/lib/xcomponentapi.js";
+import xcomponentapi from "reactivexcomponent.js";
+import { xcLogLevel } from "reactivexcomponent.js";
 
 class SessionXCSpy {
     private promiseCreateSession: Promise<any> = null;
@@ -12,11 +13,14 @@ class SessionXCSpy {
                 resolve(session);
             });
         });
+        xcomponentapi.setLogLevel(xcLogLevel.INFO);
     }
 
     getPromiseCreateSession() {
         return this.promiseCreateSession;
     }
+
+
 }
 
 export default new SessionXCSpy();

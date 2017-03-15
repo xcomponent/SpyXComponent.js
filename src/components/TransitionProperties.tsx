@@ -124,7 +124,7 @@ const TransitionProperties = ({
             <FormField>
                 <fieldset>
                     <label htmlFor="instances">Instance identifier:
-                        <Instances onChange={setCurrentId} stateMachine={stateMachine} id={id}/>
+                        <Instances onChange={setCurrentId} stateMachine={stateMachine}/>
                     </label>
                 </fieldset>
             </FormField>

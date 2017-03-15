@@ -121,7 +121,7 @@ const StateMachineProperties = ({
                 <FormField>
                     <fieldset>
                         <label htmlFor="instances">Instance identifier:
-                            <Instances onChange={setStateMachineId} stateMachine={stateMachine} id={id} />
+                            <Instances onChange={setStateMachineId} stateMachine={stateMachine} />
                         </label>
                     </fieldset>
                 </FormField>
@@ -156,8 +156,8 @@ const StateMachineProperties = ({
                     updateGraphic(currentComponent, stateMachine);
                 }} />
                 <Button primary={true} type="button" label="Clear" onClick={() => {
-                    clearFinalStates(currentComponent, stateMachine);
                     setStateMachineId(getFirstId(stateMachine));
+                    clearFinalStates(currentComponent, stateMachine);
                 }} />
             </Form >
         </Layer>

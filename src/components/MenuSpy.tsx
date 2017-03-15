@@ -1,7 +1,7 @@
 import * as React from "react";
 import * as Anchor from "grommet/components/Anchor";
 import * as Menu from "grommet/components/Menu";
-import * as Actions from "grommet/components/icons/base/Actions";
+import * as MenuIcon from "grommet/components/icons/base/Menu";
 import { connect } from "react-redux";
 import { showSideBar } from "actions/sideBar";
 import sessionXCSpy from "utils/sessionXCSpy";
@@ -62,7 +62,7 @@ const MenuSpy = ({
             responsive={true}
             primary={true}
             inline={false}
-            icon={<Actions />}>
+            icon={<MenuIcon />}>
             <Anchor href="#" onClick={() => {
                 snapshotAll(currentComponent, getStateMachines());
             }}>
