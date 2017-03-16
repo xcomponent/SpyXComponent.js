@@ -47,7 +47,7 @@
     "deep-freeze": "0.0.1",
     "es6-promisify": "^5.0.0",
     "es6-shim": "^0.35.2",
-    "gojs": "^1.7.1",
+    "gojs": "^1.7.4",
     "grommet": "^1.1.0",
     "react": "^15.4.1",
     "react-dom": "^15.4.1",
