@@ -20,7 +20,6 @@ class SessionXCSpy {
         return this.promiseCreateSession;
     }
 
-
 }
 
 export default new SessionXCSpy();

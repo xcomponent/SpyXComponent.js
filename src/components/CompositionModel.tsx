@@ -15,13 +15,13 @@ import * as Anchor from "grommet/components/Anchor";
 import * as Menu from "grommet/components/Menu";
 import { showStateMachineProperties } from "actions/stateMachineProperties";
 import StateMachineProperties from "components/StateMachineProperties";
-import MenuSpy from "components/MenuSpy";
+import AppHeader from "components/AppHeader";
 import sessionXCSpy from "utils/sessionXCSpy";
 import * as go from "gojs";
 import TransitionProperties from "components/TransitionProperties";
 import { showTransitionProperties } from "actions/transitionProperties";
 import * as Title from "grommet/components/Title";
-import * as HomeIcon from "grommet/components/icons/base/home";
+import * as Button from "grommet/components/Button";
 
 const mapStateToProps = (state) => {
     return {
@@ -191,9 +191,7 @@ class CompositionModel extends React.Component<any, any> {
             <Split flex="right">
                 <SideBar />
                 <Box full={true} direction="column">
-                    <Box alignContent="end">
-                        <MenuSpy />
-                    </Box>
+                    <AppHeader />
                     <Box>
                         {this.getContainersForGraphs(props.getDiagram())}
                     </Box>
