@@ -69,7 +69,6 @@ class SideBar extends React.Component<any, any> {
                     key={components[i]}
                     value={components[i]}
                     className={(props.currentComponent === components[i]) ? "active" : ""}
-                    href="#"
                     onClick={(e) => {
                         props.setCurrentComponent(e.target.getAttribute("value"));
                     }}>
