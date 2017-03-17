@@ -75,7 +75,7 @@ let ConfigForm = ({
                     <FormField>
                         <fieldset>
                             <label htmlFor="API">API Name:</label>
-                            <Select placeHolder="None"
+                            <Select
                                 options={apis}
                                 value={apis[0]}
                                 onChange={(e) => {

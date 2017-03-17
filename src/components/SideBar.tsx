@@ -45,14 +45,16 @@ class SideBar extends React.Component<any, any> {
 
     getTitle() {
         return (
-            <Header size="large" justify="between">
-                <Box pad="medium">
+            <Box direction="row">
+                <Box size="medium" pad="medium" justify="between">
                     <Title>
                         {this.props.projectName}
                     </Title>
                 </Box>
-                <Button icon={<CloseIcon />} onClick={this.props.hideSideBar} plain={true} />
-            </Header>
+                <Box size="large" align="end">
+                    <Button icon={<CloseIcon size="medium"/>} onClick={this.props.hideSideBar} plain={true} />
+                </Box>
+            </Box>
         );
     }
 
