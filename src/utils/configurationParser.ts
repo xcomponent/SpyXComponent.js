@@ -19,7 +19,14 @@ export const modelTags: { [key: string]: string } = {
     // state
     IsEntryPoint: "IsEntryPoint",
     State: "State",
-    Separator: "&"
+    Separator: "&",
+    // transition pattern
+    TransitionPatternStates: "TransitionPatternStates",
+    TransitionPatternStateData: "TransitionPatternStateData",
+    SelectedStatesKeys: "SelectedStatesKeys",
+    string: "string",
+    TP_State: "TP_State",
+    StateGraphicalData: "StateGraphicalData",
 };
 
 export const graphicalTags: { [key: string]: string } = {
@@ -32,5 +39,7 @@ export const graphicalTags: { [key: string]: string } = {
     Links: "Links",
     Point: "Point",
     X: "X",
-    Y: "Y"
+    Y: "Y",
+    States: "States",
+    TransitionPatternStates: "TransitionPatternStates"
 };

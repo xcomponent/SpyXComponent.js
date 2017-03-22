@@ -2,6 +2,7 @@ import { INITIALIZATION, SET_CURRENT_COMPONENT, UPDATE_GRAPHIC, CLEAR_FINAL_STAT
 import * as go from "gojs";
 import { DrawComponent } from "utils/drawComponent";
 import { modelTags } from "utils/configurationParser";
+import { activeStateColor, stateColor } from "utils/graphicColors";
 
 interface Instance {
     jsonMessage: any;
@@ -13,6 +14,7 @@ interface ComponentProperties {
     diagram: go.Diagram;
     stateMachineProperties: { [name: string]: { [id: number]: Instance } };
     finalStates: Array<String>;
+    entryPointState: string;
 };
 
 interface Components {
@@ -29,19 +31,20 @@ const initialState = {
     initialized: false
 };
 
-const updateState = (diagram, stateKey, increment) => {
+const updateState = (diagram, stateKey, finalStates, entryPointState, increment) => {
     let data = diagram.findNodeForKey(stateKey).data;
     let oldValue = data.numberOfStates;
     let newValue = oldValue + increment;
     diagram.model.setDataProperty(data, "numberOfStates", newValue);
     diagram.model.setDataProperty(data, "text", data.stateName + " (" + data.numberOfStates + ")");
-    // Must change color in those cases if (oldValue === 0 || newValue === 0) {
+    if (finalStates.indexOf(stateKey) > -1 || entryPointState === stateKey)
+        return;
     if (newValue === 0) {
-        diagram.model.setDataProperty(data, "fill", "lightgray");
-        diagram.model.setDataProperty(data, "stroke", "black");
+        diagram.model.setDataProperty(data, "fill", stateColor);
+        diagram.model.setDataProperty(data, "stroke", stateColor);
     } else {
-        diagram.model.setDataProperty(data, "fill", "red");
-        diagram.model.setDataProperty(data, "stroke", "red");
+        diagram.model.setDataProperty(data, "fill", activeStateColor);
+        diagram.model.setDataProperty(data, "stroke", activeStateColor);
     }
 };
 
@@ -52,9 +55,6 @@ const clearFinalStates = (diagram, finalStatesToClear, stateMachine, numberOfIns
     diagram.model.setDataProperty(stateMachineData, "text", stateMachineData.key + " (" + stateMachineData.numberOfInstances + ")");
     for (let i = 0; i < finalStatesToClear.length; i++) {
         let stateData = diagram.findNodeForKey(finalStatesToClear[i]).data;
-        // change color
-        diagram.model.setDataProperty(stateData, "fill", "lightgray");
-        diagram.model.setDataProperty(stateData, "stroke", "black");
         // change number in state
         diagram.model.setDataProperty(stateData, "numberOfStates", 0);
         diagram.model.setDataProperty(stateData, "text", stateData.stateName + " (" + stateData.numberOfStates + ")");
@@ -85,16 +85,18 @@ export const componentsReducer = (state = initialState, action) => {
             let nodeData = diagram.findNodeForKey(action.stateMachine).data;
             let newState = action.data.stateMachineRef.StateName;
             let newStateKey = action.stateMachine + modelTags.Separator + newState;
+            let finalStates = componentProperties[action.component].finalStates;
+            let entryPointState = componentProperties[action.component].entryPointState;
             diagram.model.startTransaction(UPDATE_GRAPHIC);
             if (instances[stateMachineId]) {
                 let oldState = instances[stateMachineId].stateMachineRef.StateName;
                 if (oldState !== newState) {
-                    updateState(diagram, newStateKey, +1);
-                    updateState(diagram, action.stateMachine + modelTags.Separator + oldState, -1);
+                    updateState(diagram, newStateKey, finalStates, entryPointState, +1);
+                    updateState(diagram, action.stateMachine + modelTags.Separator + oldState, finalStates, entryPointState, -1);
                 }
             } else {
                 diagram.model.setDataProperty(nodeData, "numberOfInstances", nodeData.numberOfInstances + 1);
-                updateState(diagram, newStateKey, +1);
+                updateState(diagram, newStateKey, finalStates, entryPointState, +1);
             }
             let instance: Instance = {
                 jsonMessage: action.data.jsonMessage,

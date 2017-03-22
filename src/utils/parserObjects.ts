@@ -20,6 +20,8 @@ export interface State {
     group: string;
     key: string;
     isFinal: boolean;
+    isPatternTransitionState: boolean;
+    isEntryPoint?: boolean;
 };
 
 export interface ComponentGraphicalModel {

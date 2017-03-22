@@ -1,6 +1,7 @@
 
 import * as go from "gojs";
 import { Parser } from "utils/parser";
+import { stateMachineColor } from "utils/graphicColors";
 
 export class DrawComponent {
 
@@ -27,7 +28,7 @@ export class DrawComponent {
             $(go.Diagram, divId,
                 {
                     contentAlignment: go.Spot.Center,
-                    "InitialLayoutCompleted": function (e) { thisObject.loadControls(e.diagram); }
+                    InitialLayoutCompleted: (e) => { thisObject.loadControls(e.diagram); }
                 });
         return diagram;
     }
@@ -104,7 +105,7 @@ export class DrawComponent {
         let groupTemplate =
             $(go.Group, "Auto",
                 $(go.Shape, "Rectangle",
-                    { fill: "rgba(0,0,128,0.45)" }),
+                    { fill: stateMachineColor }),
                 $(go.Panel, "Vertical",
                     {
                         margin: 5,

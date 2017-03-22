@@ -156,8 +156,8 @@ const StateMachineProperties = ({
                     updateGraphic(currentComponent, stateMachine);
                 }} />
                 <Button primary={true} type="button" label="Clear" onClick={() => {
-                    setStateMachineId(getFirstId(stateMachine));
                     clearFinalStates(currentComponent, stateMachine);
+                    setStateMachineId(getFirstId(stateMachine));
                 }} />
             </Form >
         </Layer>

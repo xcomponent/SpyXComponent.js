@@ -22,6 +22,7 @@ import TransitionProperties from "components/TransitionProperties";
 import { showTransitionProperties } from "actions/transitionProperties";
 import * as Title from "grommet/components/Title";
 import * as Button from "grommet/components/Button";
+import { backgroundColor } from "utils/graphicColors";
 
 const mapStateToProps = (state) => {
     return {
@@ -121,17 +122,15 @@ class CompositionModel extends React.Component<any, any> {
             });
     }
 
-    snapshotEntryPoint(component, entryPoints) {
+    snapshotEntryPoint(component, entryPoint) {
         let props = this.props;
         sessionXCSpy.getPromiseCreateSession()
             .then((session) => {
-                for (let j = 0; j < entryPoints.length; j++) {
-                    session.createSubscriber().getSnapshot(component, entryPoints[j], (items) => {
-                        for (let i = 0; i < items.length; i++) {
-                            props.updateGraphic(component, entryPoints[j], items[i]);
-                        }
-                    });
-                }
+                session.createSubscriber().getSnapshot(component, entryPoint, (items) => {
+                    for (let i = 0; i < items.length; i++) {
+                        props.updateGraphic(component, entryPoint, items[i]);
+                    }
+                });
             });
     }
 
@@ -151,11 +150,12 @@ class CompositionModel extends React.Component<any, any> {
             componentProperties[comps[i].name] = {
                 diagram: drawComponent.diagram,
                 stateMachineProperties,
-                finalStates: parser.finalStates
+                finalStates: parser.finalStates,
+                entryPointState: parser.entryPointState
             };
             this.addDiagramEventClick(drawComponent.diagram);
             this.subscribeAllStateMachines(comps[i].name, parser.stateMachineNames);
-            this.snapshotEntryPoint(comps[i].name, parser.entryPoints);
+            this.snapshotEntryPoint(comps[i].name, parser.entryPointStateMachine);
         }
         props.initialization(componentProperties, comps[0].name, props.compositionModel.projectName);
     }
@@ -175,7 +175,7 @@ class CompositionModel extends React.Component<any, any> {
                         "height": "100%",
                         "width": "100%",
                         "display": visibility,
-                        "backgroundColor": "LightGrey"
+                        "backgroundColor": backgroundColor
                     }}></div>
             );
             if (diagram) {

@@ -1,7 +1,7 @@
 import { graphicalTags, modelTags } from "utils/configurationParser";
 import { LinkLabelTemplate, TransitionTemplate, TriggerableTransitionTemplate, StateMachineTemplate, StateTemplate } from "utils/gojsTemplates";
 import { Point, Curve, StateMachine, State, ComponentGraphicalModel } from "utils/parserObjects";
-
+import { finalStateColor, stateColor, transitionPatternStateColor, entryPointStateColor } from "utils/graphicColors";
 export class Parser {
 
     private locations: { [key: string]: Point };
@@ -9,11 +9,13 @@ export class Parser {
     private controlPointTriggerable: { [key: string]: Curve };
     private stateMachines: { [key: string]: StateMachine };
     private states: { [key: string]: State };
+    private transitionPatternStates: { [key: string]: State };
     private linksLabel: Array<LinkLabelTemplate>;
     private componentGraphicalModel: ComponentGraphicalModel;
 
     public finalStates: Array<String>;
-    public entryPoints: Array<String>;
+    public entryPointState: string;
+    public entryPointStateMachine: string;
     public stateMachineNames: Array<string>;
     public linkDataArray: Array<TransitionTemplate | TriggerableTransitionTemplate>;
     public nodeDataArray: Array<StateMachineTemplate | StateTemplate | LinkLabelTemplate>;
@@ -25,12 +27,14 @@ export class Parser {
     parse() {
         this.parseGraphical();
         this.parseModel();
+        console.error(this.entryPointState);
+        console.error(this.entryPointStateMachine);
     }
 
     private parseGraphical(): void {
         this.locations = {};
         let xmlGraphicalDom = (new DOMParser()).parseFromString(this.componentGraphicalModel.graphical, "text/xml");
-        let stateGraphicalData = xmlGraphicalDom.getElementsByTagName(graphicalTags.StateGraphicalData);
+        let stateGraphicalData = xmlGraphicalDom.getElementsByTagName(graphicalTags.States)[0].getElementsByTagName(graphicalTags.StateGraphicalData);
         for (let i = 0; i < stateGraphicalData.length; i++) {
             let id = stateGraphicalData[i].getAttribute(graphicalTags.Id);
             this.locations[id] = {
@@ -38,6 +42,16 @@ export class Parser {
                 y: parseFloat(stateGraphicalData[i].getAttribute(graphicalTags.CenterY))
             };
         }
+
+        stateGraphicalData = xmlGraphicalDom.getElementsByTagName(graphicalTags.TransitionPatternStates)[0].getElementsByTagName(graphicalTags.StateGraphicalData);
+        for (let i = 0; i < stateGraphicalData.length; i++) {
+            let id = stateGraphicalData[i].getAttribute(graphicalTags.Id);
+            this.locations[id] = {
+                x: parseFloat(stateGraphicalData[i].getAttribute(graphicalTags.CenterX)),
+                y: parseFloat(stateGraphicalData[i].getAttribute(graphicalTags.CenterY))
+            };
+        }
+
         let transitionGraphicalData;
 
         transitionGraphicalData = xmlGraphicalDom.getElementsByTagName(graphicalTags.Links)[0]
@@ -55,6 +69,7 @@ export class Parser {
         this.setStates(scxmlDom);
         this.setLinks(scxmlDom);
         this.finalStates = this.getFinalStates();
+        this.entryPointState = this.getEntyPointState();
         this.nodeDataArray = this.getNodeDataArray();
         this.nodeDataArray = this.nodeDataArray.concat(this.linksLabel);
         this.addControlPoint();
@@ -82,7 +97,7 @@ export class Parser {
 
     private getNodeDataArray(): Array<StateMachineTemplate | StateTemplate | LinkLabelTemplate> {
         let nodeDataArray: Array<StateMachineTemplate | StateTemplate | LinkLabelTemplate> = [];
-        let ids, state, stateMachine;
+        let ids, state, stateMachine, id;
         ids = Object.keys(this.stateMachines);
         for (let i = 0; i < ids.length; i++) {
             stateMachine = this.stateMachines[ids[i]];
@@ -93,18 +108,37 @@ export class Parser {
                 "numberOfInstances": 0
             });
         }
-        ids = Object.keys(this.states);
+        ids = Object.keys(this.states).concat(Object.keys(this.transitionPatternStates));
         for (let j = 0; j < ids.length; j++) {
             state = this.states[ids[j]];
+            let loc, color, text;
+            if (!this.states[ids[j]]) {
+                id = ids[j].substring(modelTags.TP_State.length, ids[j].length);
+                loc = this.locations[id].x + " " + this.locations[id].y;
+                color = transitionPatternStateColor;
+                state = this.transitionPatternStates[ids[j]];
+                text = state.name;
+            } else {
+                id = ids[j].substring(modelTags.State.length, ids[j].length);
+                loc = this.locations[id].x + " " + this.locations[id].y;
+                text = state.name + " (0)";
+                if (state.isFinal) {
+                    color = finalStateColor;
+                } else if (!state.isEntryPoint) {
+                    color = stateColor;
+                } else {
+                    color = entryPointStateColor;
+                }
+            }
             nodeDataArray.push({
                 "key": state.key,
-                "text": state.name + " (0)",
+                "text": text,
                 "group": state.group,
                 "stateName": state.name,
                 "numberOfStates": 0,
-                "fill": "lightgray",
-                "stroke": "black",
-                "loc": this.getLocation(ids[j])
+                "fill": color,
+                "stroke": color,
+                "loc": loc
             });
         }
         return nodeDataArray;
@@ -152,6 +186,14 @@ export class Parser {
         return finalStates;
     }
 
+    private getEntyPointState(): string {
+        for (let id in this.states) {
+            if (this.states[id].isEntryPoint) {
+                return this.states[id].key;
+            }
+        }
+    }
+
     private setLinks(scxmlDom: Document): void {
         let linksDom = scxmlDom.getElementsByTagName(modelTags.TransitionData);
         this.linkDataArray = [];
@@ -160,9 +202,14 @@ export class Parser {
             from,
             to,
             text;
-
         for (let i = 0; i < linksDom.length; i++) {
             from = this.states[linksDom[i].getAttribute(modelTags.FromKey)];
+            if (!from) {
+                from = this.transitionPatternStates[linksDom[i].getAttribute(modelTags.FromKey)];
+                for (let k = 0; k < from.selectedStatesKeys.length; k++) {
+                    this.states[from.selectedStatesKeys[k]].isFinal = false;
+                }
+            }
             from.isFinal = false;
             to = this.states[linksDom[i].getAttribute(modelTags.ToKey)];
             text = linksDom[i].getAttribute(modelTags.Name);
@@ -187,9 +234,12 @@ export class Parser {
 
         let triggerableLinksDom = scxmlDom.getElementsByTagName(modelTags.TransversalTransitionData);
         for (let j = 0; j < triggerableLinksDom.length; j++) {
+            from = this.states[triggerableLinksDom[j].getAttribute(modelTags.FromKey)];
+            if (!from)
+                from = this.transitionPatternStates[triggerableLinksDom[j].getAttribute(modelTags.FromKey)];
             this.linkDataArray.push({
                 "key": triggerableLinksDom[j].getAttribute(modelTags.Id),
-                "from": this.states[triggerableLinksDom[j].getAttribute(modelTags.FromKey)].key,
+                "from": from.key,
                 "to": triggerableLinksDom[j].getAttribute(modelTags.ToId),
                 "strokeLink": "red",
                 "strokeArrow": "red",
@@ -207,7 +257,7 @@ export class Parser {
             group,
             name,
             isEntryPoint;
-        let entryPoints = [];
+        let entryPointStateMachine;
         for (let i = 0; i < statesDom.length; i++) {
             id = statesDom[i].getAttribute(modelTags.SubGraphKey);
             group = this.stateMachines[id].name;
@@ -217,14 +267,39 @@ export class Parser {
                 name: name,
                 group: group,
                 key: group + modelTags.Separator + name,
-                isFinal: true
+                isFinal: true,
+                isEntryPoint: isEntryPoint
             };
             if (isEntryPoint) {
-                entryPoints.push(group);
+                entryPointStateMachine = group;
             }
+
+        }
+        // transition pattern state
+        let transitionPatternStates = {};
+        let transitionPatternStateDataDom = scxmlDom.getElementsByTagName(modelTags.TransitionPatternStateData);
+        for (let i = 0; i < transitionPatternStateDataDom.length; i++) {
+            id = transitionPatternStateDataDom[i].getAttribute(modelTags.SubGraphKey);
+            group = this.stateMachines[id].name;
+            name = transitionPatternStateDataDom[i].getAttribute(modelTags.Name);
+            let selectedStatesKeys = [];
+            let selectedStatesKeysDom = transitionPatternStateDataDom[i].getElementsByTagName(modelTags.SelectedStatesKeys)[0]
+                .getElementsByTagName(modelTags.string);
+            for (let k = 0; k < selectedStatesKeysDom.length; k++) {
+                selectedStatesKeys.push(selectedStatesKeysDom[k].innerHTML);
+            }
+            transitionPatternStates[modelTags.TP_State + transitionPatternStateDataDom[i].getAttribute(modelTags.Id)] = {
+                name: name,
+                group: group,
+                key: group + modelTags.Separator + name,
+                isFinal: true,
+                isPatternTransitionState: true,
+                selectedStatesKeys: selectedStatesKeys
+            };
         }
         this.states = states;
-        this.entryPoints = entryPoints;
+        this.transitionPatternStates = transitionPatternStates;
+        this.entryPointStateMachine = entryPointStateMachine;
     }
 
     private setStateMachines(scxmlDom: Document): void {
