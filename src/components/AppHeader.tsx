@@ -3,25 +3,32 @@ import * as Anchor from "grommet/components/Anchor";
 import * as Menu from "grommet/components/Menu";
 import * as Box from "grommet/components/Box";
 import * as Title from "grommet/components/Title";
+import * as CheckBox from "grommet/components/CheckBox";
 import * as Button from "grommet/components/Button";
 import * as HomeIcon from "grommet/components/icons/base/home";
 import * as MenuIcon from "grommet/components/icons/base/Menu";
 import { connect } from "react-redux";
 import { showSideBar } from "actions/sideBar";
 import sessionXCSpy from "utils/sessionXCSpy";
-import { updateGraphic, clearFinalStates } from "actions/components";
+import { updateGraphic, clearFinalStates, setAutoClear } from "actions/components";
 
 const mapStateToProps = (state) => {
     return {
         currentComponent: state.components.currentComponent,
-        getStateMachines: () => {
+        getStateMachines: (component) => {
             let initialized = state.components.initialized;
             if (!initialized)
                 return [];
             let componentProperties = state.components.componentProperties;
-            let currentComponent = state.components.currentComponent;
-            return Object.keys(componentProperties[currentComponent].stateMachineProperties);
-        }
+            return Object.keys(componentProperties[component].stateMachineProperties);
+        },
+        getComponents: () => {
+            let initialized = state.components.initialized;
+            if (!initialized)
+                return [];
+            return Object.keys(state.components.componentProperties);
+        },
+        autoClear: state.components.autoClear
     };
 };
 
@@ -50,6 +57,9 @@ const mapDispatchToProps = (dispatch) => {
                         }
                     });
             });
+        },
+        setAutoClear: (autoClear) => {
+            dispatch(setAutoClear(autoClear));
         }
     };
 };
@@ -59,7 +69,10 @@ const AppHeader = ({
     getStateMachines,
     currentComponent,
     snapshotAll,
-    clearFinalStates
+    clearFinalStates,
+    autoClear,
+    setAutoClear,
+    getComponents
 }) => {
     let menuSpy = (
         <Menu
@@ -69,18 +82,30 @@ const AppHeader = ({
             title="Menu"
             icon={<MenuIcon size="medium" />}>
             <Anchor href="#" onClick={() => {
-                snapshotAll(currentComponent, getStateMachines());
+                snapshotAll(currentComponent, getStateMachines(currentComponent));
             }}>
                 Snapshot All
             </Anchor>
             <Anchor href="#" onClick={() => {
-                clearFinalStates(currentComponent, getStateMachines());
+                clearFinalStates(currentComponent, getStateMachines(currentComponent));
             }}>
                 Clear All
             </Anchor>
             <Anchor href="#" onClick={showSideBar}>
                 SideBar
             </Anchor>
+            <Anchor href="#" onClick={() => {
+                if (!autoClear) {
+                    let components = getComponents();
+                    for (let i = 0; i < components.length; i++) {
+                        clearFinalStates(components[i], getStateMachines(components[i]));
+                    }
+                }
+                setAutoClear(!autoClear);
+            }} >
+                <CheckBox label="autoClear" checked={autoClear} onChange={() => { }} />
+            </Anchor>
+
         </Menu>
     );
 

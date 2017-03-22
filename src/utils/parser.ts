@@ -27,8 +27,6 @@ export class Parser {
     parse() {
         this.parseGraphical();
         this.parseModel();
-        console.error(this.entryPointState);
-        console.error(this.entryPointStateMachine);
     }
 
     private parseGraphical(): void {

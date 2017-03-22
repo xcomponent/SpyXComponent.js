@@ -1,4 +1,4 @@
-import { INITIALIZATION, SET_CURRENT_COMPONENT, UPDATE_GRAPHIC, CLEAR_FINAL_STATES } from "actions/components";
+import { INITIALIZATION, SET_CURRENT_COMPONENT, UPDATE_GRAPHIC, CLEAR_FINAL_STATES, SET_AUTO_CLEAR } from "actions/components";
 import * as go from "gojs";
 import { DrawComponent } from "utils/drawComponent";
 import { modelTags } from "utils/configurationParser";
@@ -28,7 +28,8 @@ const initialState = {
     componentProperties: {},
     currentComponent: undefined,
     projectName: undefined,
-    initialized: false
+    initialized: false,
+    autoClear: false
 };
 
 const updateState = (diagram, stateKey, finalStates, entryPointState, increment) => {
@@ -128,6 +129,12 @@ export const componentsReducer = (state = initialState, action) => {
                 ...state,
                 componentProperties: componentProperties
             };
+        case SET_AUTO_CLEAR:
+            return {
+                ...state,
+                autoClear: action.autoClear
+            };
+
     }
     return state;
 };

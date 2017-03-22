@@ -2,6 +2,7 @@ export const INITIALIZATION = "INITIALIZATION";
 export const SET_CURRENT_COMPONENT = "SET_CURRENT_COMPONENT";
 export const UPDATE_GRAPHIC = "UPDATE_GRAPHIC";
 export const CLEAR_FINAL_STATES = "CLEAR_FINAL_STATES";
+export const SET_AUTO_CLEAR = "SET_AUTO_CLEAR";
 
 export const initialization = (componentProperties, currentComponent, projectName) => {
     return {
@@ -35,5 +36,12 @@ export const clearFinalStates = (component, stateMachine) => {
         type: CLEAR_FINAL_STATES,
         component,
         stateMachine
+    };
+};
+
+export const setAutoClear = (autoClear) => {
+    return {
+        type: SET_AUTO_CLEAR,
+        autoClear
     };
 };

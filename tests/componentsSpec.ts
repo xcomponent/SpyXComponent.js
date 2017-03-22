@@ -8,7 +8,8 @@ describe("Test components reducer", () => {
             componentProperties: {},
             currentComponent: undefined,
             projectName: undefined,
-            initialized: undefined
+            initialized: undefined,
+            autoClear: undefined
         };
         deepFreeze(stateBefore);
         let componentProperties = {
@@ -52,7 +53,8 @@ describe("Test components reducer", () => {
             componentProperties,
             currentComponent: oldCurrentComponent,
             projectName,
-            initialized
+            initialized,
+            autoClear: undefined
         };
         deepFreeze(stateBefore);
         let currentComponent = "currentComponent";
