@@ -1,5 +1,5 @@
 import * as deepFreeze from "deep-freeze";
-import { INITIALIZATION, SET_CURRENT_COMPONENT } from "actions/components";
+import { INITIALIZATION, SET_CURRENT_COMPONENT, SET_AUTO_CLEAR } from "actions/components";
 import { componentsReducer } from "reducers/components";
 
 describe("Test components reducer", () => {
@@ -68,6 +68,29 @@ describe("Test components reducer", () => {
             currentComponent,
             projectName,
             initialized
+        };
+        expect(
+            componentsReducer(stateBefore, action)
+        ).toEqual(stateAfter);
+    });
+
+    it("When an SET_AUTO_CLEAR action is received, it should set autoClear property", () => {
+        let autoClear = false;
+        let stateBefore = {
+            componentProperties: undefined,
+            currentComponent: undefined,
+            projectName: undefined,
+            initialized: undefined,
+            autoClear: autoClear
+        };
+        deepFreeze(stateBefore);
+        let currentComponent = "currentComponent";
+        let action = {
+            type: SET_AUTO_CLEAR,
+            autoClear: !autoClear
+        };
+        let stateAfter = {
+            autoClear: !autoClear
         };
         expect(
             componentsReducer(stateBefore, action)

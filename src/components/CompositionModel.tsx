@@ -3,7 +3,7 @@ import * as React from "react";
 import { connect } from "react-redux";
 import { getApiList, selectApi, formSubmit } from "actions/configForm";
 import { setCompositionModel, } from "actions/compositionModel";
-import { updateGraphic } from "actions/components";
+import { updateGraphic, clearFinalStates } from "actions/components";
 import { Parser } from "../utils/parser";
 import { DrawComponent } from "../utils/drawComponent";
 import { initialization } from "actions/components";
@@ -26,6 +26,9 @@ import { backgroundColor } from "utils/graphicColors";
 
 const mapStateToProps = (state) => {
     return {
+        getAutoClear: () => {
+            return state.components.autoClear;
+        },
         getCurrentComponent: () => {
             return state.components.currentComponent;
         },
@@ -61,6 +64,11 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         },
         showTransitionProperties: (stateMachine, messageType, jsonMessageString, id) => {
             dispatch(showTransitionProperties(stateMachine, messageType, jsonMessageString, id));
+        },
+        clearFinalStates: (component, stateMachines) => {
+            for (let i = 0; i < stateMachines.length; i++) {
+                dispatch(clearFinalStates(component, stateMachines[i]));
+            }
         }
     };
 };
@@ -74,6 +82,11 @@ class CompositionModel extends React.Component<any, any> {
         this.getFirstId = this.getFirstId.bind(this);
         this.snapshotEntryPoint = this.snapshotEntryPoint.bind(this);
         this.getCurrentComponent = this.getCurrentComponent.bind(this);
+        this.getAutoClear = this.getAutoClear.bind(this);
+    }
+
+    getAutoClear() {
+        return this.props.getAutoClear();
     }
 
     getFirstId(stateMachine) {
@@ -106,6 +119,7 @@ class CompositionModel extends React.Component<any, any> {
 
     subscribeAllStateMachines(component, stateMachines) {
         let props = this.props;
+        let thisObject = this;
         sessionXCSpy.getPromiseCreateSession()
             .then((session) => {
                 let subscriber = session.createSubscriber();
@@ -114,8 +128,10 @@ class CompositionModel extends React.Component<any, any> {
                         continue;
                     ((stateMachine) => {
                         subscriber.subscribe(component, stateMachine, (data) => {
-                            console.error(data);
                             props.updateGraphic(component, stateMachine, data);
+                            if (thisObject.getAutoClear()) {
+                                props.clearFinalStates(component, [stateMachine]);
+                            }
                         });
                     })(stateMachines[j]);
                 }
