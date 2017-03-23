@@ -8,7 +8,7 @@ import * as Button from "grommet/components/Button";
 import * as HomeIcon from "grommet/components/icons/base/home";
 import * as MenuIcon from "grommet/components/icons/base/Menu";
 import { connect } from "react-redux";
-import { showSideBar } from "actions/sideBar";
+import { showSideBar, hideSideBar } from "actions/sideBar";
 import sessionXCSpy from "utils/sessionXCSpy";
 import { updateGraphic, clearFinalStates, setAutoClear } from "actions/components";
 
@@ -28,7 +28,8 @@ const mapStateToProps = (state) => {
                 return [];
             return Object.keys(state.components.componentProperties);
         },
-        autoClear: state.components.autoClear
+        autoClear: state.components.autoClear,
+        sideBar: state.sideBar
     };
 };
 
@@ -41,6 +42,9 @@ const mapDispatchToProps = (dispatch) => {
         },
         showSideBar: () => {
             dispatch(showSideBar());
+        },
+        hideSideBar: () => {
+            dispatch(hideSideBar());
         },
         snapshotAll: (component, stateMachines) => {
             dispatch((dispatch) => {
@@ -72,7 +76,9 @@ const AppHeader = ({
     clearFinalStates,
     autoClear,
     setAutoClear,
-    getComponents
+    getComponents,
+    sideBar,
+    hideSideBar
 }) => {
     let menuSpy = (
         <Menu
@@ -91,9 +97,12 @@ const AppHeader = ({
             }}>
                 Clear All
             </Anchor>
-            <Anchor href="#" onClick={showSideBar}>
-                SideBar
+            <Anchor href="#" onClick={() => {
+                (!sideBar) ? showSideBar() : hideSideBar();
+            }}>
+                <CheckBox label="SideBar" checked={sideBar} onChange={() => { }} />
             </Anchor>
+
             <Anchor href="#" onClick={() => {
                 if (!autoClear) {
                     let components = getComponents();
