@@ -15,11 +15,12 @@ import { setStateMachineId } from "actions/stateMachineProperties";
 import * as Box from "grommet/components/Box";
 import * as CheckBox from "grommet/components/CheckBox";
 import * as TextInput from "grommet/components/TextInput";
-import { hideTransitionProperties, setJsonMessageString, setCurrentId } from "actions/transitionProperties";
+import { hideTransitionProperties, setJsonMessageString, setCurrentId, setPrivateTopic } from "actions/transitionProperties";
 import Instances from "components/Instances";
 
 const mapStateToProps = (state) => {
     return {
+        privateTopic: state.transitionProperties.privateTopic,
         id: state.transitionProperties.id,
         jsonMessageString: state.transitionProperties.jsonMessageString,
         messageType: state.transitionProperties.messageType,
@@ -44,6 +45,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
+        setPrivateTopic: (privateSend) => {
+            dispatch(setPrivateTopic(privateSend));
+        },
         setCurrentId: (id) => {
             dispatch(setCurrentId(id));
         },
@@ -96,7 +100,9 @@ const TransitionProperties = ({
     setJsonMessageString,
     id,
     setCurrentId,
-    getStateMachineRefFromId
+    getStateMachineRefFromId,
+    privateTopic,
+    setPrivateTopic
 }) => {
     if (!active)
         return null;
@@ -133,12 +139,26 @@ const TransitionProperties = ({
 
             <FormField>
                 <fieldset>
-                    <CheckBox label={
-                        <TextInput id="item1"
-                            name="item-1"
-                            placeHolder={"Default Private Topic"}
-                            suggestions={["Private Topic 1", "Private Topic 2"]} />
-                    } toggle={true} onChange={() => { }} />
+                    <label htmlFor="instances">
+                        <Box size={"medium"} direction={"row"}>
+                            <Box pad={{ horizontal: "none", vertical: "small", between: "small" }}>
+                                Topic:
+                            </Box>
+                            <Box size={"medium"}>
+                                <TextInput
+                                    value={privateTopic}
+                                    suggestions={sessionXCSpy.privateTopics}
+                                    onSelect={(e) => {
+                                        e.target.value = e.suggestion;
+                                        setPrivateTopic(e.suggestion);
+                                    }}
+                                    onDOMChange={(e) => {
+                                        setPrivateTopic(e.target.value);
+                                    }}
+                                />
+                            </Box>
+                        </Box>
+                    </label>
                 </fieldset>
             </FormField>
 

@@ -62,8 +62,8 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         updateGraphic: (component, stateMachine, data) => {
             dispatch(updateGraphic(component, stateMachine, data));
         },
-        showTransitionProperties: (stateMachine, messageType, jsonMessageString, id) => {
-            dispatch(showTransitionProperties(stateMachine, messageType, jsonMessageString, id));
+        showTransitionProperties: (stateMachine, messageType, jsonMessageString, id, privateTopic) => {
+            dispatch(showTransitionProperties(stateMachine, messageType, jsonMessageString, id, privateTopic));
         },
         clearFinalStates: (component, stateMachines) => {
             for (let i = 0; i < stateMachines.length; i++) {
@@ -108,7 +108,7 @@ class CompositionModel extends React.Component<any, any> {
                 sessionXCSpy.getPromiseCreateSession()
                     .then((session) => {
                         if (session.createPublisher().canPublish(this.getCurrentComponent(), data.stateMachineTarget, data.messageType)) {
-                            props.showTransitionProperties(data.stateMachineTarget, data.messageType, "{}", this.getFirstId(data.stateMachineTarget));
+                            props.showTransitionProperties(data.stateMachineTarget, data.messageType, "{}", this.getFirstId(data.stateMachineTarget), sessionXCSpy.defaultPrivateTopic);
                         } else {
                             alert("API cannot send " + data.messageType + " event to " + data.stateMachineTarget);
                         }
