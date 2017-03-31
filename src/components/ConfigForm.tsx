@@ -77,9 +77,9 @@ let ConfigForm = ({
                             <label htmlFor="API">API Name:</label>
                             <Select
                                 options={apis}
-                                value={apis[0]}
+                                value={selectedApi}
                                 onChange={(e) => {
-                                    onChangeSelectedApi(e.target.value);
+                                    onChangeSelectedApi(e.value);
                                 }} />
                         </fieldset>
                     </FormField>

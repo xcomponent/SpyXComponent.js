@@ -100,7 +100,7 @@ const AppHeader = ({
             <Anchor href="#" onClick={() => {
                 (!sideBar) ? showSideBar() : hideSideBar();
             }}>
-                <CheckBox label="SideBar" checked={sideBar} onChange={() => { }} />
+                <CheckBox label="SideBar" toggle={true} checked={sideBar} onChange={() => { }} />
             </Anchor>
 
             <Anchor href="#" onClick={() => {
@@ -112,7 +112,7 @@ const AppHeader = ({
                 }
                 setAutoClear(!autoClear);
             }} >
-                <CheckBox label="autoClear" checked={autoClear} onChange={() => { }} />
+                <CheckBox label="autoClear" toggle={true} checked={autoClear} onChange={() => { }} />
             </Anchor>
 
         </Menu>

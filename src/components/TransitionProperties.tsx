@@ -13,6 +13,8 @@ import { updateGraphic } from "actions/components";
 import * as Select from "grommet/components/Select";
 import { setStateMachineId } from "actions/stateMachineProperties";
 import * as Box from "grommet/components/Box";
+import * as CheckBox from "grommet/components/CheckBox";
+import * as TextInput from "grommet/components/TextInput";
 import { hideTransitionProperties, setJsonMessageString, setCurrentId } from "actions/transitionProperties";
 import Instances from "components/Instances";
 
@@ -124,11 +126,21 @@ const TransitionProperties = ({
             <FormField>
                 <fieldset>
                     <label htmlFor="instances">Instance identifier:
-                        <Instances onChange={setCurrentId} stateMachine={stateMachine}/>
+                        <Instances onChange={setCurrentId} stateMachine={stateMachine} />
                     </label>
                 </fieldset>
             </FormField>
 
+            <FormField>
+                <fieldset>
+                    <CheckBox label={
+                        <TextInput id="item1"
+                            name="item-1"
+                            placeHolder={"Default Private Topic"}
+                            suggestions={["Private Topic 1", "Private Topic 2"]} />
+                    } toggle={true} onChange={() => { }} />
+                </fieldset>
+            </FormField>
 
             <FormField >
                 <fieldset>
