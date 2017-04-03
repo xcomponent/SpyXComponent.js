@@ -5,14 +5,24 @@ import { transitionPropertiesReducer } from "reducers/transitionProperties";
 describe("Test transitionProperties reducer", () => {
     it("When a HIDE_TRANSITION_PROPERTIES action is received, it should set the active properties to false", () => {
         let stateBefore = {
-            active: true
+            active: true,
+            stateMachine: undefined,
+            messageType: undefined,
+            jsonMessageString: undefined,
+            id: undefined,
+            privateTopic: undefined
         };
         deepFreeze(stateBefore);
         let action = {
             type: HIDE_TRANSITION_PROPERTIES
         };
         let stateAfter = {
-            active: false
+            active: false,
+            stateMachine: undefined,
+            messageType: undefined,
+            jsonMessageString: undefined,
+            id: undefined,
+            privateTopic: undefined
         };
         expect(
             transitionPropertiesReducer(stateBefore, action)
@@ -25,7 +35,12 @@ describe("Test transitionProperties reducer", () => {
         let jsonMessageString = "jsonMessageString";
         let id = "id";
         let stateBefore = {
-            active: false
+            active: false,
+            stateMachine: undefined,
+            messageType: undefined,
+            jsonMessageString: undefined,
+            id: undefined,
+            privateTopic: undefined
         };
         deepFreeze(stateBefore);
         let action = {
@@ -40,7 +55,8 @@ describe("Test transitionProperties reducer", () => {
             stateMachine,
             messageType,
             jsonMessageString,
-            id
+            id,
+            privateTopic: undefined            
         };
         expect(
             transitionPropertiesReducer(stateBefore, action)
@@ -59,7 +75,8 @@ describe("Test transitionProperties reducer", () => {
             stateMachine,
             messageType,
             jsonMessageString,
-            id
+            id,
+            privateTopic: undefined
         };
         deepFreeze(stateBefore);
         let action = {
@@ -93,7 +110,8 @@ describe("Test transitionProperties reducer", () => {
             stateMachine,
             messageType,
             jsonMessageString,
-            id
+            id,
+            privateTopic: undefined
         };
         deepFreeze(stateBefore);
         let action = {
@@ -108,7 +126,8 @@ describe("Test transitionProperties reducer", () => {
             stateMachine,
             messageType,
             jsonMessageString,
-            id: newId
+            id: newId,
+            privateTopic: undefined
         };
         expect(
             transitionPropertiesReducer(stateBefore, action)

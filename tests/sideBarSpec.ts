@@ -4,24 +4,32 @@ import { sideBarReducer } from "reducers/sideBar";
 
 describe("Test sideBar reducer", () => {
     it("When an SHOW_SIDE_BAR action is received, it should set the state to true", () => {
-        let stateBefore = false
+        let stateBefore = {
+            isVisible: false
+        }
         deepFreeze(stateBefore);
         let action = {
             type: SHOW_SIDE_BAR,
         };
-        let stateAfter = true;
+        let stateAfter = {
+            isVisible: true
+        };
         expect(
             sideBarReducer(stateBefore, action)
         ).toEqual(stateAfter);
     });
 
     it("When an HIDE_SIDE_BAR action is received, it should set the state to false", () => {
-        let stateBefore = true
+        let stateBefore = {
+            isVisible: true
+        }
         deepFreeze(stateBefore);
         let action = {
             type: HIDE_SIDE_BAR,
         };
-        let stateAfter = false;
+        let stateAfter = {
+            isVisible: false
+        };
         expect(
             sideBarReducer(stateBefore, action)
         ).toEqual(stateAfter);

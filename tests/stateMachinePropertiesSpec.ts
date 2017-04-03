@@ -64,7 +64,9 @@ describe("Test stateMachineProperties reducer", () => {
             type: HIDE_STATE_MACHINE_PROPERTIES
         };
         let stateAfter = {
-            active: false
+            active: false,
+            stateMachine,
+            id
         };
         expect(
             stateMachinePropertiesReducer(stateBefore, action)

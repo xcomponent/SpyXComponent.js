@@ -1,30 +1,32 @@
-import { INITIALIZATION, SET_CURRENT_COMPONENT, UPDATE_GRAPHIC, CLEAR_FINAL_STATES, SET_AUTO_CLEAR } from "actions/components";
+import { INITIALIZATION, SET_CURRENT_COMPONENT, UPDATE_GRAPHIC, CLEAR_FINAL_STATES, SET_AUTO_CLEAR, GlobalComponentsAction } from "actions/components";
 import * as go from "gojs";
 import { DrawComponent } from "utils/drawComponent";
 import { modelTags } from "utils/configurationParser";
 import { activeStateColor, stateColor } from "utils/graphicColors";
+import { Reducer } from "redux";
 
-interface Instance {
+export interface Instance {
     jsonMessage: any;
     stateMachineRef: any;
     isFinal: boolean;
 };
 
-interface ComponentProperties {
+export interface ComponentProperties {
     diagram: go.Diagram;
     stateMachineProperties: { [name: string]: { [id: number]: Instance } };
     finalStates: Array<String>;
     entryPointState: string;
 };
 
-interface Components {
+export interface ComponentsState {
     componentProperties: { [componentName: string]: ComponentProperties };
     currentComponent: string;
     projectName: string;
     initialized: boolean;
+    autoClear: boolean;
 };
 
-const initialState = {
+const initialState: ComponentsState = {
     componentProperties: {},
     currentComponent: undefined,
     projectName: undefined,
@@ -63,7 +65,7 @@ const clearFinalStates = (diagram, finalStatesToClear, stateMachine, numberOfIns
     diagram.model.commitTransaction(CLEAR_FINAL_STATES);
 };
 
-export const componentsReducer = (state = initialState, action) => {
+export const componentsReducer: Reducer<ComponentsState> = (state: ComponentsState = initialState, action: GlobalComponentsAction): ComponentsState => {
     switch (action.type) {
         case INITIALIZATION:
             return {

@@ -1,7 +1,19 @@
 import * as React from "react";
 import { connect } from "react-redux";
 
-const mapStateToProps = (state, ownProps) => {
+interface InstancesGlobalProps extends InstancesProps, InstancesCallbackProps {
+};
+
+interface InstancesProps {
+    getInstances: () => any;
+    onChange: (id: string) => void;
+    getId: () => number;
+};
+
+interface InstancesCallbackProps {
+};
+
+const mapStateToProps = (state, ownProps): InstancesProps => {
     return {
         getInstances: () => {
             let componentProperties = state.components.componentProperties;
@@ -20,7 +32,7 @@ const mapStateToProps = (state, ownProps) => {
     };
 };
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch): InstancesCallbackProps => {
     return {
     };
 };
@@ -38,7 +50,7 @@ const Instances = ({
     onChange,
     getInstances,
     getId
- }) => {
+ }: InstancesGlobalProps) => {
     let id = getId();
     return (
         <select style={getStyle(id, getInstances())} value={id} onChange={(e) => {

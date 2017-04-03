@@ -11,8 +11,28 @@ import { connect } from "react-redux";
 import { showSideBar, hideSideBar } from "actions/sideBar";
 import sessionXCSpy from "utils/sessionXCSpy";
 import { updateGraphic, clearFinalStates, setAutoClear } from "actions/components";
+import { XCSpyState } from "reducers/spyReducer";
 
-const mapStateToProps = (state) => {
+interface AppHeaderGlobalProps extends AppHeaderProps, AppHeaderCallbackProps {
+};
+
+interface AppHeaderProps {
+    currentComponent: string;
+    getStateMachines: (component: string) => string[];
+    getComponents: () => string[];
+    autoClear: boolean;
+    sideBar: boolean;
+};
+
+interface AppHeaderCallbackProps {
+    clearFinalStates: (component: string, stateMachines: string[]) => void;
+    showSideBar: () => void;
+    hideSideBar: () => void;
+    snapshotAll: (component: string, stateMachines: string[]) => void;
+    setAutoClear: (autoClear: boolean) => void;
+};
+
+const mapStateToProps = (state: XCSpyState): AppHeaderProps => {
     return {
         currentComponent: state.components.currentComponent,
         getStateMachines: (component) => {
@@ -29,11 +49,11 @@ const mapStateToProps = (state) => {
             return Object.keys(state.components.componentProperties);
         },
         autoClear: state.components.autoClear,
-        sideBar: state.sideBar
+        sideBar: state.sideBar.isVisible
     };
 };
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch): AppHeaderCallbackProps => {
     return {
         clearFinalStates: (component, stateMachines) => {
             for (let i = 0; i < stateMachines.length; i++) {
@@ -79,7 +99,7 @@ const AppHeader = ({
     getComponents,
     sideBar,
     hideSideBar
-}) => {
+}: AppHeaderGlobalProps) => {
     let menuSpy = (
         <Menu
             responsive={true}

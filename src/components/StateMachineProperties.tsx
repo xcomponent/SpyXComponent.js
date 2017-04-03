@@ -14,8 +14,30 @@ import * as Select from "grommet/components/Select";
 import { setStateMachineId } from "actions/stateMachineProperties";
 import * as Box from "grommet/components/Box";
 import Instances from "components/Instances";
+import { XCSpyState } from "reducers/SpyReducer";
 
-const mapStateToProps = (state) => {
+interface StateMachinePropertiesGlobalProps extends StateMachinePropertiesProps, StateMachinePropertiesCallbackProps {
+};
+
+interface StateMachinePropertiesProps {
+    active: boolean;
+    stateMachine: string;
+    id: string;
+    currentComponent: string;
+    getIds: () => string[];
+    getPublicMember: () => string;
+    getStateMachineRef: () => any;
+    getFirstId: (stateMachine: string) => string;
+};
+
+interface StateMachinePropertiesCallbackProps {
+    clearFinalStates: (component: string, stateMachine: string) => void;
+    setStateMachineId: (id: string) => void;
+    hideStateMachineProperties: () => void;
+    updateGraphic: (currentComponent: string, stateMachine: string) => void;
+};
+
+const mapStateToProps = (state: XCSpyState): StateMachinePropertiesProps => {
     return {
         active: state.stateMachineProperties.active,
         stateMachine: state.stateMachineProperties.stateMachine,
@@ -55,7 +77,7 @@ const mapStateToProps = (state) => {
     };
 };
 
-const mapDispatchToProps = (dispatch, ownProps) => {
+const mapDispatchToProps = (dispatch): StateMachinePropertiesCallbackProps => {
     return {
         clearFinalStates: (component, stateMachine) => {
             dispatch(clearFinalStates(component, stateMachine));
@@ -66,7 +88,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         hideStateMachineProperties: () => {
             dispatch(hideStateMachineProperties());
         },
-        updateGraphic: (currentComponent, stateMachine, id, instances) => {
+        updateGraphic: (currentComponent, stateMachine) => {
             sessionXCSpy.getPromiseCreateSession()
                 .then((session) => {
                     session.createSubscriber().getSnapshot(currentComponent, stateMachine, (items) => {
@@ -100,7 +122,7 @@ const StateMachineProperties = ({
     getStateMachineRef,
     clearFinalStates,
     getFirstId
-}) => {
+}: StateMachinePropertiesGlobalProps) => {
     if (!active)
         return null;
     if (!id && getIds().length > 0) {

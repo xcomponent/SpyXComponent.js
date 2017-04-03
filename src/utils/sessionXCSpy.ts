@@ -13,8 +13,11 @@ class SessionXCSpy {
         this.promiseCreateSession = new Promise((resolve, reject) => {
             xcomponentapi.createSession(xcApiFileName, serverUrl, (error, session: any) => {
                 resolve(session);
-                this.privateTopics = session.privateTopics;
-                this.defaultPrivateTopic = session.privateTopic;
+                this.privateTopics = ["private topic"];
+                this.defaultPrivateTopic = "private topic";
+                // to change with new version of api
+                // this.privateTopics = session.privateTopics;
+                // this.defaultPrivateTopic = session.privateTopic;
             });
         });
         xcomponentapi.setLogLevel(xcLogLevel.INFO);

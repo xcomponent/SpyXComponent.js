@@ -17,8 +17,33 @@ import * as CheckBox from "grommet/components/CheckBox";
 import * as TextInput from "grommet/components/TextInput";
 import { hideTransitionProperties, setJsonMessageString, setCurrentId, setPrivateTopic } from "actions/transitionProperties";
 import Instances from "components/Instances";
+import { XCSpyState } from "reducers/SpyReducer";
 
-const mapStateToProps = (state) => {
+interface TransitionPropertiesGlobalProps extends TransitionPropertiesProps, TransitionPropertiesCallbackProps {
+};
+
+interface TransitionPropertiesProps {
+    privateTopic: string;
+    id: string;
+    jsonMessageString: string;
+    messageType: string;
+    active: boolean;
+    stateMachine: string;
+    currentComponent: string;
+    getStateMachineRefFromId: (id: string) => any;
+};
+
+interface TransitionPropertiesCallbackProps {
+    setPrivateTopic: (privateSend: string) => void;
+    setCurrentId: (id: string) => void;
+    setJsonMessageString: (jsonMessageString: string) => void;
+    hideTransitionProperties: () => void;
+    send: (component: string, stateMachine: string, messageType: string, jsonMessageString: string) => void;
+    sendContext: (stateMachineRef: any, messageType: string, jsonMessageString: string) => void;
+};
+
+
+const mapStateToProps = (state: XCSpyState): TransitionPropertiesProps => {
     return {
         privateTopic: state.transitionProperties.privateTopic,
         id: state.transitionProperties.id,
@@ -43,7 +68,7 @@ const mapStateToProps = (state) => {
     };
 };
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch): TransitionPropertiesCallbackProps => {
     return {
         setPrivateTopic: (privateSend) => {
             dispatch(setPrivateTopic(privateSend));
@@ -103,7 +128,7 @@ const TransitionProperties = ({
     getStateMachineRefFromId,
     privateTopic,
     setPrivateTopic
-}) => {
+}: TransitionPropertiesGlobalProps) => {
     if (!active)
         return null;
     return <Layer onClose={hideTransitionProperties} closer={true} align="right">

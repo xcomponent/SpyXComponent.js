@@ -14,20 +14,37 @@ import * as User from "grommet/components/icons/base/User";
 import { connect } from "react-redux";
 import { setCurrentComponent } from "actions/components";
 import { hideSideBar } from "actions/sideBar";
+import { XCSpyState } from "reducers/spyReducer";
 
-const mapStateToProps = (state) => {
+interface SideBarGlobalProps extends SideBarProps, SideBarCallbackProps {
+};
+
+interface SideBarProps {
+    isVisible: boolean;
+    initialized: boolean;
+    components: string[];
+    currentComponent: string;
+    projectName: string;
+};
+
+interface SideBarCallbackProps {
+    setCurrentComponent: (currentComponent: string) => void;
+    hideSideBar: () => void;
+};
+
+const mapStateToProps = (state: XCSpyState): SideBarProps => {
     return {
-        active: state.sideBar,
+        isVisible: state.sideBar.isVisible,
         initialized: state.components.initialized,
-        components: state.components.componentProperties,
+        components: Object.keys(state.components.componentProperties),
         currentComponent: state.components.currentComponent,
         projectName: state.components.projectName
     };
 };
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch): SideBarCallbackProps => {
     return {
-        setCurrentComponent: (currentComponent) => {
+        setCurrentComponent: (currentComponent: string) => {
             dispatch(setCurrentComponent(currentComponent));
         },
         hideSideBar: () => {
@@ -36,8 +53,8 @@ const mapDispatchToProps = (dispatch) => {
     };
 };
 
-class SideBar extends React.Component<any, any> {
-    constructor(props) {
+class SideBar extends React.Component<SideBarGlobalProps, any> {
+    constructor(props: SideBarGlobalProps) {
         super(props);
         this.getTitle = this.getTitle.bind(this);
         this.getComponentList = this.getComponentList.bind(this);
@@ -52,7 +69,7 @@ class SideBar extends React.Component<any, any> {
                     </Title>
                 </Box>
                 <Box size="large" align="end">
-                    <Button icon={<CloseIcon size="medium"/>} onClick={this.props.hideSideBar} plain={true} />
+                    <Button icon={<CloseIcon size="medium" />} onClick={this.props.hideSideBar} plain={true} />
                 </Box>
             </Box>
         );
@@ -61,7 +78,7 @@ class SideBar extends React.Component<any, any> {
     getComponentList() {
         let list = [];
         let props = this.props;
-        let components = Object.keys(props.components);
+        let components = props.components;
         for (let i = 0; i < components.length; i++) {
             list.push(
                 <Anchor
@@ -80,7 +97,7 @@ class SideBar extends React.Component<any, any> {
     }
 
     render() {
-        if (!this.props.initialized || !this.props.active)
+        if (!this.props.initialized || !this.props.isVisible)
             return null;
         return (
             <GrommetSidebar fixed={true} colorIndex="neutral-1">

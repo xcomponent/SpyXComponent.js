@@ -69,7 +69,7 @@ let ConfigForm = ({
                                 onDOMChange={(e) => {
                                     serverUrl = e.target.value;
                                 }}
-                                suggestions={["wss://localhost:443"]} />
+                                suggestions={["wss://localhost:443", "wss://commandcenter.xcomponent.com/bridge:443"]} />
                         </fieldset>
                     </FormField>
                     <FormField>

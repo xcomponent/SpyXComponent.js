@@ -1,4 +1,12 @@
-import { GET_API_LIST, SELECT_API, FORM_SUBMIT } from "actions/configForm";
+import { GET_API_LIST, SELECT_API, FORM_SUBMIT, GlobalConfigFormAction } from "actions/configForm";
+import { Reducer } from "redux";
+
+export interface ConfigFormState {
+    apis: string[];
+    selectedApi: string;
+    serverUrl: string;
+    formSubmited: boolean;
+};
 
 const initialState = {
     apis: [],
@@ -14,7 +22,7 @@ const defaultAction = {
     selectedApi: undefined
 };
 
-export const configFormReducer = (state = initialState, action = defaultAction) => {
+export const configFormReducer: Reducer<ConfigFormState> = (state: ConfigFormState = initialState, action: GlobalConfigFormAction = defaultAction): ConfigFormState => {
     switch (action.type) {
         case GET_API_LIST:
             return {

@@ -43,8 +43,10 @@ describe("Test components reducer", () => {
         let oldCurrentComponent = "oldCurrentComponent";
         let componentProperties = {
             "componentName": {
-                "instances": {},
-                "diagram": null
+                diagram: undefined,
+                stateMachineProperties: {},
+                finalStates: [],
+                entryPointState: undefined,
             }
         };
         let projectName = "projectName";

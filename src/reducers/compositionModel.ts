@@ -1,20 +1,18 @@
 import * as go from "gojs";
-import { INIT_COMPOSITION_MODEL } from "actions/compositionModel";
+import { INIT_COMPOSITION_MODEL, GlobalCompositionModelAction } from "actions/compositionModel";
+import { Reducer } from "redux";
+
+export interface CompositionModelState {
+    initialized: boolean;
+    value: any; // type comes from api
+};
 
 const initialState = {
     initialized: false,
     value: undefined
 };
 
-const defaultAction = {
-    type: undefined,
-    initialized: undefined,
-    compositionModel: undefined,
-    component: undefined,
-    stateMachine: undefined
-};
-
-export const compositionModelReducer = (state = initialState, action) => {
+export const compositionModelReducer: Reducer<CompositionModelState> = (state: CompositionModelState = initialState, action: GlobalCompositionModelAction): CompositionModelState => {
     switch (action.type) {
         case INIT_COMPOSITION_MODEL:
             return {

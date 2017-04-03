@@ -1,7 +1,17 @@
-import { HIDE_TRANSITION_PROPERTIES, SHOW_TRANSITION_PROPERTIES, SET_JSON_MESSAGE_STRING, SET_CURRENT_ID, SET_PRIVATE_TOPIC } from "actions/transitionProperties";
+import { HIDE_TRANSITION_PROPERTIES, SHOW_TRANSITION_PROPERTIES, SET_JSON_MESSAGE_STRING, SET_CURRENT_ID, SET_PRIVATE_TOPIC, GlobalTransitionPropertiesAction } from "actions/transitionProperties";
 import sessionXCSpy from "utils/sessionXCSpy";
+import { Reducer } from "redux";
 
-let initialState = {
+export interface TransitionPropertiesState {
+    active: boolean;
+    stateMachine: string;
+    messageType: string;
+    jsonMessageString: string;
+    id: string;
+    privateTopic: string;
+};
+
+let initialState: TransitionPropertiesState = {
     active: false,
     stateMachine: undefined,
     messageType: undefined,
@@ -10,7 +20,7 @@ let initialState = {
     privateTopic: undefined
 };
 
-export const transitionPropertiesReducer = (state = {}, action) => {
+export const transitionPropertiesReducer: Reducer<TransitionPropertiesState> = (state: TransitionPropertiesState = initialState, action: GlobalTransitionPropertiesAction): TransitionPropertiesState => {
     switch (action.type) {
         case HIDE_TRANSITION_PROPERTIES:
             return {

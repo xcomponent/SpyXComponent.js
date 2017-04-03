@@ -1,4 +1,11 @@
-import { SHOW_STATE_MACHINE_PROPERTIES, HIDE_STATE_MACHINE_PROPERTIES, SET_STATE_MACHINE_ID } from "actions/stateMachineProperties";
+import { SHOW_STATE_MACHINE_PROPERTIES, HIDE_STATE_MACHINE_PROPERTIES, SET_STATE_MACHINE_ID, GlobalStateMachinePropertiesAction } from "actions/stateMachineProperties";
+import { Reducer } from "redux";
+
+export interface StateMachinePropertiesState {
+    active: boolean;
+    stateMachine: string;
+    id: string;
+};
 
 const initialState = {
     active: false,
@@ -6,14 +13,16 @@ const initialState = {
     id: undefined
 };
 
-export const stateMachinePropertiesReducer = (state = initialState, action) => {
+export const stateMachinePropertiesReducer: Reducer<StateMachinePropertiesState> = (state: StateMachinePropertiesState = initialState, action: GlobalStateMachinePropertiesAction): StateMachinePropertiesState => {
     switch (action.type) {
         case HIDE_STATE_MACHINE_PROPERTIES:
             return {
+                ...state,
                 active: false
             };
         case SHOW_STATE_MACHINE_PROPERTIES:
             return {
+                ...state,
                 active: true,
                 stateMachine: action.stateMachine,
                 id: action.id
