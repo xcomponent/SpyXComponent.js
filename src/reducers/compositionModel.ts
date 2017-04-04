@@ -1,5 +1,5 @@
 import * as go from "gojs";
-import { INIT_COMPOSITION_MODEL, GlobalCompositionModelAction } from "actions/compositionModel";
+import { INIT_COMPOSITION_MODEL, GlobalCompositionModelAction } from "actions";
 import { Reducer } from "redux";
 
 export interface CompositionModelState {

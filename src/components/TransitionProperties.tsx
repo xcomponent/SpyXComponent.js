@@ -9,13 +9,11 @@ import * as FormField from "grommet/components/FormField";
 import * as Button from "grommet/components/Button";
 import * as Footer from "grommet/components/Footer";
 import sessionXCSpy from "utils/sessionXCSpy";
-import { updateGraphic } from "actions/components";
+import { updateGraphic, setStateMachineId, hideTransitionProperties, setJsonMessageString, setCurrentId, setPrivateTopic } from "actions";
 import * as Select from "grommet/components/Select";
-import { setStateMachineId } from "actions/stateMachineProperties";
 import * as Box from "grommet/components/Box";
 import * as CheckBox from "grommet/components/CheckBox";
 import * as TextInput from "grommet/components/TextInput";
-import { hideTransitionProperties, setJsonMessageString, setCurrentId, setPrivateTopic } from "actions/transitionProperties";
 import Instances from "components/Instances";
 import { XCSpyState } from "reducers/SpyReducer";
 

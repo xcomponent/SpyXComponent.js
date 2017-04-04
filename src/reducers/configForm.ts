@@ -1,4 +1,4 @@
-import { GET_API_LIST, SELECT_API, FORM_SUBMIT, GlobalConfigFormAction, GetApiListAction, SelectApiAction, FormSubmitAction } from "actions/configForm";
+import { GET_API_LIST, SELECT_API, FORM_SUBMIT, GlobalConfigFormAction, GetApiListAction, SelectApiAction } from "actions";
 import { Reducer } from "redux";
 
 export interface ConfigFormState {

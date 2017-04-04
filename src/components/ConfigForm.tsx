@@ -13,7 +13,7 @@ import * as Select from "grommet/components/Select";
 import * as Image from "grommet/components/Image";
 
 import { connect } from "react-redux";
-import { getApiList, selectApi, formSubmit } from "actions/configForm";
+import { getApiList, selectApi, formSubmit } from "actions";
 import Footer from "components/Footer";
 
 const mapStateToProps = (state) => {

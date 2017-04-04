@@ -12,8 +12,7 @@ import * as CloseIcon from "grommet/components/icons/base/Close";
 
 import * as User from "grommet/components/icons/base/User";
 import { connect } from "react-redux";
-import { setCurrentComponent } from "actions/components";
-import { hideSideBar } from "actions/sideBar";
+import { setCurrentComponent, hideSideBar } from "actions";
 import { XCSpyState } from "reducers/spyReducer";
 
 interface SideBarGlobalProps extends SideBarProps, SideBarCallbackProps {

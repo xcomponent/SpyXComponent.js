@@ -10,7 +10,7 @@ import * as MenuIcon from "grommet/components/icons/base/Menu";
 import { connect } from "react-redux";
 import { showSideBar, hideSideBar } from "actions/sideBar";
 import sessionXCSpy from "utils/sessionXCSpy";
-import { updateGraphic, clearFinalStates, setAutoClear } from "actions/components";
+import { updateGraphic, clearFinalStates, setAutoClear } from "actions";
 import { XCSpyState } from "reducers/spyReducer";
 
 interface AppHeaderGlobalProps extends AppHeaderProps, AppHeaderCallbackProps {

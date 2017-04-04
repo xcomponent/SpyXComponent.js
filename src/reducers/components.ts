@@ -1,4 +1,4 @@
-import { INITIALIZATION, SET_CURRENT_COMPONENT, UPDATE_GRAPHIC, CLEAR_FINAL_STATES, SET_AUTO_CLEAR, GlobalComponentsAction, InitializationAction, SetCurrentComponentAction, UpdateGraphicAction, ClearFinalStatesAction, SetAutoClearAction } from "actions/components";
+import { INITIALIZATION, SET_CURRENT_COMPONENT, UPDATE_GRAPHIC, CLEAR_FINAL_STATES, SET_AUTO_CLEAR, GlobalComponentsAction, InitializationAction, SetCurrentComponentAction, UpdateGraphicAction, ClearFinalStatesAction, SetAutoClearAction } from "actions";
 import * as go from "gojs";
 import { DrawComponent } from "utils/drawComponent";
 import { modelTags } from "utils/configurationParser";
@@ -14,7 +14,7 @@ export interface Instance {
 export interface ComponentProperties {
     diagram: go.Diagram;
     stateMachineProperties: { [name: string]: { [id: number]: Instance } };
-    finalStates: Array<String>;
+    finalStates: string[];
     entryPointState: string;
 };
 
@@ -34,7 +34,7 @@ const initialState: ComponentsState = {
     autoClear: false
 };
 
-const updateState = (diagram, stateKey, finalStates, entryPointState, increment) => {
+const updateState = (diagram: go.Diagram, stateKey: string, finalStates: string[], entryPointState: string, increment: number) => {
     let data = diagram.findNodeForKey(stateKey).data;
     let oldValue = data.numberOfStates;
     let newValue = oldValue + increment;
@@ -51,7 +51,7 @@ const updateState = (diagram, stateKey, finalStates, entryPointState, increment)
     }
 };
 
-const clearFinalStates = (diagram, finalStatesToClear, stateMachine, numberOfInstances) => {
+const clearFinalStates = (diagram: go.Diagram, finalStatesToClear: string[], stateMachine: string, numberOfInstances: number) => {
     diagram.model.startTransaction(CLEAR_FINAL_STATES);
     let stateMachineData = diagram.findNodeForKey(stateMachine).data;
     diagram.model.setDataProperty(stateMachineData, "numberOfInstances", numberOfInstances);

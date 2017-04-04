@@ -1,7 +1,7 @@
 import * as React from "react";
 import { connect } from "react-redux";
 import * as Layer from "grommet/components/Layer";
-import { hideStateMachineProperties } from "actions/stateMachineProperties";
+import { hideStateMachineProperties, updateGraphic, clearFinalStates, setStateMachineId } from "actions";
 import * as Header from "grommet/components/Header";
 import * as Title from "grommet/components/Title";
 import * as Form from "grommet/components/Form";
@@ -9,9 +9,7 @@ import * as FormField from "grommet/components/FormField";
 import * as Button from "grommet/components/Button";
 import * as Footer from "grommet/components/Footer";
 import sessionXCSpy from "utils/sessionXCSpy";
-import { updateGraphic, clearFinalStates } from "actions/components";
 import * as Select from "grommet/components/Select";
-import { setStateMachineId } from "actions/stateMachineProperties";
 import * as Box from "grommet/components/Box";
 import Instances from "components/Instances";
 import { XCSpyState } from "reducers/SpyReducer";
