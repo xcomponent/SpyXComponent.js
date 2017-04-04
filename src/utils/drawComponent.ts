@@ -12,7 +12,7 @@ export class DrawComponent {
     constructor() {
     }
 
-    draw(parser: Parser, divId: string) {
+    draw(parser: Parser, divId: string): void {
         this.$ = go.GraphObject.make;
         this.diagram = this.createDiagram(divId);
         this.diagram.nodeTemplate = this.getNodeTemplate();
