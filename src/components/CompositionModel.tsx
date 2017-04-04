@@ -42,7 +42,7 @@ interface CompositionModelCallbackProps {
     clearFinalStates: (component: string, stateMachines: string[]) => void;
 };
 
-const mapStateToProps = (state: XCSpyState) => {
+const mapStateToProps = (state: XCSpyState): CompositionModelProps => {
     return {
         getAutoClear: (): boolean => {
             return state.components.autoClear;
@@ -69,7 +69,7 @@ const mapStateToProps = (state: XCSpyState) => {
     };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<void>) => {
+const mapDispatchToProps = (dispatch: Dispatch<void>): CompositionModelCallbackProps => {
     return {
         initialization: (componentProperties: { [componentName: string]: ComponentProperties }, currentComponent: string, projectName: string): void => {
             dispatch(initialization(componentProperties, currentComponent, projectName));

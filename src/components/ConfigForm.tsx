@@ -21,20 +21,18 @@ interface ConfigFormGlobalProps extends ConfigFormProps, ConfigFormCallbackProps
 };
 
 interface ConfigFormProps {
-    apis: string;
+    apis: string[];
     selectedApi: string;
     serverUrlState: string;
 };
 
 interface ConfigFormCallbackProps {
-    setCurrentComponent: (currentComponent: string) => void;
-    hideConfigForm: () => void;
     onClickGetApiList: (serverUrl: string) => void;
     onChangeSelectedApi: (selectedApi: string) => void;
     onClickSubmit: () => void;
 };
 
-const mapStateToProps = (state: XCSpyState) => {
+const mapStateToProps = (state: XCSpyState): ConfigFormProps => {
     return {
         apis: state.configForm.apis,
         selectedApi: state.configForm.selectedApi,
@@ -42,7 +40,7 @@ const mapStateToProps = (state: XCSpyState) => {
     };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<void>) => {
+const mapDispatchToProps = (dispatch: Dispatch<void>):ConfigFormCallbackProps => {
     return {
         onClickGetApiList: (serverUrl: string): void => {
             dispatch(getApiList(serverUrl));
