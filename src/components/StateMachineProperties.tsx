@@ -13,6 +13,7 @@ import * as Select from "grommet/components/Select";
 import * as Box from "grommet/components/Box";
 import Instances from "components/Instances";
 import { XCSpyState } from "reducers/SpyReducer";
+import { Dispatch } from "redux";
 
 interface StateMachinePropertiesGlobalProps extends StateMachinePropertiesProps, StateMachinePropertiesCallbackProps {
 };
@@ -41,52 +42,52 @@ const mapStateToProps = (state: XCSpyState): StateMachinePropertiesProps => {
         stateMachine: state.stateMachineProperties.stateMachine,
         id: state.stateMachineProperties.id,
         currentComponent: state.components.currentComponent,
-        getIds: () => {
-            let componentProperties = state.components.componentProperties;
-            let currentComponent = state.components.currentComponent;
-            let stateMachine = state.stateMachineProperties.stateMachine;
+        getIds: (): string[] => {
+            const componentProperties = state.components.componentProperties;
+            const currentComponent = state.components.currentComponent;
+            const stateMachine = state.stateMachineProperties.stateMachine;
             return Object.keys(componentProperties[currentComponent].stateMachineProperties[stateMachine]);
         },
-        getPublicMember: () => {
-            let id = state.stateMachineProperties.id;
+        getPublicMember: (): string => {
+            const id = state.stateMachineProperties.id;
             if (!id)
                 return null;
-            let componentProperties = state.components.componentProperties;
-            let currentComponent = state.components.currentComponent;
-            let stateMachine = state.stateMachineProperties.stateMachine;
-            let publicMember = componentProperties[currentComponent].stateMachineProperties[stateMachine][id].jsonMessage;
+            const componentProperties = state.components.componentProperties;
+            const currentComponent = state.components.currentComponent;
+            const stateMachine = state.stateMachineProperties.stateMachine;
+            const publicMember = componentProperties[currentComponent].stateMachineProperties[stateMachine][id].jsonMessage;
             return JSON.stringify(publicMember);
         },
-        getStateMachineRef: () => {
-            let id = state.stateMachineProperties.id;
+        getStateMachineRef: (): any => {
+            const id = state.stateMachineProperties.id;
             if (!id)
                 return null;
-            let componentProperties = state.components.componentProperties;
-            let currentComponent = state.components.currentComponent;
-            let stateMachine = state.stateMachineProperties.stateMachine;
+            const componentProperties = state.components.componentProperties;
+            const currentComponent = state.components.currentComponent;
+            const stateMachine = state.stateMachineProperties.stateMachine;
             return componentProperties[currentComponent].stateMachineProperties[stateMachine][id].stateMachineRef;
         },
-        getFirstId: (stateMachine) => {
-            let componentProperties = state.components.componentProperties;
-            let currentComponent = state.components.currentComponent;
+        getFirstId: (stateMachine): string => {
+            const componentProperties = state.components.componentProperties;
+            const currentComponent = state.components.currentComponent;
             return Object.keys(componentProperties[currentComponent].stateMachineProperties[stateMachine])[0];
         }
 
     };
 };
 
-const mapDispatchToProps = (dispatch): StateMachinePropertiesCallbackProps => {
+const mapDispatchToProps = (dispatch: Dispatch<void>): StateMachinePropertiesCallbackProps => {
     return {
-        clearFinalStates: (component, stateMachine) => {
+        clearFinalStates: (component: string, stateMachine: string): void => {
             dispatch(clearFinalStates(component, stateMachine));
         },
-        setStateMachineId: (id) => {
+        setStateMachineId: (id: string): void => {
             dispatch(setStateMachineId(id));
         },
-        hideStateMachineProperties: () => {
+        hideStateMachineProperties: (): void => {
             dispatch(hideStateMachineProperties());
         },
-        updateGraphic: (currentComponent, stateMachine) => {
+        updateGraphic: (currentComponent: string, stateMachine: string): void => {
             sessionXCSpy.getPromiseCreateSession()
                 .then((session) => {
                     session.createSubscriber().getSnapshot(currentComponent, stateMachine, (items) => {
@@ -97,13 +98,6 @@ const mapDispatchToProps = (dispatch): StateMachinePropertiesCallbackProps => {
                     });
                 });
         }
-    };
-};
-
-const getStyle = (id, instances) => {
-    let backgroundColor = (id && instances[id].isFinal) ? "#ED0000" : "white";
-    return {
-        "backgroundColor": backgroundColor
     };
 };
 

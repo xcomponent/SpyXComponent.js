@@ -1,7 +1,7 @@
 import * as React from "react";
 import * as FooterGrommet from "grommet/components/Footer";
 
-const Footer = ({ }) => {
+const Footer = () => {
     return (
         <FooterGrommet
             appCentered={true}

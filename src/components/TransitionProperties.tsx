@@ -16,6 +16,7 @@ import * as CheckBox from "grommet/components/CheckBox";
 import * as TextInput from "grommet/components/TextInput";
 import Instances from "components/Instances";
 import { XCSpyState } from "reducers/SpyReducer";
+import { Dispatch } from "redux";
 
 interface TransitionPropertiesGlobalProps extends TransitionPropertiesProps, TransitionPropertiesCallbackProps {
 };
@@ -54,10 +55,10 @@ const mapStateToProps = (state: XCSpyState): TransitionPropertiesProps => {
             if (!id) {
                 return null;
             }
-            let componentProperties = state.components.componentProperties;
-            let currentComponent = state.components.currentComponent;
-            let stateMachine = state.transitionProperties.stateMachine;
-            let instance = componentProperties[currentComponent].stateMachineProperties[stateMachine][id];
+            const componentProperties = state.components.componentProperties;
+            const currentComponent = state.components.currentComponent;
+            const stateMachine = state.transitionProperties.stateMachine;
+            const instance = componentProperties[currentComponent].stateMachineProperties[stateMachine][id];
             if (instance.isFinal) {
                 return null;
             }
@@ -66,24 +67,24 @@ const mapStateToProps = (state: XCSpyState): TransitionPropertiesProps => {
     };
 };
 
-const mapDispatchToProps = (dispatch): TransitionPropertiesCallbackProps => {
+const mapDispatchToProps = (dispatch: Dispatch<void>): TransitionPropertiesCallbackProps => {
     return {
-        setPrivateTopic: (privateSend) => {
+        setPrivateTopic: (privateSend: string): void => {
             dispatch(setPrivateTopic(privateSend));
         },
-        setCurrentId: (id) => {
+        setCurrentId: (id: string): void => {
             dispatch(setCurrentId(id));
         },
-        setJsonMessageString: (jsonMessageString) => {
+        setJsonMessageString: (jsonMessageString: string): void => {
             dispatch(setJsonMessageString(jsonMessageString));
         },
-        hideTransitionProperties: () => {
+        hideTransitionProperties: (): void => {
             dispatch(hideTransitionProperties());
         },
-        send: (component, stateMachine, messageType, jsonMessageString) => {
+        send: (component: string, stateMachine: string, messageType: string, jsonMessageString: string): void => {
             sessionXCSpy.getPromiseCreateSession()
                 .then((session) => {
-                    let publisher = session.createPublisher();
+                    const publisher = session.createPublisher();
                     let jsonMessage;
                     try {
                         jsonMessage = JSON.parse(jsonMessageString);
@@ -94,7 +95,7 @@ const mapDispatchToProps = (dispatch): TransitionPropertiesCallbackProps => {
                     }
                 });
         },
-        sendContext: (stateMachineRef, messageType, jsonMessageString) => {
+        sendContext: (stateMachineRef: any, messageType: string, jsonMessageString: string): void => {
             if (!stateMachineRef) {
                 alert("Please select an instance!");
                 return;

@@ -5,22 +5,23 @@ import { configFormReducer } from "reducers/configForm";
 
 describe("Test configForm reducer", () => {
     it("When an GET_API_LIST action is received, it should update the apis array", () => {
-        let stateBefore = {
+        const stateBefore = {
             apis: [],
             selectedApi: undefined,
             serverUrl: undefined,
             formSubmited: false
         };
         deepFreeze(stateBefore);
-        let serverUrl = "wss://localhost:443";
-        let apis = ["Hello.xcApi", "GoodBye.xcApi"];
-        let action = {
+        const serverUrl = "wss://localhost:443";
+        const apis = ["Hello.xcApi", "GoodBye.xcApi"];
+        const action = {
             type: GET_API_LIST,
             serverUrl,
             apis,
             selectedApi: undefined
         };
-        let stateAfter = {
+        deepFreeze(action);
+        const stateAfter = {
             apis,
             selectedApi: apis[0],
             serverUrl,
@@ -32,11 +33,11 @@ describe("Test configForm reducer", () => {
     });
 
     it("When an SELECT_API action is received, it should update the selectedApi field", () => {
-        let selectedApi = "Hello.xcApi";
-        let serverUrl = "wss://localhost:443";
-        let apis = ["Hello.xcApi", "GoodBye.xcApi"];
+        const selectedApi = "Hello.xcApi";
+        const serverUrl = "wss://localhost:443";
+        const apis = ["Hello.xcApi", "GoodBye.xcApi"];
 
-        let stateBefore = {
+        const stateBefore = {
             apis,
             serverUrl,
             selectedApi: "random",
@@ -44,13 +45,14 @@ describe("Test configForm reducer", () => {
         };
 
         deepFreeze(stateBefore);
-        let action = {
+        const action = {
             type: SELECT_API,
             selectedApi,
             serverUrl: undefined,
             apis: undefined
         };
-        let stateAfter = {
+        deepFreeze(action);
+        const stateAfter = {
             apis,
             serverUrl,
             selectedApi,
@@ -62,11 +64,11 @@ describe("Test configForm reducer", () => {
     });
 
     it("When an FORM_SUBMIT action is received, it should update the formSubmited field", () => {
-        let selectedApi = "Hello.xcApi";
-        let serverUrl = "wss://localhost:443";
-        let apis = ["Hello.xcApi", "GoodBye.xcApi"];
+        const selectedApi = "Hello.xcApi";
+        const serverUrl = "wss://localhost:443";
+        const apis = ["Hello.xcApi", "GoodBye.xcApi"];
 
-        let stateBefore = {
+        const stateBefore = {
             apis,
             serverUrl,
             selectedApi,
@@ -74,13 +76,14 @@ describe("Test configForm reducer", () => {
         };
 
         deepFreeze(stateBefore);
-        let action = {
+        const action = {
             type: FORM_SUBMIT,
             selectedApi,
             serverUrl: undefined,
             apis: undefined
         };
-        let stateAfter = {
+        deepFreeze(action);
+        const stateAfter = {
             apis,
             serverUrl,
             selectedApi,

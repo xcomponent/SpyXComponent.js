@@ -4,18 +4,19 @@ import { compositionModelReducer } from "reducers/compositionModel";
 
 describe("Test components reducer", () => {
     it("When an INIT_COMPOSITION_MODEL action is received, it should initialize the component model value", () => {
-        let stateBefore = {
+        const stateBefore = {
             initialized: false,
             value: undefined
         };
         deepFreeze(stateBefore);
-        let value = "randomValue";
-        let action = {
+        const value = "randomValue";
+        const action = {
             type: INIT_COMPOSITION_MODEL,
             compositionModel: value,
             initialized: undefined
         };
-        let stateAfter = {
+        deepFreeze(action);
+        const stateAfter = {
             initialized: true,
             value
         };

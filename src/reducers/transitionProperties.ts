@@ -11,7 +11,7 @@ export interface TransitionPropertiesState {
     privateTopic: string;
 };
 
-let initialState: TransitionPropertiesState = {
+const initialState: TransitionPropertiesState = {
     active: false,
     stateMachine: undefined,
     messageType: undefined,
@@ -28,7 +28,7 @@ export const transitionPropertiesReducer: Reducer<TransitionPropertiesState> = (
                 active: false
             };
         case SHOW_TRANSITION_PROPERTIES:
-            let showTransitionPropertiesAction = <ShowTransitionPropertiesAction>action;
+            const showTransitionPropertiesAction = <ShowTransitionPropertiesAction>action;
             return {
                 ...state,
                 active: true,
@@ -39,19 +39,19 @@ export const transitionPropertiesReducer: Reducer<TransitionPropertiesState> = (
                 privateTopic: showTransitionPropertiesAction.privateTopic
             };
         case SET_JSON_MESSAGE_STRING:
-            let setJsonMessageStringAction = <SetJsonMessageStringAction>action;
+            const setJsonMessageStringAction = <SetJsonMessageStringAction>action;
             return {
                 ...state,
                 jsonMessageString: setJsonMessageStringAction.jsonMessageString
             };
         case SET_CURRENT_ID:
-            let setCurrentIdAction = <SetCurrentIdAction>action;
+            const setCurrentIdAction = <SetCurrentIdAction>action;
             return {
                 ...state,
                 id: setCurrentIdAction.id
             };
         case SET_PRIVATE_TOPIC:
-            let setPrivateTopicAction = <SetPrivateTopicAction>action;
+            const setPrivateTopicAction = <SetPrivateTopicAction>action;
             return {
                 ...state,
                 privateTopic: setPrivateTopicAction.privateTopic

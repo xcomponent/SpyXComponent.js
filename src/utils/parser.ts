@@ -31,10 +31,10 @@ export class Parser {
 
     private parseGraphical(): void {
         this.locations = {};
-        let xmlGraphicalDom = (new DOMParser()).parseFromString(this.componentGraphicalModel.graphical, "text/xml");
+        const xmlGraphicalDom = (new DOMParser()).parseFromString(this.componentGraphicalModel.graphical, "text/xml");
         let stateGraphicalData = xmlGraphicalDom.getElementsByTagName(graphicalTags.States)[0].getElementsByTagName(graphicalTags.StateGraphicalData);
         for (let i = 0; i < stateGraphicalData.length; i++) {
-            let id = stateGraphicalData[i].getAttribute(graphicalTags.Id);
+            const id = stateGraphicalData[i].getAttribute(graphicalTags.Id);
             this.locations[id] = {
                 x: parseFloat(stateGraphicalData[i].getAttribute(graphicalTags.CenterX)),
                 y: parseFloat(stateGraphicalData[i].getAttribute(graphicalTags.CenterY))
@@ -43,7 +43,7 @@ export class Parser {
 
         stateGraphicalData = xmlGraphicalDom.getElementsByTagName(graphicalTags.TransitionPatternStates)[0].getElementsByTagName(graphicalTags.StateGraphicalData);
         for (let i = 0; i < stateGraphicalData.length; i++) {
-            let id = stateGraphicalData[i].getAttribute(graphicalTags.Id);
+            const id = stateGraphicalData[i].getAttribute(graphicalTags.Id);
             this.locations[id] = {
                 x: parseFloat(stateGraphicalData[i].getAttribute(graphicalTags.CenterX)),
                 y: parseFloat(stateGraphicalData[i].getAttribute(graphicalTags.CenterY))
@@ -62,7 +62,7 @@ export class Parser {
     }
 
     private parseModel(): void {
-        let scxmlDom = (new DOMParser()).parseFromString(this.componentGraphicalModel.model, "text/xml");
+        const scxmlDom = (new DOMParser()).parseFromString(this.componentGraphicalModel.model, "text/xml");
         this.setStateMachines(scxmlDom);
         this.setStates(scxmlDom);
         this.setLinks(scxmlDom);
@@ -76,25 +76,25 @@ export class Parser {
     private addControlPoint(): void {
         for (let i = 0; i < this.linkDataArray.length; i++) {
             if (this.linkDataArray[i].triggerable) {
-                let keyLink = this.linkDataArray[i].key;
-                let firstPoint = this.controlPointTriggerable[keyLink].firstPoint;
-                let lastPoint = this.controlPointTriggerable[keyLink].lastPoint;
-                let firstControlPoint = this.controlPointTriggerable[keyLink].firstControlPoint;
-                let secondControlPoint = this.controlPointTriggerable[keyLink].secondControlPoint;
+                const keyLink = this.linkDataArray[i].key;
+                const firstPoint = this.controlPointTriggerable[keyLink].firstPoint;
+                const lastPoint = this.controlPointTriggerable[keyLink].lastPoint;
+                const firstControlPoint = this.controlPointTriggerable[keyLink].firstControlPoint;
+                const secondControlPoint = this.controlPointTriggerable[keyLink].secondControlPoint;
                 this.linkDataArray[i].controls = [firstControlPoint.x, firstControlPoint.y, secondControlPoint.x, secondControlPoint.y, lastPoint.x, lastPoint.y];
             } else {
-                let keyLink = this.linkDataArray[i].key;
-                let firstPoint = this.controlPointTransition[keyLink].firstPoint;
-                let lastPoint = this.controlPointTransition[keyLink].lastPoint;
-                let firstControlPoint = this.controlPointTransition[keyLink].firstControlPoint;
-                let secondControlPoint = this.controlPointTransition[keyLink].secondControlPoint;
+                const keyLink = this.linkDataArray[i].key;
+                const firstPoint = this.controlPointTransition[keyLink].firstPoint;
+                const lastPoint = this.controlPointTransition[keyLink].lastPoint;
+                const firstControlPoint = this.controlPointTransition[keyLink].firstControlPoint;
+                const secondControlPoint = this.controlPointTransition[keyLink].secondControlPoint;
                 this.linkDataArray[i].controls = [firstControlPoint.x, firstControlPoint.y, secondControlPoint.x, secondControlPoint.y];
             }
         }
     }
 
     private getNodeDataArray(): Array<StateMachineTemplate | StateTemplate | LinkLabelTemplate> {
-        let nodeDataArray: Array<StateMachineTemplate | StateTemplate | LinkLabelTemplate> = [];
+        const nodeDataArray: Array<StateMachineTemplate | StateTemplate | LinkLabelTemplate> = [];
         let ids, state, stateMachine, id;
         ids = Object.keys(this.stateMachines);
         for (let i = 0; i < ids.length; i++) {
@@ -143,10 +143,10 @@ export class Parser {
     }
 
     private getControlPointTransition(transitionGraphicalData: NodeListOf<Element>): { [key: string]: Curve } {
-        let controlPoints: { [key: string]: Curve } = {};
+        const controlPoints: { [key: string]: Curve } = {};
         for (let i = 0; i < transitionGraphicalData.length; i++) {
-            let id = transitionGraphicalData[i].getAttribute(graphicalTags.Id);
-            let points = transitionGraphicalData[i].getElementsByTagName(graphicalTags.Point);
+            const id = transitionGraphicalData[i].getAttribute(graphicalTags.Id);
+            const points = transitionGraphicalData[i].getElementsByTagName(graphicalTags.Point);
             controlPoints[id] = {
                 firstPoint: {
                     x: parseFloat(points[0].getElementsByTagName(graphicalTags.X)[0].innerHTML),
@@ -175,7 +175,7 @@ export class Parser {
     }
 
     private getFinalStates(): Array<String> {
-        let finalStates = [];
+        const finalStates = [];
         for (let id in this.states) {
             if (this.states[id].isFinal) {
                 finalStates.push(this.states[id].key);
@@ -193,7 +193,7 @@ export class Parser {
     }
 
     private setLinks(scxmlDom: Document): void {
-        let linksDom = scxmlDom.getElementsByTagName(modelTags.TransitionData);
+        const linksDom = scxmlDom.getElementsByTagName(modelTags.TransitionData);
         this.linkDataArray = [];
         this.linksLabel = [];
         let key,
@@ -230,7 +230,7 @@ export class Parser {
             });
         }
 
-        let triggerableLinksDom = scxmlDom.getElementsByTagName(modelTags.TransversalTransitionData);
+        const triggerableLinksDom = scxmlDom.getElementsByTagName(modelTags.TransversalTransitionData);
         for (let j = 0; j < triggerableLinksDom.length; j++) {
             from = this.states[triggerableLinksDom[j].getAttribute(modelTags.FromKey)];
             if (!from)
@@ -249,8 +249,8 @@ export class Parser {
     }
 
     private setStates(scxmlDom: Document): void {
-        let statesDom = scxmlDom.getElementsByTagName(modelTags.StateData);
-        let states = {};
+        const statesDom = scxmlDom.getElementsByTagName(modelTags.StateData);
+        const states = {};
         let id,
             group,
             name,
@@ -274,14 +274,14 @@ export class Parser {
 
         }
         // transition pattern state
-        let transitionPatternStates = {};
-        let transitionPatternStateDataDom = scxmlDom.getElementsByTagName(modelTags.TransitionPatternStateData);
+        const transitionPatternStates = {};
+        const transitionPatternStateDataDom = scxmlDom.getElementsByTagName(modelTags.TransitionPatternStateData);
         for (let i = 0; i < transitionPatternStateDataDom.length; i++) {
             id = transitionPatternStateDataDom[i].getAttribute(modelTags.SubGraphKey);
             group = this.stateMachines[id].name;
             name = transitionPatternStateDataDom[i].getAttribute(modelTags.Name);
-            let selectedStatesKeys = [];
-            let selectedStatesKeysDom = transitionPatternStateDataDom[i].getElementsByTagName(modelTags.SelectedStatesKeys)[0]
+            const selectedStatesKeys = [];
+            const selectedStatesKeysDom = transitionPatternStateDataDom[i].getElementsByTagName(modelTags.SelectedStatesKeys)[0]
                 .getElementsByTagName(modelTags.string);
             for (let k = 0; k < selectedStatesKeysDom.length; k++) {
                 selectedStatesKeys.push(selectedStatesKeysDom[k].innerHTML);
@@ -301,9 +301,9 @@ export class Parser {
     }
 
     private setStateMachines(scxmlDom: Document): void {
-        let stateMachineDom = scxmlDom.getElementsByTagName(modelTags.StateMachineData);
-        let stateMachines = {};
-        let stateMachineNames = [];
+        const stateMachineDom = scxmlDom.getElementsByTagName(modelTags.StateMachineData);
+        const stateMachines = {};
+        const stateMachineNames = [];
         let id, name;
         for (let i = 0; i < stateMachineDom.length; i++) {
             id = stateMachineDom[i].getAttribute(modelTags.Id);

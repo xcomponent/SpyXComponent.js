@@ -11,12 +11,30 @@ import * as CheckBox from "grommet/components/CheckBox";
 import * as TextInput from "grommet/components/TextInput";
 import * as Select from "grommet/components/Select";
 import * as Image from "grommet/components/Image";
-
 import { connect } from "react-redux";
 import { getApiList, selectApi, formSubmit } from "actions";
 import Footer from "components/Footer";
+import { XCSpyState } from "reducers/SpyReducer";
+import { Dispatch } from "redux";
 
-const mapStateToProps = (state) => {
+interface ConfigFormGlobalProps extends ConfigFormProps, ConfigFormCallbackProps {
+};
+
+interface ConfigFormProps {
+    apis: string;
+    selectedApi: string;
+    serverUrlState: string;
+};
+
+interface ConfigFormCallbackProps {
+    setCurrentComponent: (currentComponent: string) => void;
+    hideConfigForm: () => void;
+    onClickGetApiList: (serverUrl: string) => void;
+    onChangeSelectedApi: (selectedApi: string) => void;
+    onClickSubmit: () => void;
+};
+
+const mapStateToProps = (state: XCSpyState) => {
     return {
         apis: state.configForm.apis,
         selectedApi: state.configForm.selectedApi,
@@ -24,15 +42,15 @@ const mapStateToProps = (state) => {
     };
 };
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch: Dispatch<void>) => {
     return {
-        onClickGetApiList: (serverUrl) => {
+        onClickGetApiList: (serverUrl: string): void => {
             dispatch(getApiList(serverUrl));
         },
-        onChangeSelectedApi: (selectedApi) => {
+        onChangeSelectedApi: (selectedApi: string): void => {
             dispatch(selectApi(selectedApi));
         },
-        onClickSubmit: () => {
+        onClickSubmit: (): void => {
             dispatch(formSubmit());
         }
     };
@@ -45,7 +63,7 @@ let ConfigForm = ({
     apis,
     serverUrlState,
     selectedApi
-}) => {
+}: ConfigFormGlobalProps) => {
     let serverUrl = serverUrlState;
     return (
         <Box full={true}>

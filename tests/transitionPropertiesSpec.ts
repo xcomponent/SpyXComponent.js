@@ -4,7 +4,7 @@ import { transitionPropertiesReducer } from "reducers/transitionProperties";
 
 describe("Test transitionProperties reducer", () => {
     it("When a HIDE_TRANSITION_PROPERTIES action is received, it should set the active properties to false", () => {
-        let stateBefore = {
+        const stateBefore = {
             active: true,
             stateMachine: undefined,
             messageType: undefined,
@@ -13,10 +13,11 @@ describe("Test transitionProperties reducer", () => {
             privateTopic: undefined
         };
         deepFreeze(stateBefore);
-        let action = {
+        const action = {
             type: HIDE_TRANSITION_PROPERTIES
         };
-        let stateAfter = {
+        deepFreeze(action);
+        const stateAfter = {
             active: false,
             stateMachine: undefined,
             messageType: undefined,
@@ -30,11 +31,11 @@ describe("Test transitionProperties reducer", () => {
     });
 
     it("When a SHOW_TRANSITION_PROPERTIES action is received, it should initialize the transition properties", () => {
-        let stateMachine = "stateMachine";
-        let messageType = "messageType";
-        let jsonMessageString = "jsonMessageString";
-        let id = "id";
-        let stateBefore = {
+        const stateMachine = "stateMachine";
+        const messageType = "messageType";
+        const jsonMessageString = "jsonMessageString";
+        const id = "id";
+        const stateBefore = {
             active: false,
             stateMachine: undefined,
             messageType: undefined,
@@ -43,14 +44,15 @@ describe("Test transitionProperties reducer", () => {
             privateTopic: undefined
         };
         deepFreeze(stateBefore);
-        let action = {
+        const action = {
             type: SHOW_TRANSITION_PROPERTIES,
             stateMachine,
             messageType,
             jsonMessageString,
             id
         };
-        let stateAfter = {
+        deepFreeze(action);
+        const stateAfter = {
             active: true,
             stateMachine,
             messageType,
@@ -64,13 +66,13 @@ describe("Test transitionProperties reducer", () => {
     });
 
     it("When a SET_JSON_MESSAGE_STRING action is received, it should set the jsonMessage properties", () => {
-        let active = true;
-        let stateMachine = "stateMachine";
-        let messageType = "messageType";
-        let jsonMessageString = "jsonMessageString";
-        let newJsonMessageString = "newJsonMessageString";
-        let id = "id";
-        let stateBefore = {
+        const active = true;
+        const stateMachine = "stateMachine";
+        const messageType = "messageType";
+        const jsonMessageString = "jsonMessageString";
+        const newJsonMessageString = "newJsonMessageString";
+        const id = "id";
+        const stateBefore = {
             active,
             stateMachine,
             messageType,
@@ -79,14 +81,15 @@ describe("Test transitionProperties reducer", () => {
             privateTopic: undefined
         };
         deepFreeze(stateBefore);
-        let action = {
+        const action = {
             type: SET_JSON_MESSAGE_STRING,
             stateMachine,
             messageType,
             jsonMessageString: newJsonMessageString,
             id
         };
-        let stateAfter = {
+        deepFreeze(action);
+        const stateAfter = {
             active,
             stateMachine,
             messageType,
@@ -99,13 +102,13 @@ describe("Test transitionProperties reducer", () => {
     });
 
     it("When a SET_CURRENT_ID action is received, it should set the current id properties", () => {
-        let active = true;
-        let stateMachine = "stateMachine";
-        let messageType = "messageType";
-        let jsonMessageString = "jsonMessageString";
-        let id = "id";
-        let newId = "newId";
-        let stateBefore = {
+        const active = true;
+        const stateMachine = "stateMachine";
+        const messageType = "messageType";
+        const jsonMessageString = "jsonMessageString";
+        const id = "id";
+        const newId = "newId";
+        const stateBefore = {
             active,
             stateMachine,
             messageType,
@@ -114,14 +117,15 @@ describe("Test transitionProperties reducer", () => {
             privateTopic: undefined
         };
         deepFreeze(stateBefore);
-        let action = {
+        const action = {
             type: SET_CURRENT_ID,
             stateMachine,
             messageType,
             jsonMessageString,
             id: newId
         };
-        let stateAfter = {
+        deepFreeze(action);
+        const stateAfter = {
             active,
             stateMachine,
             messageType,

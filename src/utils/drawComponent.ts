@@ -22,9 +22,9 @@ export class DrawComponent {
     }
 
     private createDiagram(divId: string): go.Diagram {
-        let $ = this.$;
-        let thisObject = this;
-        let diagram =
+        const $ = this.$;
+        const thisObject = this;
+        const diagram =
             $(go.Diagram, divId,
                 {
                     contentAlignment: go.Spot.Center,
@@ -35,10 +35,10 @@ export class DrawComponent {
 
     private loadControls(diagram): void {
         diagram.links.each((link) => {
-            let arr = link.data.controls;
+            const arr = link.data.controls;
             if (!Array.isArray(arr) || arr.length < 4) return;
-            let from = link.fromPort;
-            let to = link.toPort;
+            const from = link.fromPort;
+            const to = link.toPort;
             if (from === null || to === null) return;
             let firstPoint, firstControlPoint, secondControlPoint, lastPoint;
             if (arr.length === 4) {
@@ -52,7 +52,7 @@ export class DrawComponent {
                 lastPoint = new go.Point(arr[4], arr[5]);
                 firstPoint = link.getLinkPointFromPoint(from.part, from, from.getDocumentPoint(go.Spot.Center), firstControlPoint, true);
             }
-            let list = new go.List();
+            const list = new go.List();
             list.add(firstPoint);
             list.add(firstControlPoint);
             list.add(secondControlPoint);
@@ -62,8 +62,8 @@ export class DrawComponent {
     }
 
     private getLinkLabelTemplate(): go.Part {
-        let $ = this.$;
-        let linkLabelTemplate = $(go.Node,
+        const $ = this.$;
+        const linkLabelTemplate = $(go.Node,
             {
                 locationSpot: go.Spot.Center,  // Node.location is the center of the Shape
                 layerName: "Foreground"
@@ -77,8 +77,8 @@ export class DrawComponent {
 
 
     private getNodeTemplate(): go.Part {
-        let $ = this.$;
-        let nodeTemplate =
+        const $ = this.$;
+        const nodeTemplate =
             $(go.Node, "Vertical",
                 {
                     locationSpot: go.Spot.Center,  // Node.location is the center of the Shape
@@ -101,8 +101,8 @@ export class DrawComponent {
     }
 
     private getGroupTemplate(): go.Group {
-        let $ = this.$;
-        let groupTemplate =
+        const $ = this.$;
+        const groupTemplate =
             $(go.Group, "Auto",
                 $(go.Shape, "Rectangle",
                     { fill: stateMachineColor }),
@@ -121,8 +121,8 @@ export class DrawComponent {
 
 
     private getLinkTemplate(): go.Link {
-        let $ = this.$;
-        let linkTemplate =
+        const $ = this.$;
+        const linkTemplate =
             $(go.Link,
                 { curve: go.Link.Bezier, adjusting: go.Link.Stretch, reshapable: true },
                 $(go.Shape, new go.Binding("stroke", "strokeLink")),
@@ -132,7 +132,7 @@ export class DrawComponent {
     }
 
     private getModel(nodeDataArray, linkDataArray): go.Model {
-        let data = {
+        const data = {
             "class": "go.GraphLinksModel",
             "linkLabelKeysProperty": "labelKeys",
             "nodeDataArray": nodeDataArray,

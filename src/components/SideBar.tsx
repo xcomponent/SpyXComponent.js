@@ -14,6 +14,7 @@ import * as User from "grommet/components/icons/base/User";
 import { connect } from "react-redux";
 import { setCurrentComponent, hideSideBar } from "actions";
 import { XCSpyState } from "reducers/spyReducer";
+import { Dispatch } from "redux";
 
 interface SideBarGlobalProps extends SideBarProps, SideBarCallbackProps {
 };
@@ -41,7 +42,7 @@ const mapStateToProps = (state: XCSpyState): SideBarProps => {
     };
 };
 
-const mapDispatchToProps = (dispatch): SideBarCallbackProps => {
+const mapDispatchToProps = (dispatch: Dispatch<void>): SideBarCallbackProps => {
     return {
         setCurrentComponent: (currentComponent: string) => {
             dispatch(setCurrentComponent(currentComponent));
@@ -52,14 +53,14 @@ const mapDispatchToProps = (dispatch): SideBarCallbackProps => {
     };
 };
 
-class SideBar extends React.Component<SideBarGlobalProps, any> {
+class SideBar extends React.Component<SideBarGlobalProps, XCSpyState> {
     constructor(props: SideBarGlobalProps) {
         super(props);
         this.getTitle = this.getTitle.bind(this);
         this.getComponentList = this.getComponentList.bind(this);
     }
 
-    getTitle() {
+    getTitle(): Box {
         return (
             <Box direction="row">
                 <Box size="medium" pad="medium" justify="between">
@@ -74,23 +75,25 @@ class SideBar extends React.Component<SideBarGlobalProps, any> {
         );
     }
 
-    getComponentList() {
-        let list = [];
-        let props = this.props;
-        let components = props.components;
-        for (let i = 0; i < components.length; i++) {
+    getComponentList(): Anchor[] {
+        const list = [];
+        const props = this.props;
+        const components = props.components;
+        components.map((component: string) => {
             list.push(
                 <Anchor
                     primary={true}
-                    key={components[i]}
-                    value={components[i]}
-                    className={(props.currentComponent === components[i]) ? "active" : ""}
+                    key={component}
+                    value={component}
+                    className={(props.currentComponent === component) ? "active" : ""}
                     onClick={(e) => {
                         props.setCurrentComponent(e.target.getAttribute("value"));
                     }}>
-                    {components[i]}
+                    {component}
                 </Anchor>
             );
+        });
+        for (let i = 0; i < components.length; i++) {
         }
         return list;
     }

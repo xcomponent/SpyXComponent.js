@@ -25,7 +25,7 @@ const defaultAction = {
 export const configFormReducer: Reducer<ConfigFormState> = (state: ConfigFormState = initialState, action: GlobalConfigFormAction = defaultAction): ConfigFormState => {
     switch (action.type) {
         case GET_API_LIST:
-            let getApiListAction = <GetApiListAction>action;
+            const getApiListAction = <GetApiListAction>action;
             return {
                 ...state,
                 serverUrl: getApiListAction.serverUrl,
@@ -33,7 +33,7 @@ export const configFormReducer: Reducer<ConfigFormState> = (state: ConfigFormSta
                 selectedApi: getApiListAction.apis[0]
             };
         case SELECT_API:
-            let selectApiAction = <SelectApiAction>action;
+            const selectApiAction = <SelectApiAction>action;
             return {
                 ...state,
                 selectedApi: selectApiAction.selectedApi

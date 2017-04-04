@@ -12,6 +12,7 @@ import { showSideBar, hideSideBar } from "actions/sideBar";
 import sessionXCSpy from "utils/sessionXCSpy";
 import { updateGraphic, clearFinalStates, setAutoClear } from "actions";
 import { XCSpyState } from "reducers/spyReducer";
+import { Dispatch } from "redux";
 
 interface AppHeaderGlobalProps extends AppHeaderProps, AppHeaderCallbackProps {
 };
@@ -35,15 +36,15 @@ interface AppHeaderCallbackProps {
 const mapStateToProps = (state: XCSpyState): AppHeaderProps => {
     return {
         currentComponent: state.components.currentComponent,
-        getStateMachines: (component) => {
-            let initialized = state.components.initialized;
+        getStateMachines: (component: string): string[] => {
+            const initialized = state.components.initialized;
             if (!initialized)
                 return [];
-            let componentProperties = state.components.componentProperties;
+            const componentProperties = state.components.componentProperties;
             return Object.keys(componentProperties[component].stateMachineProperties);
         },
-        getComponents: () => {
-            let initialized = state.components.initialized;
+        getComponents: (): string[] => {
+            const initialized = state.components.initialized;
             if (!initialized)
                 return [];
             return Object.keys(state.components.componentProperties);
@@ -53,24 +54,24 @@ const mapStateToProps = (state: XCSpyState): AppHeaderProps => {
     };
 };
 
-const mapDispatchToProps = (dispatch): AppHeaderCallbackProps => {
+const mapDispatchToProps = (dispatch: Dispatch<void>): AppHeaderCallbackProps => {
     return {
-        clearFinalStates: (component, stateMachines) => {
+        clearFinalStates: (component: string, stateMachines: string[]): void => {
             for (let i = 0; i < stateMachines.length; i++) {
                 dispatch(clearFinalStates(component, stateMachines[i]));
             }
         },
-        showSideBar: () => {
+        showSideBar: (): void => {
             dispatch(showSideBar());
         },
-        hideSideBar: () => {
+        hideSideBar: (): void => {
             dispatch(hideSideBar());
         },
-        snapshotAll: (component, stateMachines) => {
-            dispatch((dispatch) => {
+        snapshotAll: (component: string, stateMachines: string[]): void => {
+            dispatch((dispatch: Dispatch<void>) => {
                 sessionXCSpy.getPromiseCreateSession()
                     .then((session) => {
-                        let subscriber = session.createSubscriber();
+                        const subscriber = session.createSubscriber();
                         for (let i = 0; i < stateMachines.length; i++) {
                             subscriber.getSnapshot(component, stateMachines[i], (items) => {
                                 console.log(items);
@@ -82,7 +83,7 @@ const mapDispatchToProps = (dispatch): AppHeaderCallbackProps => {
                     });
             });
         },
-        setAutoClear: (autoClear) => {
+        setAutoClear: (autoClear: boolean): void => {
             dispatch(setAutoClear(autoClear));
         }
     };
@@ -100,7 +101,7 @@ const AppHeader = ({
     sideBar,
     hideSideBar
 }: AppHeaderGlobalProps) => {
-    let menuSpy = (
+    const menuSpy = (
         <Menu
             responsive={true}
             primary={true}
@@ -125,7 +126,7 @@ const AppHeader = ({
 
             <Anchor href="#" onClick={() => {
                 if (!autoClear) {
-                    let components = getComponents();
+                    const components = getComponents();
                     for (let i = 0; i < components.length; i++) {
                         clearFinalStates(components[i], getStateMachines(components[i]));
                     }

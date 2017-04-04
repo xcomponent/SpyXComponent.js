@@ -4,14 +4,15 @@ import { sideBarReducer } from "reducers/sideBar";
 
 describe("Test sideBar reducer", () => {
     it("When an SHOW_SIDE_BAR action is received, it should set the state to true", () => {
-        let stateBefore = {
+        const stateBefore = {
             isVisible: false
         }
         deepFreeze(stateBefore);
-        let action = {
+        const action = {
             type: SHOW_SIDE_BAR,
         };
-        let stateAfter = {
+        deepFreeze(action);
+        const stateAfter = {
             isVisible: true
         };
         expect(
@@ -20,14 +21,15 @@ describe("Test sideBar reducer", () => {
     });
 
     it("When an HIDE_SIDE_BAR action is received, it should set the state to false", () => {
-        let stateBefore = {
+        const stateBefore = {
             isVisible: true
         }
         deepFreeze(stateBefore);
-        let action = {
+        const action = {
             type: HIDE_SIDE_BAR,
         };
-        let stateAfter = {
+        deepFreeze(action);
+        const stateAfter = {
             isVisible: false
         };
         expect(

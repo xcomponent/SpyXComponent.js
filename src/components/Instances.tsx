@@ -1,28 +1,31 @@
 import * as React from "react";
 import { connect } from "react-redux";
+import { XCSpyState } from "reducers/SpyReducer";
+import { Instance } from "reducers/components";
+import { Dispatch } from "redux";
 
 interface InstancesGlobalProps extends InstancesProps, InstancesCallbackProps {
 };
 
 interface InstancesProps {
-    getInstances: () => any;
-    onChange: (id: string) => void;
-    getId: () => number;
+    getInstances: () => { [id: number]: Instance };
+    onChangeOwnProps: (id: string) => void;
+    getId: () => string;
 };
 
 interface InstancesCallbackProps {
 };
 
-const mapStateToProps = (state, ownProps): InstancesProps => {
+const mapStateToProps = (state: XCSpyState, ownProps): InstancesProps => {
     return {
-        getInstances: () => {
-            let componentProperties = state.components.componentProperties;
-            let currentComponent = state.components.currentComponent;
-            let stateMachine = ownProps.stateMachine;
+        getInstances: (): { [id: number]: Instance } => {
+            const componentProperties = state.components.componentProperties;
+            const currentComponent = state.components.currentComponent;
+            const stateMachine = ownProps.stateMachine;
             return componentProperties[currentComponent].stateMachineProperties[stateMachine];
         },
-        onChange: ownProps.onChange,
-        getId: () => {
+        onChangeOwnProps: ownProps.onChange,
+        getId: (): string => {
             if (state.transitionProperties.active) {
                 return state.transitionProperties.id;
             } else {
@@ -32,29 +35,24 @@ const mapStateToProps = (state, ownProps): InstancesProps => {
     };
 };
 
-const mapDispatchToProps = (dispatch): InstancesCallbackProps => {
-    return {
-    };
-};
-
-const getStyle = (id, instances) => {
-    let redColor = "#ED0000";
-    let whiteColor = "#FFFFFF";
-    let backgroundColor = (id && instances[id].isFinal) ? redColor : whiteColor;
+const getStyle = (id: string, instances: { [id: number]: Instance }) => {
+    const redColor = "#ED0000";
+    const whiteColor = "#FFFFFF";
+    const backgroundColor = (id && instances[id].isFinal) ? redColor : whiteColor;
     return {
         "backgroundColor": backgroundColor
     };
 };
 
 const Instances = ({
-    onChange,
+    onChangeOwnProps,
     getInstances,
     getId
  }: InstancesGlobalProps) => {
-    let id = getId();
+    const id = getId();
     return (
         <select style={getStyle(id, getInstances())} value={id} onChange={(e) => {
-            onChange(e.currentTarget.value);
+            onChangeOwnProps(e.currentTarget.value);
         }}>
             {Object.keys(getInstances()).map((id) => {
                 return (
@@ -66,4 +64,4 @@ const Instances = ({
 
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Instances);
+export default connect(mapStateToProps)(Instances);

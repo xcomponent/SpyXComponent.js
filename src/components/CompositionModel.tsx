@@ -18,49 +18,72 @@ import TransitionProperties from "components/TransitionProperties";
 import * as Title from "grommet/components/Title";
 import * as Button from "grommet/components/Button";
 import { backgroundColor } from "utils/graphicColors";
+import { Dispatch } from "redux";
+import { XCSpyState } from "reducers/SpyReducer";
+import { ComponentProperties } from "reducers/components";
 
-const mapStateToProps = (state) => {
+interface CompositionModelGlobalProps extends CompositionModelProps, CompositionModelCallbackProps {
+    compositionModel: any;
+};
+
+interface CompositionModelProps {
+    getAutoClear: () => boolean;
+    getCurrentComponent: () => string;
+    currentComponent: string;
+    getDiagram: () => go.Diagram;
+    getFirstId: (stateMachine: string) => string;
+};
+
+interface CompositionModelCallbackProps {
+    initialization: (componentProperties: { [componentName: string]: ComponentProperties }, currentComponent: string, projectName: string) => void;
+    showStateMachineProperties: (stateMachine: string, id: string) => void;
+    updateGraphic: (component: string, stateMachine: string, data: any) => void;
+    showTransitionProperties: (stateMachine: string, messageType: string, jsonMessageString: string, id: string, privateTopic: string) => void;
+    clearFinalStates: (component: string, stateMachines: string[]) => void;
+};
+
+const mapStateToProps = (state: XCSpyState) => {
     return {
-        getAutoClear: () => {
+        getAutoClear: (): boolean => {
             return state.components.autoClear;
         },
-        getCurrentComponent: () => {
+        getCurrentComponent: (): string => {
             return state.components.currentComponent;
         },
         currentComponent: state.components.currentComponent,
-        getDiagram: () => {
-            let initialized = state.components.initialized;
+        getDiagram: (): go.Diagram => {
+            const initialized = state.components.initialized;
             if (!initialized) {
                 return null;
             } else {
-                let currentComponent = state.components.currentComponent;
-                let componentProperties = state.components.componentProperties;
+                const currentComponent = state.components.currentComponent;
+                const componentProperties = state.components.componentProperties;
                 return componentProperties[currentComponent].diagram;
             }
         },
-        getFirstId: (stateMachine) => {
-            let componentProperties = state.components.componentProperties;
-            let currentComponent = state.components.currentComponent;
+        getFirstId: (stateMachine: string): string => {
+            const componentProperties = state.components.componentProperties;
+            const currentComponent = state.components.currentComponent;
             return Object.keys(componentProperties[currentComponent].stateMachineProperties[stateMachine])[0];
         }
     };
 };
 
-const mapDispatchToProps = (dispatch, ownProps) => {
+const mapDispatchToProps = (dispatch: Dispatch<void>) => {
     return {
-        initialization: (componentProperties, currentComponent, projectName) => {
+        initialization: (componentProperties: { [componentName: string]: ComponentProperties }, currentComponent: string, projectName: string): void => {
             dispatch(initialization(componentProperties, currentComponent, projectName));
         },
-        showStateMachineProperties: (stateMachine, id) => {
+        showStateMachineProperties: (stateMachine: string, id: string): void => {
             dispatch(showStateMachineProperties(stateMachine, id));
         },
-        updateGraphic: (component, stateMachine, data) => {
+        updateGraphic: (component: string, stateMachine: string, data: any): void => {
             dispatch(updateGraphic(component, stateMachine, data));
         },
-        showTransitionProperties: (stateMachine, messageType, jsonMessageString, id, privateTopic) => {
+        showTransitionProperties: (stateMachine: string, messageType: string, jsonMessageString: string, id: string, privateTopic: string): void => {
             dispatch(showTransitionProperties(stateMachine, messageType, jsonMessageString, id, privateTopic));
         },
-        clearFinalStates: (component, stateMachines) => {
+        clearFinalStates: (component: string, stateMachines: string[]): void => {
             for (let i = 0; i < stateMachines.length; i++) {
                 dispatch(clearFinalStates(component, stateMachines[i]));
             }
@@ -68,8 +91,8 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     };
 };
 
-class CompositionModel extends React.Component<any, any> {
-    constructor(props: any) {
+class CompositionModel extends React.Component<CompositionModelGlobalProps, XCSpyState> {
+    constructor(props: CompositionModelGlobalProps) {
         super(props);
         this.getContainersForGraphs = this.getContainersForGraphs.bind(this);
         this.addDiagramEventClick = this.addDiagramEventClick.bind(this);
@@ -80,22 +103,22 @@ class CompositionModel extends React.Component<any, any> {
         this.getAutoClear = this.getAutoClear.bind(this);
     }
 
-    getAutoClear() {
+    getAutoClear(): boolean {
         return this.props.getAutoClear();
     }
 
-    getFirstId(stateMachine) {
+    getFirstId(stateMachine: string): string {
         return this.props.getFirstId(stateMachine);
     }
 
-    getCurrentComponent() {
+    getCurrentComponent(): string {
         return this.props.getCurrentComponent();
     }
 
-    addDiagramEventClick(diagram) {
-        let props = this.props;
+    addDiagramEventClick(diagram: go.Diagram): void {
+        const props = this.props;
         diagram.addDiagramListener("ObjectDoubleClicked", ((diagramEvent: go.DiagramEvent) => {
-            let data = diagramEvent.subject.part.data;
+            const data = diagramEvent.subject.part.data;
             console.error(data);
             if (data.isGroup) { // it is a stateMachine
                 props.showStateMachineProperties(data.key, this.getFirstId(data.key));
@@ -112,12 +135,12 @@ class CompositionModel extends React.Component<any, any> {
         }).bind(this));
     }
 
-    subscribeAllStateMachines(component, stateMachines) {
-        let props = this.props;
-        let thisObject = this;
+    subscribeAllStateMachines(component: string, stateMachines: string[]): void {
+        const props = this.props;
+        const thisObject = this;
         sessionXCSpy.getPromiseCreateSession()
             .then((session) => {
-                let subscriber = session.createSubscriber();
+                const subscriber = session.createSubscriber();
                 for (let j = 0; j < stateMachines.length; j++) {
                     if (!subscriber.canSubscribe(component, stateMachines[j]))
                         continue;
@@ -133,8 +156,8 @@ class CompositionModel extends React.Component<any, any> {
             });
     }
 
-    snapshotEntryPoint(component, entryPoint) {
-        let props = this.props;
+    snapshotEntryPoint(component: string, entryPoint: string): void {
+        const props = this.props;
         sessionXCSpy.getPromiseCreateSession()
             .then((session) => {
                 session.createSubscriber().getSnapshot(component, entryPoint, (items) => {
@@ -147,14 +170,14 @@ class CompositionModel extends React.Component<any, any> {
 
     componentDidMount() {
         const props = this.props;
-        let comps = props.compositionModel.components;
-        let componentProperties = {};
+        const comps = props.compositionModel.components;
+        const componentProperties = {};
         for (let i = 0; i < comps.length; i++) {
-            let parser = new Parser(comps[i]);
+            const parser = new Parser(comps[i]);
             parser.parse();
-            let drawComponent = new DrawComponent();
+            const drawComponent = new DrawComponent();
             drawComponent.draw(parser, comps[i].name);
-            let stateMachineProperties = {};
+            const stateMachineProperties = {};
             for (let k = 0; k < parser.stateMachineNames.length; k++) {
                 stateMachineProperties[parser.stateMachineNames[k]] = {};
             }
@@ -171,10 +194,10 @@ class CompositionModel extends React.Component<any, any> {
         props.initialization(componentProperties, comps[0].name, props.compositionModel.projectName);
     }
 
-    getContainersForGraphs(diagram) {
-        let props = this.props;
-        let divs = [];
-        let comps = props.compositionModel.components;
+    getContainersForGraphs(diagram: go.Diagram) {
+        const props = this.props;
+        const divs = [];
+        const comps = props.compositionModel.components;
         let visibility;
         for (let i = 0; i < comps.length; i++) {
             visibility = (comps[i].name === props.currentComponent) ? "block" : "none";

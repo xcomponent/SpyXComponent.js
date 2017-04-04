@@ -4,7 +4,7 @@ import { componentsReducer } from "reducers/components";
 
 describe("Test components reducer", () => {
     it("When an INITIALIZATION action is received, it should initialize the state", () => {
-        let stateBefore = {
+        const stateBefore = {
             componentProperties: {},
             currentComponent: undefined,
             projectName: undefined,
@@ -12,23 +12,24 @@ describe("Test components reducer", () => {
             autoClear: undefined
         };
         deepFreeze(stateBefore);
-        let componentProperties = {
+        const componentProperties = {
             "componentName": {
                 "instances": {},
                 "drawComponent": null
             }
         };
-        let currentComponent = "currentComponent";
-        let projectName = "projectName";
-        let initialized = true;
-        let action = {
+        const currentComponent = "currentComponent";
+        const projectName = "projectName";
+        const initialized = true;
+        const action = {
             type: INITIALIZATION,
             componentProperties,
             currentComponent,
             projectName,
             initialized
         };
-        let stateAfter = {
+        deepFreeze(action);
+        const stateAfter = {
             componentProperties,
             currentComponent,
             projectName,
@@ -40,8 +41,8 @@ describe("Test components reducer", () => {
     });
 
     it("When an SET_CURRENT_COMPONENT action is received, it should update the currentComponent", () => {
-        let oldCurrentComponent = "oldCurrentComponent";
-        let componentProperties = {
+        const oldCurrentComponent = "oldCurrentComponent";
+        const componentProperties = {
             "componentName": {
                 diagram: undefined,
                 stateMachineProperties: {},
@@ -49,9 +50,9 @@ describe("Test components reducer", () => {
                 entryPointState: undefined,
             }
         };
-        let projectName = "projectName";
-        let initialized = true;
-        let stateBefore = {
+        const projectName = "projectName";
+        const initialized = true;
+        const stateBefore = {
             componentProperties,
             currentComponent: oldCurrentComponent,
             projectName,
@@ -59,13 +60,14 @@ describe("Test components reducer", () => {
             autoClear: undefined
         };
         deepFreeze(stateBefore);
-        let currentComponent = "currentComponent";
-        let action = {
+        const currentComponent = "currentComponent";
+        const action = {
             type: SET_CURRENT_COMPONENT,
             currentComponent,
             componentProperties: undefined
         };
-        let stateAfter = {
+        deepFreeze(action);
+        const stateAfter = {
             componentProperties,
             currentComponent,
             projectName,
@@ -77,8 +79,8 @@ describe("Test components reducer", () => {
     });
 
     it("When an SET_AUTO_CLEAR action is received, it should set autoClear property", () => {
-        let autoClear = false;
-        let stateBefore = {
+        const autoClear = false;
+        const stateBefore = {
             componentProperties: undefined,
             currentComponent: undefined,
             projectName: undefined,
@@ -86,12 +88,13 @@ describe("Test components reducer", () => {
             autoClear: autoClear
         };
         deepFreeze(stateBefore);
-        let currentComponent = "currentComponent";
-        let action = {
+        const currentComponent = "currentComponent";
+        const action = {
             type: SET_AUTO_CLEAR,
             autoClear: !autoClear
         };
-        let stateAfter = {
+        deepFreeze(action);
+        const stateAfter = {
             autoClear: !autoClear
         };
         expect(

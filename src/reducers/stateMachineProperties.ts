@@ -21,7 +21,7 @@ export const stateMachinePropertiesReducer: Reducer<StateMachinePropertiesState>
                 active: false
             };
         case SHOW_STATE_MACHINE_PROPERTIES:
-            let showStateMachinePropertiesAction = <ShowStateMachinePropertiesAction>action;
+            const showStateMachinePropertiesAction = <ShowStateMachinePropertiesAction>action;
             return {
                 ...state,
                 active: true,
@@ -29,7 +29,7 @@ export const stateMachinePropertiesReducer: Reducer<StateMachinePropertiesState>
                 id: showStateMachinePropertiesAction.id
             };
         case SET_STATE_MACHINE_ID:
-            let setStateMachineIdAction = <SetStateMachineIdAction>action;
+            const setStateMachineIdAction = <SetStateMachineIdAction>action;
             return {
                 ...state,
                 id: setStateMachineIdAction.id
