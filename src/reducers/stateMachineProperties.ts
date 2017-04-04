@@ -1,4 +1,4 @@
-import { SHOW_STATE_MACHINE_PROPERTIES, HIDE_STATE_MACHINE_PROPERTIES, SET_STATE_MACHINE_ID, GlobalStateMachinePropertiesAction } from "actions/stateMachineProperties";
+import { SHOW_STATE_MACHINE_PROPERTIES, HIDE_STATE_MACHINE_PROPERTIES, SET_STATE_MACHINE_ID, GlobalStateMachinePropertiesAction, ShowStateMachinePropertiesAction, SetStateMachineIdAction } from "actions/stateMachineProperties";
 import { Reducer } from "redux";
 
 export interface StateMachinePropertiesState {
@@ -21,16 +21,18 @@ export const stateMachinePropertiesReducer: Reducer<StateMachinePropertiesState>
                 active: false
             };
         case SHOW_STATE_MACHINE_PROPERTIES:
+            let showStateMachinePropertiesAction = <ShowStateMachinePropertiesAction>action;
             return {
                 ...state,
                 active: true,
-                stateMachine: action.stateMachine,
-                id: action.id
+                stateMachine: showStateMachinePropertiesAction.stateMachine,
+                id: showStateMachinePropertiesAction.id
             };
         case SET_STATE_MACHINE_ID:
+            let setStateMachineIdAction = <SetStateMachineIdAction>action;
             return {
                 ...state,
-                id: action.id
+                id: setStateMachineIdAction.id
             };
     }
     return state;

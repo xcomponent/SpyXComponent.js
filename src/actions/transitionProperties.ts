@@ -6,8 +6,7 @@ export const SET_JSON_MESSAGE_STRING = "SET_JSON_MESSAGE_STRING";
 export const SET_CURRENT_ID = "SET_CURRENT_ID";
 export const SET_PRIVATE_TOPIC = "SET_PRIVATE_TOPIC";
 
-export interface GlobalTransitionPropertiesAction extends ShowTransitionPropertiesAction, HideTransitionPropertiesAction, SetJsonMessageStringAction, SetCurrentIdAction, SetPrivateTopicAction {
-};
+export type GlobalTransitionPropertiesAction = ShowTransitionPropertiesAction| HideTransitionPropertiesAction| SetJsonMessageStringAction| SetCurrentIdAction| SetPrivateTopicAction;
 
 export interface ShowTransitionPropertiesAction extends Action {
     stateMachine: string;

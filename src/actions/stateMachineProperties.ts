@@ -4,8 +4,7 @@ export const SHOW_STATE_MACHINE_PROPERTIES = "SHOW_STATE_MACHINE_PROPERTIES ";
 export const HIDE_STATE_MACHINE_PROPERTIES = "HIDE_STATE_MACHINE_PROPERTIES";
 export const SET_STATE_MACHINE_ID = "SET_STATE_MACHINE_ID";
 
-export interface GlobalStateMachinePropertiesAction extends ShowStateMachinePropertiesAction, SetStateMachineIdAction {
-};
+export type GlobalStateMachinePropertiesAction = ShowStateMachinePropertiesAction | SetStateMachineIdAction;
 
 export interface ShowStateMachinePropertiesAction extends Action {
     stateMachine: string;

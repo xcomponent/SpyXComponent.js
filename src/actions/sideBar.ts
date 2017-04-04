@@ -3,8 +3,7 @@ import { Action } from "redux";
 export const SHOW_SIDE_BAR = "SHOW_SIDE_BAR";
 export const HIDE_SIDE_BAR = "HIDE_SIDE_BAR";
 
-export interface GlobalSideBarAction extends SideBarAction {
-};
+export type GlobalSideBarAction = SideBarAction;
 
 export interface SideBarAction extends Action {
 };

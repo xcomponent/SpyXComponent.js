@@ -5,8 +5,7 @@ export const GET_API_LIST = "GET_API_LIST";
 export const SELECT_API = "SELECT_API";
 export const FORM_SUBMIT = "FORM_SUBMIT";
 
-export interface GlobalConfigFormAction extends GetApiListAction, SelectApiAction, FormSubmitAction {
-};
+export type GlobalConfigFormAction = GetApiListAction | SelectApiAction | FormSubmitAction;
 
 export interface GetApiListAction extends Action {
     serverUrl: string;

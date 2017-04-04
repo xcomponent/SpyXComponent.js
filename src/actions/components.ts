@@ -1,5 +1,6 @@
 import { Action } from "redux";
 import { ComponentProperties } from "reducers/components";
+import { ThunkAction } from "redux-thunk";
 
 export const INITIALIZATION = "INITIALIZATION";
 export const SET_CURRENT_COMPONENT = "SET_CURRENT_COMPONENT";
@@ -7,8 +8,7 @@ export const UPDATE_GRAPHIC = "UPDATE_GRAPHIC";
 export const CLEAR_FINAL_STATES = "CLEAR_FINAL_STATES";
 export const SET_AUTO_CLEAR = "SET_AUTO_CLEAR";
 
-export interface GlobalComponentsAction extends InitializationAction, SetCurrentComponentAction, UpdateGraphicAction, ClearFinalStatesAction, SetAutoClearAction {
-};
+export type GlobalComponentsAction = InitializationAction | SetCurrentComponentAction | UpdateGraphicAction | ClearFinalStatesAction | SetAutoClearAction;
 
 export interface InitializationAction extends Action {
     componentProperties: { [componentName: string]: ComponentProperties };
@@ -22,6 +22,8 @@ export interface SetCurrentComponentAction extends Action {
 
 export interface UpdateGraphicAction extends Action {
     data: any; // comes from api
+    component: string;
+    stateMachine: string;
 };
 
 export interface ClearFinalStatesAction extends Action {
@@ -49,7 +51,7 @@ export const setCurrentComponent = (currentComponent: string): SetCurrentCompone
     };
 };
 
-export const updateGraphic = (component: string, stateMachine: string, data: any): (dispatch: any) => void => {
+export const updateGraphic = (component: string, stateMachine: string, data: any): ThunkAction<void, void, void> => {
     return (dispatch) => {
         dispatch({
             type: UPDATE_GRAPHIC,

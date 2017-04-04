@@ -1,4 +1,4 @@
-import { INITIALIZATION, SET_CURRENT_COMPONENT, UPDATE_GRAPHIC, CLEAR_FINAL_STATES, SET_AUTO_CLEAR, GlobalComponentsAction } from "actions/components";
+import { INITIALIZATION, SET_CURRENT_COMPONENT, UPDATE_GRAPHIC, CLEAR_FINAL_STATES, SET_AUTO_CLEAR, GlobalComponentsAction, InitializationAction, SetCurrentComponentAction, UpdateGraphicAction, ClearFinalStatesAction, SetAutoClearAction } from "actions/components";
 import * as go from "gojs";
 import { DrawComponent } from "utils/drawComponent";
 import { modelTags } from "utils/configurationParser";
@@ -68,43 +68,46 @@ const clearFinalStates = (diagram, finalStatesToClear, stateMachine, numberOfIns
 export const componentsReducer: Reducer<ComponentsState> = (state: ComponentsState = initialState, action: GlobalComponentsAction): ComponentsState => {
     switch (action.type) {
         case INITIALIZATION:
+            let initAction = <InitializationAction>action;
             return {
                 ...state,
-                componentProperties: action.componentProperties,
-                currentComponent: action.currentComponent,
-                projectName: action.projectName,
+                componentProperties: initAction.componentProperties,
+                currentComponent: initAction.currentComponent,
+                projectName: initAction.projectName,
                 initialized: true
             };
         case SET_CURRENT_COMPONENT:
+            let setCurrentComponentAction = <InitializationAction>action;
             return {
                 ...state,
-                currentComponent: action.currentComponent
+                currentComponent: setCurrentComponentAction.currentComponent
             };
         case UPDATE_GRAPHIC:
+            let updateGraphicAction = <UpdateGraphicAction>action;
             let componentProperties = { ...state.componentProperties };
-            let diagram: go.Diagram = componentProperties[action.component].diagram;
-            let stateMachineId = action.data.stateMachineRef.StateMachineId;
-            let instances = componentProperties[action.component].stateMachineProperties[action.stateMachine];
-            let nodeData = diagram.findNodeForKey(action.stateMachine).data;
-            let newState = action.data.stateMachineRef.StateName;
-            let newStateKey = action.stateMachine + modelTags.Separator + newState;
-            let finalStates = componentProperties[action.component].finalStates;
-            let entryPointState = componentProperties[action.component].entryPointState;
+            let diagram: go.Diagram = componentProperties[updateGraphicAction.component].diagram;
+            let stateMachineId = updateGraphicAction.data.stateMachineRef.StateMachineId;
+            let instances = componentProperties[updateGraphicAction.component].stateMachineProperties[updateGraphicAction.stateMachine];
+            let nodeData = diagram.findNodeForKey(updateGraphicAction.stateMachine).data;
+            let newState = updateGraphicAction.data.stateMachineRef.StateName;
+            let newStateKey = updateGraphicAction.stateMachine + modelTags.Separator + newState;
+            let finalStates = componentProperties[updateGraphicAction.component].finalStates;
+            let entryPointState = componentProperties[updateGraphicAction.component].entryPointState;
             diagram.model.startTransaction(UPDATE_GRAPHIC);
             if (instances[stateMachineId]) {
                 let oldState = instances[stateMachineId].stateMachineRef.StateName;
                 if (oldState !== newState) {
                     updateState(diagram, newStateKey, finalStates, entryPointState, +1);
-                    updateState(diagram, action.stateMachine + modelTags.Separator + oldState, finalStates, entryPointState, -1);
+                    updateState(diagram, updateGraphicAction.stateMachine + modelTags.Separator + oldState, finalStates, entryPointState, -1);
                 }
             } else {
                 diagram.model.setDataProperty(nodeData, "numberOfInstances", nodeData.numberOfInstances + 1);
                 updateState(diagram, newStateKey, finalStates, entryPointState, +1);
             }
             let instance: Instance = {
-                jsonMessage: action.data.jsonMessage,
-                stateMachineRef: action.data.stateMachineRef,
-                isFinal: componentProperties[action.component].finalStates.indexOf(newStateKey) > -1
+                jsonMessage: updateGraphicAction.data.jsonMessage,
+                stateMachineRef: updateGraphicAction.data.stateMachineRef,
+                isFinal: componentProperties[updateGraphicAction.component].finalStates.indexOf(newStateKey) > -1
             };
             instances[stateMachineId] = instance;
             diagram.model.setDataProperty(nodeData, "numberOfInstances", nodeData.numberOfInstances);
@@ -115,28 +118,29 @@ export const componentsReducer: Reducer<ComponentsState> = (state: ComponentsSta
                 componentProperties: componentProperties
             };
         case CLEAR_FINAL_STATES:
+            let clearFinalStatesAction = <ClearFinalStatesAction>action;
             let finalStatesToClear = [];
             componentProperties = { ...state.componentProperties };
-            diagram = componentProperties[action.component].diagram;
-            let stateMachineInstances = componentProperties[action.component].stateMachineProperties[action.stateMachine];
+            diagram = componentProperties[clearFinalStatesAction.component].diagram;
+            let stateMachineInstances = componentProperties[clearFinalStatesAction.component].stateMachineProperties[clearFinalStatesAction.stateMachine];
             for (let id in stateMachineInstances) {
                 if (stateMachineInstances[id].isFinal) {
-                    let stateKey = action.stateMachine + modelTags.Separator + stateMachineInstances[id].stateMachineRef.StateName;
+                    let stateKey = clearFinalStatesAction.stateMachine + modelTags.Separator + stateMachineInstances[id].stateMachineRef.StateName;
                     finalStatesToClear.push(stateKey);
                     delete stateMachineInstances[id];
                 }
             }
-            clearFinalStates(diagram, finalStatesToClear, action.stateMachine, Object.keys(stateMachineInstances).length);
+            clearFinalStates(diagram, finalStatesToClear, clearFinalStatesAction.stateMachine, Object.keys(stateMachineInstances).length);
             return {
                 ...state,
                 componentProperties: componentProperties
             };
         case SET_AUTO_CLEAR:
+            let setAutoClearAction = <SetAutoClearAction>action;
             return {
                 ...state,
-                autoClear: action.autoClear
+                autoClear: setAutoClearAction.autoClear
             };
-
     }
     return state;
 };

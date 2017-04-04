@@ -1,4 +1,4 @@
-import { HIDE_TRANSITION_PROPERTIES, SHOW_TRANSITION_PROPERTIES, SET_JSON_MESSAGE_STRING, SET_CURRENT_ID, SET_PRIVATE_TOPIC, GlobalTransitionPropertiesAction } from "actions/transitionProperties";
+import { HIDE_TRANSITION_PROPERTIES, SHOW_TRANSITION_PROPERTIES, SET_JSON_MESSAGE_STRING, SET_CURRENT_ID, SET_PRIVATE_TOPIC, GlobalTransitionPropertiesAction, ShowTransitionPropertiesAction, HideTransitionPropertiesAction, SetJsonMessageStringAction, SetCurrentIdAction, SetPrivateTopicAction } from "actions/transitionProperties";
 import sessionXCSpy from "utils/sessionXCSpy";
 import { Reducer } from "redux";
 
@@ -28,29 +28,33 @@ export const transitionPropertiesReducer: Reducer<TransitionPropertiesState> = (
                 active: false
             };
         case SHOW_TRANSITION_PROPERTIES:
+            let showTransitionPropertiesAction = <ShowTransitionPropertiesAction>action;
             return {
                 ...state,
                 active: true,
-                stateMachine: action.stateMachine,
-                messageType: action.messageType,
-                jsonMessageString: action.jsonMessageString,
-                id: action.id,
-                privateTopic: action.privateTopic
+                stateMachine: showTransitionPropertiesAction.stateMachine,
+                messageType: showTransitionPropertiesAction.messageType,
+                jsonMessageString: showTransitionPropertiesAction.jsonMessageString,
+                id: showTransitionPropertiesAction.id,
+                privateTopic: showTransitionPropertiesAction.privateTopic
             };
         case SET_JSON_MESSAGE_STRING:
+            let setJsonMessageStringAction = <SetJsonMessageStringAction>action;
             return {
                 ...state,
-                jsonMessageString: action.jsonMessageString
+                jsonMessageString: setJsonMessageStringAction.jsonMessageString
             };
         case SET_CURRENT_ID:
+            let setCurrentIdAction = <SetCurrentIdAction>action;
             return {
                 ...state,
-                id: action.id
+                id: setCurrentIdAction.id
             };
         case SET_PRIVATE_TOPIC:
+            let setPrivateTopicAction = <SetPrivateTopicAction>action;
             return {
                 ...state,
-                privateTopic: action.privateTopic
+                privateTopic: setPrivateTopicAction.privateTopic
             };
     }
     return state;
