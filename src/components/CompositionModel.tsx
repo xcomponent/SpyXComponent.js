@@ -197,14 +197,13 @@ class CompositionModel extends React.Component<CompositionModelGlobalProps, XCSp
     getContainersForGraphs(diagram: go.Diagram) {
         const props = this.props;
         const divs = [];
-        const comps = props.compositionModel.components;
         let visibility;
-        for (let i = 0; i < comps.length; i++) {
-            visibility = (comps[i].name === props.currentComponent) ? "block" : "none";
+        props.compositionModel.components.map((component) => {
+            visibility = (component.name === props.currentComponent) ? "block" : "none";
             divs.push(
                 <div
-                    key={comps[i].name}
-                    id={comps[i].name}
+                    key={component.name}
+                    id={component.name}
                     style={{
                         "height": "100%",
                         "width": "100%",
@@ -215,7 +214,7 @@ class CompositionModel extends React.Component<CompositionModelGlobalProps, XCSp
             if (diagram) {
                 diagram.requestUpdate();
             }
-        }
+        });
         return divs;
     }
 
