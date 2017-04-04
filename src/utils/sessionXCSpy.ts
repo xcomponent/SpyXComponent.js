@@ -3,13 +3,13 @@ import { xcLogLevel } from "reactivexcomponent.js";
 
 class SessionXCSpy {
     private promiseCreateSession: Promise<any> = null;
-    public privateTopics: Array<String> = [];
-    public defaultPrivateTopic: string = "";
+    private privateTopics: string[] = [];
+    private defaultPrivateTopic: string = "";
 
     constructor() {
     }
 
-    init(xcApiFileName, serverUrl) {
+    init(xcApiFileName: string, serverUrl: string) {
         this.promiseCreateSession = new Promise((resolve, reject) => {
             xcomponentapi.createSession(xcApiFileName, serverUrl, (error, session: any) => {
                 resolve(session);
@@ -21,10 +21,17 @@ class SessionXCSpy {
             });
         });
         xcomponentapi.setLogLevel(xcLogLevel.INFO);
-
     }
 
-    getPromiseCreateSession() {
+    getDefaultPrivateTopic(): string {
+        return this.defaultPrivateTopic;
+    }
+
+    getPrivateTopics(): string[] {
+        return this.privateTopics;
+    }
+
+    getPromiseCreateSession(): Promise<any> {
         return this.promiseCreateSession;
     }
 

@@ -1,5 +1,5 @@
 import { graphicalTags, modelTags } from "utils/configurationParser";
-import { LinkLabelTemplate, TransitionTemplate, TriggerableTransitionTemplate, StateMachineTemplate, StateTemplate } from "utils/gojsTemplates";
+import { LinkLabelTemplate, TransitionTemplate, TriggerableTransitionTemplate, StateMachineTemplate, StateTemplate, LinkDataArrayTemplate, NodeDataArrayTemplate } from "utils/gojsTemplates";
 import { Point, Curve, StateMachine, State, ComponentGraphicalModel } from "utils/parserObjects";
 import { finalStateColor, stateColor, transitionPatternStateColor, entryPointStateColor } from "utils/graphicColors";
 export class Parser {
@@ -13,12 +13,12 @@ export class Parser {
     private linksLabel: Array<LinkLabelTemplate>;
     private componentGraphicalModel: ComponentGraphicalModel;
 
-    public finalStates: Array<String>;
-    public entryPointState: string;
-    public entryPointStateMachine: string;
-    public stateMachineNames: Array<string>;
-    public linkDataArray: Array<TransitionTemplate | TriggerableTransitionTemplate>;
-    public nodeDataArray: Array<StateMachineTemplate | StateTemplate | LinkLabelTemplate>;
+    private finalStates: Array<String>;
+    private entryPointState: string;
+    private entryPointStateMachine: string;
+    private stateMachineNames: Array<string>;
+    private linkDataArray: Array<LinkDataArrayTemplate>;
+    private nodeDataArray: Array<NodeDataArrayTemplate>;
 
     constructor(componentGraphicalModel: ComponentGraphicalModel) {
         this.componentGraphicalModel = componentGraphicalModel;
@@ -66,9 +66,9 @@ export class Parser {
         this.setStateMachines(scxmlDom);
         this.setStates(scxmlDom);
         this.setLinks(scxmlDom);
-        this.finalStates = this.getFinalStates();
+        this.finalStates = this.setFinalStates();
         this.entryPointState = this.getEntyPointState();
-        this.nodeDataArray = this.getNodeDataArray();
+        this.nodeDataArray = this.setNodeDataArray();
         this.nodeDataArray = this.nodeDataArray.concat(this.linksLabel);
         this.addControlPoint();
     }
@@ -93,8 +93,8 @@ export class Parser {
         }
     }
 
-    private getNodeDataArray(): Array<StateMachineTemplate | StateTemplate | LinkLabelTemplate> {
-        const nodeDataArray: Array<StateMachineTemplate | StateTemplate | LinkLabelTemplate> = [];
+    private setNodeDataArray(): Array<NodeDataArrayTemplate> {
+        const nodeDataArray: Array<NodeDataArrayTemplate> = [];
         let ids, state, stateMachine, id;
         ids = Object.keys(this.stateMachines);
         for (let i = 0; i < ids.length; i++) {
@@ -174,7 +174,7 @@ export class Parser {
         return this.locations[id].x + " " + this.locations[id].y;
     }
 
-    private getFinalStates(): Array<String> {
+    private setFinalStates(): Array<String> {
         const finalStates = [];
         for (let id in this.states) {
             if (this.states[id].isFinal) {
@@ -318,4 +318,27 @@ export class Parser {
         this.stateMachineNames = stateMachineNames;
     }
 
+    public getFinalStates(): Array<String> {
+        return this.finalStates;
+    };
+
+    public getEntryPointState(): string {
+        return this.entryPointState;
+    };
+
+    public getEntryPointStateMachine(): string {
+        return this.entryPointStateMachine;
+    };
+
+    public getStateMachineNames(): Array<string> {
+        return this.stateMachineNames;
+    };
+
+    public getLinkDataArray(): Array<LinkDataArrayTemplate> {
+        return this.linkDataArray;
+    };
+
+    public getNodeDataArray(): Array<NodeDataArrayTemplate> {
+        return this.nodeDataArray;
+    };
 }

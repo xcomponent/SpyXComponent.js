@@ -171,7 +171,7 @@ const TransitionProperties = ({
                             <Box size={"medium"}>
                                 <TextInput
                                     value={privateTopic}
-                                    suggestions={sessionXCSpy.privateTopics}
+                                    suggestions={sessionXCSpy.getPrivateTopics()}
                                     onSelect={(e) => {
                                         e.target.value = e.suggestion;
                                         setPrivateTopic(e.suggestion);

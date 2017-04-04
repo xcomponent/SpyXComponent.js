@@ -2,6 +2,7 @@
 import * as go from "gojs";
 import { Parser } from "utils/parser";
 import { stateMachineColor } from "utils/graphicColors";
+import { NodeDataArrayTemplate, LinkDataArrayTemplate } from "utils/gojsTemplates";
 
 export class DrawComponent {
 
@@ -18,7 +19,7 @@ export class DrawComponent {
         this.diagram.nodeTemplateMap.add("LinkLabel", this.getLinkLabelTemplate());
         this.diagram.groupTemplate = this.getGroupTemplate();
         this.diagram.linkTemplate = this.getLinkTemplate();
-        this.diagram.model = this.getModel(parser.nodeDataArray, parser.linkDataArray);
+        this.diagram.model = this.getModel(parser.getNodeDataArray(), parser.getLinkDataArray());
     }
 
     private createDiagram(divId: string): go.Diagram {
@@ -131,7 +132,8 @@ export class DrawComponent {
         return linkTemplate;
     }
 
-    private getModel(nodeDataArray, linkDataArray): go.Model {
+
+    private getModel(nodeDataArray: Array<NodeDataArrayTemplate>, linkDataArray: Array<LinkDataArrayTemplate>): go.Model {
         const data = {
             "class": "go.GraphLinksModel",
             "linkLabelKeysProperty": "labelKeys",

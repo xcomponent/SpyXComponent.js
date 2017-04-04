@@ -126,9 +126,9 @@ class CompositionModel extends React.Component<CompositionModelGlobalProps, XCSp
                 sessionXCSpy.getPromiseCreateSession()
                     .then((session) => {
                         if (session.createPublisher().canPublish(this.getCurrentComponent(), data.stateMachineTarget, data.messageType)) {
-                            props.showTransitionProperties(data.stateMachineTarget, data.messageType, "{}", this.getFirstId(data.stateMachineTarget), sessionXCSpy.defaultPrivateTopic);
+                            props.showTransitionProperties(data.stateMachineTarget, data.messageType, "{}", this.getFirstId(data.stateMachineTarget), sessionXCSpy.getDefaultPrivateTopic());
                         } else {
-                            alert("API cannot send " + data.messageType + " event to " + data.stateMachineTarget);
+                            alert(`API cannot send ${data.messageType} event to ${data.stateMachineTarget}`);
                         }
                     });
             }
@@ -178,18 +178,18 @@ class CompositionModel extends React.Component<CompositionModelGlobalProps, XCSp
             const drawComponent = new DrawComponent();
             drawComponent.draw(parser, comps[i].name);
             const stateMachineProperties = {};
-            for (let k = 0; k < parser.stateMachineNames.length; k++) {
-                stateMachineProperties[parser.stateMachineNames[k]] = {};
+            for (let k = 0; k < parser.getStateMachineNames().length; k++) {
+                stateMachineProperties[parser.getStateMachineNames()[k]] = {};
             }
             componentProperties[comps[i].name] = {
                 diagram: drawComponent.diagram,
                 stateMachineProperties,
-                finalStates: parser.finalStates,
-                entryPointState: parser.entryPointState
+                finalStates: parser.getFinalStates(),
+                entryPointState: parser.getEntryPointState()
             };
             this.addDiagramEventClick(drawComponent.diagram);
-            this.subscribeAllStateMachines(comps[i].name, parser.stateMachineNames);
-            this.snapshotEntryPoint(comps[i].name, parser.entryPointStateMachine);
+            this.subscribeAllStateMachines(comps[i].name, parser.getStateMachineNames());
+            this.snapshotEntryPoint(comps[i].name, parser.getEntryPointStateMachine());
         }
         props.initialization(componentProperties, comps[0].name, props.compositionModel.projectName);
     }

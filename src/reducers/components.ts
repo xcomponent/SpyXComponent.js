@@ -39,7 +39,7 @@ const updateState = (diagram: go.Diagram, stateKey: string, finalStates: string[
     const oldValue = data.numberOfStates;
     const newValue = oldValue + increment;
     diagram.model.setDataProperty(data, "numberOfStates", newValue);
-    diagram.model.setDataProperty(data, "text", data.stateName + " (" + data.numberOfStates + ")");
+    diagram.model.setDataProperty(data, "text", `${data.stateName} (${data.numberOfStates})`);
     if (finalStates.indexOf(stateKey) > -1 || entryPointState === stateKey)
         return;
     if (newValue === 0) {
@@ -55,12 +55,12 @@ const clearFinalStates = (diagram: go.Diagram, finalStatesToClear: string[], sta
     diagram.model.startTransaction(CLEAR_FINAL_STATES);
     const stateMachineData = diagram.findNodeForKey(stateMachine).data;
     diagram.model.setDataProperty(stateMachineData, "numberOfInstances", numberOfInstances);
-    diagram.model.setDataProperty(stateMachineData, "text", stateMachineData.key + " (" + stateMachineData.numberOfInstances + ")");
+    diagram.model.setDataProperty(stateMachineData, "text", `${stateMachineData.key} (${stateMachineData.numberOfInstances})`);
     for (let i = 0; i < finalStatesToClear.length; i++) {
         const stateData = diagram.findNodeForKey(finalStatesToClear[i]).data;
         // change number in state
         diagram.model.setDataProperty(stateData, "numberOfStates", 0);
-        diagram.model.setDataProperty(stateData, "text", stateData.stateName + " (" + stateData.numberOfStates + ")");
+        diagram.model.setDataProperty(stateData, "text", `${stateData.stateName} (${stateData.numberOfStates})`);
     }
     diagram.model.commitTransaction(CLEAR_FINAL_STATES);
 };
@@ -113,7 +113,7 @@ export const componentsReducer: Reducer<ComponentsState> = (state: ComponentsSta
             };
             instances[stateMachineId] = instance;
             diagram.model.setDataProperty(nodeData, "numberOfInstances", nodeData.numberOfInstances);
-            diagram.model.setDataProperty(nodeData, "text", nodeData.key + " (" + nodeData.numberOfInstances + ")");
+            diagram.model.setDataProperty(nodeData, "text", `${nodeData.key} (${nodeData.numberOfInstances})`);
             diagram.model.commitTransaction(UPDATE_GRAPHIC);
             return {
                 ...state,

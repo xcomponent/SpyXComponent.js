@@ -42,3 +42,6 @@ export interface TriggerableTransitionTemplate extends LinkInterface {
     messageType: string;
     labelKeys: Array<String>;
 };
+
+export type LinkDataArrayTemplate = TransitionTemplate | TriggerableTransitionTemplate;
+export type NodeDataArrayTemplate = StateMachineTemplate | StateTemplate | LinkLabelTemplate;
