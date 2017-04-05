@@ -225,7 +225,7 @@ class CompositionModel extends React.Component<CompositionModelGlobalProps, XCSp
                 <SideBar />
                 <Box full={true} direction="column">
                     <AppHeader />
-                    <Box>
+                    <Box full={true}>
                         {this.getContainersForGraphs(props.getDiagram())}
                     </Box>
                     <Box >

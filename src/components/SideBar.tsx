@@ -93,8 +93,6 @@ class SideBar extends React.Component<SideBarGlobalProps, XCSpyState> {
                 </Anchor>
             );
         });
-        for (let i = 0; i < components.length; i++) {
-        }
         return list;
     }
 

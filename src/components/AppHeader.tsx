@@ -141,15 +141,15 @@ const AppHeader = ({
 
     return (
         <Box direction="row">
-            <Box justify="center" size="large">
+            <Box justify="center" size="large" basis="1/3">
                 {menuSpy}
             </Box>
-            <Box align="center" justify="center" size="large">
+            <Box align="center" justify="center" size="large" basis="1/3">
                 <Title>
                     XCSpy Application
                 </Title>
             </Box>
-            <Box align="end" justify="center" size="large">
+            <Box align="end" justify="center" size="large" basis="1/3">
                 <Button title={"Home"} icon={<HomeIcon size="medium" />}
                     onClick={() => {
                         window.location.reload();
