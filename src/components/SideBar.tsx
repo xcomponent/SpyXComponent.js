@@ -42,7 +42,7 @@ const mapStateToProps = (state: XCSpyState): SideBarProps => {
     };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<void>): SideBarCallbackProps => {
+const mapDispatchToProps = (dispatch: Dispatch<XCSpyState>): SideBarCallbackProps => {
     return {
         setCurrentComponent: (currentComponent: string) => {
             dispatch(setCurrentComponent(currentComponent));

@@ -17,6 +17,7 @@ import * as TextInput from "grommet/components/TextInput";
 import Instances from "components/Instances";
 import { XCSpyState } from "reducers/SpyReducer";
 import { Dispatch } from "redux";
+import { send, sendContext } from "core";
 
 interface TransitionPropertiesGlobalProps extends TransitionPropertiesProps, TransitionPropertiesCallbackProps {
 };
@@ -37,8 +38,6 @@ interface TransitionPropertiesCallbackProps {
     setCurrentId: (id: string) => void;
     setJsonMessageString: (jsonMessageString: string) => void;
     hideTransitionProperties: () => void;
-    send: (component: string, stateMachine: string, messageType: string, jsonMessageString: string) => void;
-    sendContext: (stateMachineRef: any, messageType: string, jsonMessageString: string) => void;
 };
 
 
@@ -67,7 +66,7 @@ const mapStateToProps = (state: XCSpyState): TransitionPropertiesProps => {
     };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<void>): TransitionPropertiesCallbackProps => {
+const mapDispatchToProps = (dispatch: Dispatch<XCSpyState>): TransitionPropertiesCallbackProps => {
     return {
         setPrivateTopic: (privateSend: string): void => {
             dispatch(setPrivateTopic(privateSend));
@@ -80,34 +79,6 @@ const mapDispatchToProps = (dispatch: Dispatch<void>): TransitionPropertiesCallb
         },
         hideTransitionProperties: (): void => {
             dispatch(hideTransitionProperties());
-        },
-        send: (component: string, stateMachine: string, messageType: string, jsonMessageString: string): void => {
-            sessionXCSpy.getPromiseCreateSession()
-                .then((session) => {
-                    const publisher = session.createPublisher();
-                    let jsonMessage;
-                    try {
-                        jsonMessage = JSON.parse(jsonMessageString);
-                        publisher.send(component, stateMachine, messageType, jsonMessage);
-                    } catch (e) {
-                        alert("Json format incorrect");
-                        console.error(e);
-                    }
-                });
-        },
-        sendContext: (stateMachineRef: any, messageType: string, jsonMessageString: string): void => {
-            if (!stateMachineRef) {
-                alert("Please select an instance!");
-                return;
-            }
-            let jsonMessage;
-            try {
-                jsonMessage = JSON.parse(jsonMessageString);
-                stateMachineRef.send(messageType, jsonMessage);
-            } catch (e) {
-                alert("Json format incorrect");
-                console.error(e);
-            }
         }
     };
 };
@@ -118,8 +89,6 @@ const TransitionProperties = ({
     hideTransitionProperties,
     stateMachine,
     currentComponent,
-    send,
-    sendContext,
     jsonMessageString,
     setJsonMessageString,
     id,

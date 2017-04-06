@@ -3,7 +3,6 @@ import { LinkLabelTemplate, TransitionTemplate, TriggerableTransitionTemplate, S
 import { Point, Curve, StateMachine, State, ComponentGraphicalModel } from "utils/parserObjects";
 import { finalStateColor, stateColor, transitionPatternStateColor, entryPointStateColor } from "utils/graphicColors";
 export class Parser {
-
     private locations: { [key: string]: Point };
     private controlPointTransition: { [key: string]: Curve };
     private controlPointTriggerable: { [key: string]: Curve };
@@ -13,6 +12,7 @@ export class Parser {
     private linksLabel: Array<LinkLabelTemplate>;
     private componentGraphicalModel: ComponentGraphicalModel;
 
+    private componentName: string;
     private finalStates: Array<String>;
     private entryPointState: string;
     private entryPointStateMachine: string;
@@ -63,6 +63,7 @@ export class Parser {
 
     private parseModel(): void {
         const scxmlDom = (new DOMParser()).parseFromString(this.componentGraphicalModel.model, "text/xml");
+        this.setComponentName(scxmlDom);
         this.setStateMachines(scxmlDom);
         this.setStates(scxmlDom);
         this.setLinks(scxmlDom);
@@ -71,6 +72,11 @@ export class Parser {
         this.nodeDataArray = this.setNodeDataArray();
         this.nodeDataArray = this.nodeDataArray.concat(this.linksLabel);
         this.addControlPoint();
+    }
+
+    private setComponentName(scxmlDom: Document): void {
+        this.componentName = scxmlDom.getElementsByTagName(modelTags.ComponentViewModelData)[0].getAttribute(modelTags.Name);
+        console.error(this.componentName);
     }
 
     private addControlPoint(): void {
@@ -340,5 +346,9 @@ export class Parser {
 
     public getNodeDataArray(): Array<NodeDataArrayTemplate> {
         return this.nodeDataArray;
+    };
+
+    public getComponentName(): string {
+        return this.componentName;
     };
 }

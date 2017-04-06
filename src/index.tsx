@@ -4,34 +4,92 @@ import * as ReactDOM from "react-dom";
 import { createStore, applyMiddleware } from "redux";
 import * as App from "grommet/components/App";
 import ConfigForm from "./components/ConfigForm";
-import { SpyReducer } from "./reducers/SpyReducer";
+import { SpyReducer, XCSpyState } from "./reducers/SpyReducer";
 import * as logger from "redux-logger";
 import thunk from "redux-thunk";
-import CompositionModel from "./components/CompositionModel";
+import Components from "./components/Components";
 import { setCompositionModel } from "actions/compositionModel";
 import sessionXCSpy from "utils/sessionXCSpy";
+import { Dispatch } from "redux";
+import { Parser } from "utils/parser";
+import { subscribeAllStateMachines, snapshotEntryPoint } from "core";
+import SideBar from "components/SideBar";
+import * as Split from "grommet/components/Split";
+import * as Box from "grommet/components/Box";
+import AppHeader from "components/AppHeader";
+import Footer from "components/Footer";
+import TransitionProperties from "components/TransitionProperties";
+import StateMachineProperties from "components/StateMachineProperties";
 
 const middleware = applyMiddleware(thunk, logger());
 const store = createStore(SpyReducer, middleware);
 
-let App = (props) => {
-  if (!props.submitted) {
-    return (
-      <ConfigForm />
-    );
-  }
-  if (props.submitted && !props.compositionModel.initialized) {
-    props.setCompositionModel(props.selectedApi, props.serverUrl);
-    return (
-      <ConfigForm />
-    );
-  }
-  sessionXCSpy.init(props.selectedApi, props.serverUrl);
-  return (
-    <CompositionModel compositionModel={props.compositionModel.value} />
-  );
+interface XCSpyGlobalProps extends XCSpyProps, XCSpyCallbackProps {
 };
-const mapStateToProps = (state) => {
+
+interface XCSpyProps {
+  submitted: boolean;
+  selectedApi: string;
+  serverUrl: string;
+  compositionModel: any;
+};
+
+interface XCSpyCallbackProps {
+  setCompositionModel: (xcApiName: string, serverUrl: string) => void;
+};
+
+class XCSpyApp extends React.Component<XCSpyGlobalProps, XCSpyState> {
+  constructor(props: XCSpyGlobalProps) {
+    super(props);
+  }
+
+  render() {
+    const props = this.props;
+    if (!props.submitted) {
+      return (
+        <ConfigForm />
+      );
+    }
+    if (props.submitted && !props.compositionModel.initialized) {
+      props.setCompositionModel(props.selectedApi, props.serverUrl);
+      return (
+        <ConfigForm />
+      );
+    }
+    sessionXCSpy.init(props.selectedApi, props.serverUrl);
+    const components = props.compositionModel.value.components;
+    const parsers = [];
+    components.map((component) => {
+      const parser = new Parser(component);
+      parser.parse();
+      parsers.push(parser);
+      subscribeAllStateMachines(store.dispatch, parser.getComponentName(), parser.getStateMachineNames());
+      snapshotEntryPoint(store.dispatch, parser.getComponentName(), parser.getEntryPointStateMachine());
+    });
+    return (
+      <Split flex="right">
+        <SideBar />
+        <Box full={true} direction="column">
+          <AppHeader />
+          <Box full={true}>
+            <Components parsers={parsers} compositionModel={props.compositionModel.value} />
+          </Box>
+          <Box >
+            <Footer />
+          </Box>
+          <Box >
+            {<StateMachineProperties />}
+          </Box>
+          <Box >
+            {<TransitionProperties />}
+          </Box>
+        </Box>
+      </Split>
+    );
+  }
+}
+
+const mapStateToProps = (state: XCSpyState) => {
   return {
     submitted: state.configForm.formSubmited,
     selectedApi: state.configForm.selectedApi,
@@ -39,14 +97,16 @@ const mapStateToProps = (state) => {
     compositionModel: state.compositionModel
   };
 };
-const mapDispatchToProps = (dispatch) => {
+
+const mapDispatchToProps = (dispatch: Dispatch<XCSpyState>) => {
   return {
-    setCompositionModel: (xcApiName, serverUrl) => {
+    setCompositionModel: (xcApiName: string, serverUrl: string) => {
       dispatch(setCompositionModel(xcApiName, serverUrl));
     }
   };
 };
-App = connect(mapStateToProps, mapDispatchToProps)(App);
+
+const App = connect(mapStateToProps, mapDispatchToProps)(XCSpyApp);
 
 ReactDOM.render(
   <Provider store={store} >

@@ -1,4 +1,7 @@
 import { Action } from "redux";
+import { Dispatch } from "redux";
+import { XCSpyState } from "reducers/SpyReducer";
+import { ThunkAction } from "redux-thunk";
 
 export const SHOW_STATE_MACHINE_PROPERTIES = "SHOW_STATE_MACHINE_PROPERTIES ";
 export const HIDE_STATE_MACHINE_PROPERTIES = "HIDE_STATE_MACHINE_PROPERTIES";
@@ -15,11 +18,16 @@ export interface SetStateMachineIdAction extends Action {
     id: string;
 };
 
-export const showStateMachineProperties = (stateMachine: string, id: string): ShowStateMachinePropertiesAction => {
-    return {
-        type: SHOW_STATE_MACHINE_PROPERTIES,
-        stateMachine,
-        id
+export const showStateMachineProperties = (stateMachine: string): any => {
+    return (dispatch: Dispatch<XCSpyState>, getState: () => XCSpyState) => {
+        const componentProperties = getState().components.componentProperties;
+        const currentComponent = getState().components.currentComponent;
+        const firstId = Object.keys(componentProperties[currentComponent].stateMachineProperties[stateMachine])[0];
+        dispatch({
+            type: SHOW_STATE_MACHINE_PROPERTIES,
+            stateMachine,
+            id: firstId
+        });
     };
 };
 

@@ -9,10 +9,10 @@ import * as HomeIcon from "grommet/components/icons/base/home";
 import * as MenuIcon from "grommet/components/icons/base/Menu";
 import { connect } from "react-redux";
 import { showSideBar, hideSideBar } from "actions/sideBar";
-import sessionXCSpy from "utils/sessionXCSpy";
 import { updateGraphic, clearFinalStates, setAutoClear } from "actions";
 import { XCSpyState } from "reducers/spyReducer";
 import { Dispatch } from "redux";
+import { snapshotAll } from "core";
 
 interface AppHeaderGlobalProps extends AppHeaderProps, AppHeaderCallbackProps {
 };
@@ -54,7 +54,7 @@ const mapStateToProps = (state: XCSpyState): AppHeaderProps => {
     };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<void>): AppHeaderCallbackProps => {
+const mapDispatchToProps = (dispatch: Dispatch<XCSpyState>): AppHeaderCallbackProps => {
     return {
         clearFinalStates: (component: string, stateMachines: string[]): void => {
             for (let i = 0; i < stateMachines.length; i++) {
@@ -68,20 +68,7 @@ const mapDispatchToProps = (dispatch: Dispatch<void>): AppHeaderCallbackProps =>
             dispatch(hideSideBar());
         },
         snapshotAll: (component: string, stateMachines: string[]): void => {
-            dispatch((dispatch: Dispatch<void>) => {
-                sessionXCSpy.getPromiseCreateSession()
-                    .then((session) => {
-                        const subscriber = session.createSubscriber();
-                        for (let i = 0; i < stateMachines.length; i++) {
-                            subscriber.getSnapshot(component, stateMachines[i], (items) => {
-                                console.log(items);
-                                for (let j = 0; j < items.length; j++) {
-                                    dispatch(updateGraphic(component, stateMachines[i], items[j]));
-                                }
-                            });
-                        }
-                    });
-            });
+            snapshotAll(dispatch, component, stateMachines);
         },
         setAutoClear: (autoClear: boolean): void => {
             dispatch(setAutoClear(autoClear));

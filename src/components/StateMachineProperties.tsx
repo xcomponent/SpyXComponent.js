@@ -14,6 +14,7 @@ import * as Box from "grommet/components/Box";
 import Instances from "components/Instances";
 import { XCSpyState } from "reducers/SpyReducer";
 import { Dispatch } from "redux";
+import { snapshot } from "core";
 
 interface StateMachinePropertiesGlobalProps extends StateMachinePropertiesProps, StateMachinePropertiesCallbackProps {
 };
@@ -33,7 +34,7 @@ interface StateMachinePropertiesCallbackProps {
     clearFinalStates: (component: string, stateMachine: string) => void;
     setStateMachineId: (id: string) => void;
     hideStateMachineProperties: () => void;
-    updateGraphic: (currentComponent: string, stateMachine: string) => void;
+    snapshot: (currentComponent: string, stateMachine: string) => void;
 };
 
 const mapStateToProps = (state: XCSpyState): StateMachinePropertiesProps => {
@@ -67,7 +68,7 @@ const mapStateToProps = (state: XCSpyState): StateMachinePropertiesProps => {
             const stateMachine = state.stateMachineProperties.stateMachine;
             return componentProperties[currentComponent].stateMachineProperties[stateMachine][id].stateMachineRef;
         },
-        getFirstId: (stateMachine): string => {
+        getFirstId: (stateMachine: string): string => {
             const componentProperties = state.components.componentProperties;
             const currentComponent = state.components.currentComponent;
             return Object.keys(componentProperties[currentComponent].stateMachineProperties[stateMachine])[0];
@@ -76,7 +77,7 @@ const mapStateToProps = (state: XCSpyState): StateMachinePropertiesProps => {
     };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<void>): StateMachinePropertiesCallbackProps => {
+const mapDispatchToProps = (dispatch: Dispatch<XCSpyState>): StateMachinePropertiesCallbackProps => {
     return {
         clearFinalStates: (component: string, stateMachine: string): void => {
             dispatch(clearFinalStates(component, stateMachine));
@@ -87,22 +88,14 @@ const mapDispatchToProps = (dispatch: Dispatch<void>): StateMachinePropertiesCal
         hideStateMachineProperties: (): void => {
             dispatch(hideStateMachineProperties());
         },
-        updateGraphic: (currentComponent: string, stateMachine: string): void => {
-            sessionXCSpy.getPromiseCreateSession()
-                .then((session) => {
-                    session.createSubscriber().getSnapshot(currentComponent, stateMachine, (items) => {
-                        for (let i = 0; i < items.length; i++) {
-                            dispatch(updateGraphic(currentComponent, stateMachine, items[i]));
-                        }
-                        console.log(items);
-                    });
-                });
+        snapshot: (currentComponent: string, stateMachine: string): void => {
+            snapshot(dispatch, currentComponent, stateMachine);
         }
     };
 };
 
 const StateMachineProperties = ({
-    updateGraphic,
+    snapshot,
     hideStateMachineProperties,
     active,
     stateMachine,
@@ -167,7 +160,7 @@ const StateMachineProperties = ({
 
                 <Footer></Footer>
                 <Button primary={true} type="button" label="Snapshot" onClick={() => {
-                    updateGraphic(currentComponent, stateMachine);
+                    snapshot(currentComponent, stateMachine);
                 }} />
                 <Button primary={true} type="button" label="Clear" onClick={() => {
                     clearFinalStates(currentComponent, stateMachine);

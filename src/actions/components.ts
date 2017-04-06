@@ -1,6 +1,8 @@
 import { Action } from "redux";
 import { ComponentProperties } from "reducers/components";
 import { ThunkAction } from "redux-thunk";
+import { Dispatch } from "redux";
+import { XCSpyState } from "reducers/SpyReducer";
 
 export const INITIALIZATION = "INITIALIZATION";
 export const SET_CURRENT_COMPONENT = "SET_CURRENT_COMPONENT";
@@ -52,13 +54,16 @@ export const setCurrentComponent = (currentComponent: string): SetCurrentCompone
 };
 
 export const updateGraphic = (component: string, stateMachine: string, data: any): ThunkAction<void, void, void> => {
-    return (dispatch) => {
+    return (dispatch: Dispatch<XCSpyState>, getState: () => XCSpyState) => {
         dispatch({
             type: UPDATE_GRAPHIC,
             component,
             stateMachine,
             data
         });
+        if (getState().components.autoClear === true) {
+            dispatch(clearFinalStates(component, stateMachine));
+        }
     };
 };
 
