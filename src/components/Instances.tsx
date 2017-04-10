@@ -8,30 +8,20 @@ interface InstancesGlobalProps extends InstancesProps, InstancesCallbackProps {
 };
 
 interface InstancesProps {
-    getInstances: () => { [id: number]: Instance };
+    instances: { [id: number]: Instance };
     onChangeOwnProps: (id: string) => void;
-    getId: () => string;
+    id: string;
 };
 
 interface InstancesCallbackProps {
 };
 
 const mapStateToProps = (state: XCSpyState, ownProps): InstancesProps => {
+    const id = (state.transitionProperties.active) ? state.transitionProperties.id : state.stateMachineProperties.id;
     return {
-        getInstances: (): { [id: number]: Instance } => {
-            const componentProperties = state.components.componentProperties;
-            const currentComponent = state.components.currentComponent;
-            const stateMachine = ownProps.stateMachine;
-            return componentProperties[currentComponent].stateMachineProperties[stateMachine];
-        },
+        instances: ownProps.instances,
         onChangeOwnProps: ownProps.onChange,
-        getId: (): string => {
-            if (state.transitionProperties.active) {
-                return state.transitionProperties.id;
-            } else {
-                return state.stateMachineProperties.id;
-            }
-        }
+        id: id
     };
 };
 
@@ -46,17 +36,16 @@ const getStyle = (id: string, instances: { [id: number]: Instance }) => {
 
 const Instances = ({
     onChangeOwnProps,
-    getInstances,
-    getId
+    instances,
+    id
  }: InstancesGlobalProps) => {
-    const id = getId();
     return (
-        <select style={getStyle(id, getInstances())} value={id} onChange={(e) => {
+        <select style={getStyle(id, instances)} value={id} onChange={(e) => {
             onChangeOwnProps(e.currentTarget.value);
         }}>
-            {Object.keys(getInstances()).map((id) => {
+            {Object.keys(instances).map((id) => {
                 return (
-                    <option key={id} value={id} style={getStyle(id, getInstances())}>#{id}</option>
+                    <option key={id} value={id} style={getStyle(id, instances)}>#{id}</option>
                 );
             })}
         </select>

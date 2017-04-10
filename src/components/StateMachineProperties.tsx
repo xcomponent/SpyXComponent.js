@@ -1,7 +1,7 @@
 import * as React from "react";
 import { connect } from "react-redux";
 import * as Layer from "grommet/components/Layer";
-import { hideStateMachineProperties, updateGraphic, clearFinalStates, setStateMachineId } from "actions";
+import { hideStateMachineProperties, updateGraphic, clearFinalStates, setStateMachineId, snapshotAction } from "actions";
 import * as Header from "grommet/components/Header";
 import * as Title from "grommet/components/Title";
 import * as Form from "grommet/components/Form";
@@ -15,6 +15,7 @@ import Instances from "components/Instances";
 import { XCSpyState } from "reducers/SpyReducer";
 import { Dispatch } from "redux";
 import { snapshot } from "core";
+import { Instance } from "reducers/components";
 
 interface StateMachinePropertiesGlobalProps extends StateMachinePropertiesProps, StateMachinePropertiesCallbackProps {
 };
@@ -24,10 +25,10 @@ interface StateMachinePropertiesProps {
     stateMachine: string;
     id: string;
     currentComponent: string;
-    getIds: () => string[];
-    getPublicMember: () => string;
-    getStateMachineRef: () => any;
-    getFirstId: (stateMachine: string) => string;
+    ids: string[];
+    instances: { [id: number]: Instance };
+    publicMember: string;
+    stateMachineRef: any;
 };
 
 interface StateMachinePropertiesCallbackProps {
@@ -38,42 +39,28 @@ interface StateMachinePropertiesCallbackProps {
 };
 
 const mapStateToProps = (state: XCSpyState): StateMachinePropertiesProps => {
+    const id = state.stateMachineProperties.id;
+    const active = state.stateMachineProperties.active;
+    const componentProperties = state.components.componentProperties;
+    const currentComponent = state.components.currentComponent;
+    const stateMachine = state.stateMachineProperties.stateMachine;
+    const instances = (!active) ? null : componentProperties[currentComponent].stateMachineProperties[stateMachine];
+    const ids = (instances !== null) ? Object.keys(instances) : null;
+    const stateMachineRef = (() => {
+        if (!id)
+            return null;
+        return componentProperties[currentComponent].stateMachineProperties[stateMachine][id].stateMachineRef;
+    })();
+    const publicMember = (!id) ? null : JSON.stringify(instances[id].jsonMessage);
     return {
-        active: state.stateMachineProperties.active,
-        stateMachine: state.stateMachineProperties.stateMachine,
-        id: state.stateMachineProperties.id,
-        currentComponent: state.components.currentComponent,
-        getIds: (): string[] => {
-            const componentProperties = state.components.componentProperties;
-            const currentComponent = state.components.currentComponent;
-            const stateMachine = state.stateMachineProperties.stateMachine;
-            return Object.keys(componentProperties[currentComponent].stateMachineProperties[stateMachine]);
-        },
-        getPublicMember: (): string => {
-            const id = state.stateMachineProperties.id;
-            if (!id)
-                return null;
-            const componentProperties = state.components.componentProperties;
-            const currentComponent = state.components.currentComponent;
-            const stateMachine = state.stateMachineProperties.stateMachine;
-            const publicMember = componentProperties[currentComponent].stateMachineProperties[stateMachine][id].jsonMessage;
-            return JSON.stringify(publicMember);
-        },
-        getStateMachineRef: (): any => {
-            const id = state.stateMachineProperties.id;
-            if (!id)
-                return null;
-            const componentProperties = state.components.componentProperties;
-            const currentComponent = state.components.currentComponent;
-            const stateMachine = state.stateMachineProperties.stateMachine;
-            return componentProperties[currentComponent].stateMachineProperties[stateMachine][id].stateMachineRef;
-        },
-        getFirstId: (stateMachine: string): string => {
-            const componentProperties = state.components.componentProperties;
-            const currentComponent = state.components.currentComponent;
-            return Object.keys(componentProperties[currentComponent].stateMachineProperties[stateMachine])[0];
-        }
-
+        active,
+        stateMachine,
+        id,
+        currentComponent,
+        ids: ids,
+        instances,
+        publicMember,
+        stateMachineRef
     };
 };
 
@@ -89,7 +76,7 @@ const mapDispatchToProps = (dispatch: Dispatch<XCSpyState>): StateMachinePropert
             dispatch(hideStateMachineProperties());
         },
         snapshot: (currentComponent: string, stateMachine: string): void => {
-            snapshot(dispatch, currentComponent, stateMachine);
+            dispatch(snapshotAction(currentComponent, stateMachine));
         }
     };
 };
@@ -100,18 +87,18 @@ const StateMachineProperties = ({
     active,
     stateMachine,
     currentComponent,
-    getIds,
+    ids,
+    instances,
     setStateMachineId,
     id,
-    getPublicMember,
-    getStateMachineRef,
-    clearFinalStates,
-    getFirstId
+    publicMember,
+    stateMachineRef,
+    clearFinalStates
 }: StateMachinePropertiesGlobalProps) => {
     if (!active)
         return null;
-    if (!id && getIds().length > 0) {
-        setStateMachineId(getIds()[0]);
+    if (!id && ids.length > 0) {
+        setStateMachineId(ids[0]);
     }
     return (
         <Layer
@@ -128,7 +115,7 @@ const StateMachineProperties = ({
                 <FormField>
                     <fieldset>
                         <label htmlFor="instances">Instance identifier:
-                            <Instances onChange={setStateMachineId} stateMachine={stateMachine} />
+                            <Instances onChange={setStateMachineId} stateMachine={stateMachine} instances={instances} />
                         </label>
                     </fieldset>
                 </FormField>
@@ -136,7 +123,7 @@ const StateMachineProperties = ({
                 <FormField>
                     <fieldset>
                         <label htmlFor="publicMember">Public member : <br />
-                            {getPublicMember()}
+                            {publicMember}
                         </label>
                     </fieldset>
                 </FormField>
@@ -144,7 +131,7 @@ const StateMachineProperties = ({
                 <FormField>
                     <fieldset>
                         <label htmlFor="currentState">Current state : {" "}
-                            {(getStateMachineRef()) ? getStateMachineRef().StateName : null}
+                            {(stateMachineRef) ? stateMachineRef.StateName : null}
                         </label>
                     </fieldset>
                 </FormField>
@@ -152,7 +139,7 @@ const StateMachineProperties = ({
                 <FormField>
                     <fieldset>
                         <label htmlFor="agentId">Agent Id : {" "}
-                            {(getStateMachineRef()) ? getStateMachineRef().AgentId : null}
+                            {(stateMachineRef) ? stateMachineRef.AgentId : null}
                         </label>
                     </fieldset>
                 </FormField>
@@ -164,7 +151,7 @@ const StateMachineProperties = ({
                 }} />
                 <Button primary={true} type="button" label="Clear" onClick={() => {
                     clearFinalStates(currentComponent, stateMachine);
-                    setStateMachineId(getFirstId(stateMachine));
+                    hideStateMachineProperties();
                 }} />
             </Form >
         </Layer>

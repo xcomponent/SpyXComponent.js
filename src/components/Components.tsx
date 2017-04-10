@@ -1,7 +1,7 @@
 import "grommet/grommet-hpinc.min.css";
 import * as React from "react";
 import { connect } from "react-redux";
-import { setCompositionModel, getApiList, selectApi, formSubmit, showStateMachineProperties, showTransitionProperties, initialization, updateGraphic, clearFinalStates } from "actions";
+import { setCompositionModel, getApiList, selectApi, formSubmit, showStateMachineProperties, showTransitionProperties, initialization, updateGraphic, clearFinalStates, subscribeAllStateMachinesAction, snapshotEntryPointAction } from "actions";
 import { Parser } from "../utils/parser";
 import { DrawComponent } from "../utils/drawComponent";
 import * as Anchor from "grommet/components/Anchor";
@@ -13,18 +13,15 @@ import { backgroundColor } from "utils/graphicColors";
 import { Dispatch } from "redux";
 import { XCSpyState } from "reducers/SpyReducer";
 import { ComponentProperties } from "reducers/components";
-import { subscribeAllStateMachines } from "core";
 import * as Box from "grommet/components/Box";
 
 interface ComponentsGlobalProps extends ComponentsProps, ComponentsCallbackProps {
     compositionModel: any;
-    parsers: Parser[];
 };
 
 interface ComponentsProps {
-    getAutoClear: () => boolean;
     currentComponent: string;
-    getDiagram: () => go.Diagram;
+    diagram: go.Diagram;
 };
 
 interface ComponentsCallbackProps {
@@ -33,24 +30,17 @@ interface ComponentsCallbackProps {
     updateGraphic: (component: string, stateMachine: string, data: any) => void;
     showTransitionProperties: (stateMachine: string, messageType: string, jsonMessageString: string) => void;
     clearFinalStates: (component: string, stateMachines: string[]) => void;
+    subscribeAllStateMachines: (component: string, stateMachines: string[]) => void;
+    snapshotEntryPoint: (component: string, entryPoint: string) => void;
 };
 
 const mapStateToProps = (state: XCSpyState): ComponentsProps => {
+    const currentComponent = state.components.currentComponent;
+    const componentProperties = state.components.componentProperties;
+    const diagram = (!state.components.initialized) ? null : componentProperties[currentComponent].diagram;
     return {
-        getAutoClear: (): boolean => {
-            return state.components.autoClear;
-        },
-        currentComponent: state.components.currentComponent,
-        getDiagram: (): go.Diagram => {
-            const initialized = state.components.initialized;
-            if (!initialized) {
-                return null;
-            } else {
-                const currentComponent = state.components.currentComponent;
-                const componentProperties = state.components.componentProperties;
-                return componentProperties[currentComponent].diagram;
-            }
-        }
+        currentComponent,
+        diagram
     };
 };
 
@@ -72,6 +62,12 @@ const mapDispatchToProps = (dispatch: Dispatch<XCSpyState>): ComponentsCallbackP
             for (let i = 0; i < stateMachines.length; i++) {
                 dispatch(clearFinalStates(component, stateMachines[i]));
             }
+        },
+        subscribeAllStateMachines: (component: string, stateMachines: string[]): void => {
+            dispatch(subscribeAllStateMachinesAction(component, stateMachines));
+        },
+        snapshotEntryPoint: (component: string, entryPoint: string): void => {
+            dispatch(snapshotEntryPointAction(component, entryPoint));
         }
     };
 };
@@ -97,11 +93,15 @@ class Components extends React.Component<ComponentsGlobalProps, XCSpyState> {
 
     componentDidMount() {
         const props = this.props;
-        // const comps = props.compositionModel.components;
-        const parsers = props.parsers;
         const componentProperties = {};
-        for (let i = 0; i < parsers.length; i++) {
-            const parser = parsers[i];
+        const components = props.compositionModel.components;
+        const parsers = [];
+        components.map((component) => {
+            const parser = new Parser(component);
+            parser.parse();
+            parsers.push(parser);
+            props.subscribeAllStateMachines(parser.getComponentName(), parser.getStateMachineNames());
+            props.snapshotEntryPoint(parser.getComponentName(), parser.getEntryPointStateMachine());
             const drawComponent = new DrawComponent();
             drawComponent.draw(parser, parser.getComponentName());
             const stateMachineProperties = {};
@@ -115,7 +115,7 @@ class Components extends React.Component<ComponentsGlobalProps, XCSpyState> {
                 entryPointState: parser.getEntryPointState()
             };
             this.addDiagramEventClick(drawComponent.diagram);
-        }
+        });
         props.initialization(componentProperties, parsers[0].getComponentName(), props.compositionModel.projectName);
     }
 
@@ -146,7 +146,7 @@ class Components extends React.Component<ComponentsGlobalProps, XCSpyState> {
     render() {
         return (
             <Box full={true}>
-                {this.getContainersForGraphs(this.props.getDiagram())}
+                {this.getContainersForGraphs(this.props.diagram)}
             </Box>
         );
     }

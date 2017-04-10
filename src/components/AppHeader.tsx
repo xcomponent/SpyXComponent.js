@@ -9,7 +9,7 @@ import * as HomeIcon from "grommet/components/icons/base/home";
 import * as MenuIcon from "grommet/components/icons/base/Menu";
 import { connect } from "react-redux";
 import { showSideBar, hideSideBar } from "actions/sideBar";
-import { updateGraphic, clearFinalStates, setAutoClear } from "actions";
+import { updateGraphic, clearFinalStates, setAutoClear, snapshotAllAction } from "actions";
 import { XCSpyState } from "reducers/spyReducer";
 import { Dispatch } from "redux";
 import { snapshotAll } from "core";
@@ -20,7 +20,7 @@ interface AppHeaderGlobalProps extends AppHeaderProps, AppHeaderCallbackProps {
 interface AppHeaderProps {
     currentComponent: string;
     getStateMachines: (component: string) => string[];
-    getComponents: () => string[];
+    components: string[];
     autoClear: boolean;
     sideBar: boolean;
 };
@@ -34,6 +34,12 @@ interface AppHeaderCallbackProps {
 };
 
 const mapStateToProps = (state: XCSpyState): AppHeaderProps => {
+    const components = ((): string[] => {
+        const initialized = state.components.initialized;
+        if (!initialized)
+            return [];
+        return Object.keys(state.components.componentProperties);
+    })();
     return {
         currentComponent: state.components.currentComponent,
         getStateMachines: (component: string): string[] => {
@@ -43,12 +49,7 @@ const mapStateToProps = (state: XCSpyState): AppHeaderProps => {
             const componentProperties = state.components.componentProperties;
             return Object.keys(componentProperties[component].stateMachineProperties);
         },
-        getComponents: (): string[] => {
-            const initialized = state.components.initialized;
-            if (!initialized)
-                return [];
-            return Object.keys(state.components.componentProperties);
-        },
+        components: components,
         autoClear: state.components.autoClear,
         sideBar: state.sideBar.isVisible
     };
@@ -68,7 +69,7 @@ const mapDispatchToProps = (dispatch: Dispatch<XCSpyState>): AppHeaderCallbackPr
             dispatch(hideSideBar());
         },
         snapshotAll: (component: string, stateMachines: string[]): void => {
-            snapshotAll(dispatch, component, stateMachines);
+            dispatch(snapshotAllAction(component, stateMachines));
         },
         setAutoClear: (autoClear: boolean): void => {
             dispatch(setAutoClear(autoClear));
@@ -84,7 +85,7 @@ const AppHeader = ({
     clearFinalStates,
     autoClear,
     setAutoClear,
-    getComponents,
+    components,
     sideBar,
     hideSideBar
 }: AppHeaderGlobalProps) => {
@@ -113,7 +114,6 @@ const AppHeader = ({
 
             <Anchor href="#" onClick={() => {
                 if (!autoClear) {
-                    const components = getComponents();
                     for (let i = 0; i < components.length; i++) {
                         clearFinalStates(components[i], getStateMachines(components[i]));
                     }

@@ -1,5 +1,4 @@
 import xcomponentapi from "reactivexcomponent.js";
-import { xcLogLevel } from "reactivexcomponent.js";
 
 class SessionXCSpy {
     private promiseCreateSession: Promise<any> = null;
@@ -20,7 +19,6 @@ class SessionXCSpy {
                 // this.defaultPrivateTopic = session.privateTopic;
             });
         });
-        xcomponentapi.setLogLevel(xcLogLevel.INFO);
     }
 
     getDefaultPrivateTopic(): string {

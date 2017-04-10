@@ -3,6 +3,7 @@ import { ComponentProperties } from "reducers/components";
 import { ThunkAction } from "redux-thunk";
 import { Dispatch } from "redux";
 import { XCSpyState } from "reducers/SpyReducer";
+import { snapshotEntryPoint, subscribeAllStateMachines } from "core";
 
 export const INITIALIZATION = "INITIALIZATION";
 export const SET_CURRENT_COMPONENT = "SET_CURRENT_COMPONENT";
@@ -54,14 +55,14 @@ export const setCurrentComponent = (currentComponent: string): SetCurrentCompone
 };
 
 export const updateGraphic = (component: string, stateMachine: string, data: any): ThunkAction<void, void, void> => {
-    return (dispatch: Dispatch<XCSpyState>, getState: () => XCSpyState) => {
+    return (dispatch: Dispatch<XCSpyState>, getState: () => XCSpyState): void => {
         dispatch({
             type: UPDATE_GRAPHIC,
             component,
             stateMachine,
             data
         });
-        if (getState().components.autoClear === true) {
+        if (getState().components.autoClear) {
             dispatch(clearFinalStates(component, stateMachine));
         }
     };
@@ -79,5 +80,17 @@ export const setAutoClear = (autoClear: boolean): SetAutoClearAction => {
     return {
         type: SET_AUTO_CLEAR,
         autoClear
+    };
+};
+
+export const subscribeAllStateMachinesAction = (component: string, stateMachines: string[]): ThunkAction<void, XCSpyState, void> => {
+    return (dispatch: Dispatch<XCSpyState>): void => {
+        subscribeAllStateMachines(dispatch, component, stateMachines);
+    };
+};
+
+export const snapshotEntryPointAction = (component: string, entryPoint: string): ThunkAction<void, XCSpyState, void> => {
+    return (dispatch: Dispatch<XCSpyState>): void => {
+        snapshotEntryPoint(dispatch, component, entryPoint);
     };
 };

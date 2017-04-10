@@ -2,6 +2,7 @@ import { Action } from "redux";
 import { Dispatch } from "redux";
 import { XCSpyState } from "reducers/SpyReducer";
 import { ThunkAction } from "redux-thunk";
+import { snapshot, snapshotAll } from "core";
 
 export const SHOW_STATE_MACHINE_PROPERTIES = "SHOW_STATE_MACHINE_PROPERTIES ";
 export const HIDE_STATE_MACHINE_PROPERTIES = "HIDE_STATE_MACHINE_PROPERTIES";
@@ -41,5 +42,17 @@ export const setStateMachineId = (id): SetStateMachineIdAction => {
     return {
         type: SET_STATE_MACHINE_ID,
         id
+    };
+};
+
+export const snapshotAction = (currentComponent: string, stateMachine: string): ThunkAction<void, XCSpyState, void> => {
+    return (dispatch: Dispatch<XCSpyState>): void => {
+        snapshot(dispatch, currentComponent, stateMachine);
+    };
+};
+
+export const snapshotAllAction = (currentComponent: string, stateMachines: string[]): ThunkAction<void, XCSpyState, void> => {
+    return (dispatch: Dispatch<XCSpyState>): void => {
+        snapshotAll(dispatch, currentComponent, stateMachines);
     };
 };

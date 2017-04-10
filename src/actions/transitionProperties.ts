@@ -9,8 +9,10 @@ export const HIDE_TRANSITION_PROPERTIES = "HIDE_TRANSITION_PROPERTIES";
 export const SET_JSON_MESSAGE_STRING = "SET_JSON_MESSAGE_STRING";
 export const SET_CURRENT_ID = "SET_CURRENT_ID";
 export const SET_PRIVATE_TOPIC = "SET_PRIVATE_TOPIC";
+export const SEND = "SEND";
+export const SEND_CONTEXT = "SEND_CONTEXT";
 
-export type GlobalTransitionPropertiesAction = ShowTransitionPropertiesAction | HideTransitionPropertiesAction | SetJsonMessageStringAction | SetCurrentIdAction | SetPrivateTopicAction;
+export type GlobalTransitionPropertiesAction = ShowTransitionPropertiesAction | HideTransitionPropertiesAction | SetJsonMessageStringAction | SetCurrentIdAction | SetPrivateTopicAction | SendAction | SendContextAction;
 
 export interface ShowTransitionPropertiesAction extends Action {
     stateMachine: string;
@@ -33,6 +35,19 @@ export interface SetCurrentIdAction extends Action {
 
 export interface SetPrivateTopicAction extends Action {
     privateTopic: string;
+};
+
+export interface SendAction extends Action {
+    component: string;
+    stateMachine: string;
+    messageType: string;
+    jsonMessageString: string;
+};
+
+export interface SendContextAction extends Action {
+    stateMachineRef: any;
+    messageType: string;
+    jsonMessageString: string;
 };
 
 export const showTransitionProperties = (stateMachine: string, messageType: string, jsonMessageString: string): ThunkAction<void, XCSpyState, void> => {
@@ -82,5 +97,24 @@ export const setPrivateTopic = (privateTopic: string): SetPrivateTopicAction => 
     return {
         type: SET_PRIVATE_TOPIC,
         privateTopic
+    };
+};
+
+export const send = (component: string, stateMachine: string, messageType: string, jsonMessageString: string): SendAction => {
+    return {
+        type: SEND,
+        component,
+        stateMachine,
+        messageType,
+        jsonMessageString
+    };
+};
+
+export const sendContext = (stateMachineRef: any, messageType: string, jsonMessageString: string): SendContextAction => {
+    return {
+        type: SEND_CONTEXT,
+        stateMachineRef,
+        messageType,
+        jsonMessageString
     };
 };

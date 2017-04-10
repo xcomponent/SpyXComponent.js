@@ -1,6 +1,7 @@
-import { HIDE_TRANSITION_PROPERTIES, SHOW_TRANSITION_PROPERTIES, SET_JSON_MESSAGE_STRING, SET_CURRENT_ID, SET_PRIVATE_TOPIC, GlobalTransitionPropertiesAction, ShowTransitionPropertiesAction, HideTransitionPropertiesAction, SetJsonMessageStringAction, SetCurrentIdAction, SetPrivateTopicAction } from "actions";
+import { HIDE_TRANSITION_PROPERTIES, SHOW_TRANSITION_PROPERTIES, SET_JSON_MESSAGE_STRING, SET_CURRENT_ID, SET_PRIVATE_TOPIC, SEND, SEND_CONTEXT, GlobalTransitionPropertiesAction, ShowTransitionPropertiesAction, HideTransitionPropertiesAction, SetJsonMessageStringAction, SetCurrentIdAction, SetPrivateTopicAction, SendAction, SendContextAction } from "actions";
 import sessionXCSpy from "utils/sessionXCSpy";
 import { Reducer } from "redux";
+import { send, sendContext } from "core";
 
 export interface TransitionPropertiesState {
     active: boolean;
@@ -23,10 +24,7 @@ const initialState: TransitionPropertiesState = {
 export const transitionPropertiesReducer: Reducer<TransitionPropertiesState> = (state: TransitionPropertiesState = initialState, action: GlobalTransitionPropertiesAction): TransitionPropertiesState => {
     switch (action.type) {
         case HIDE_TRANSITION_PROPERTIES:
-            return {
-                ...state,
-                active: false
-            };
+            return initialState;
         case SHOW_TRANSITION_PROPERTIES:
             const showTransitionPropertiesAction = <ShowTransitionPropertiesAction>action;
             return {
@@ -56,6 +54,14 @@ export const transitionPropertiesReducer: Reducer<TransitionPropertiesState> = (
                 ...state,
                 privateTopic: setPrivateTopicAction.privateTopic
             };
+        case SEND:
+            const sendAction = <SendAction>action;
+            send(sendAction.component, sendAction.stateMachine, sendAction.messageType, sendAction.jsonMessageString);
+            return state;
+        case SEND_CONTEXT:
+            const sendContextAction = <SendContextAction>action;
+            sendContext(sendContextAction.stateMachineRef, sendContextAction.messageType, sendContextAction.jsonMessageString);
+            return state;
     }
     return state;
 };

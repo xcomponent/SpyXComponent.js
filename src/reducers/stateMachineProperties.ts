@@ -16,10 +16,7 @@ const initialState = {
 export const stateMachinePropertiesReducer: Reducer<StateMachinePropertiesState> = (state: StateMachinePropertiesState = initialState, action: GlobalStateMachinePropertiesAction): StateMachinePropertiesState => {
     switch (action.type) {
         case HIDE_STATE_MACHINE_PROPERTIES:
-            return {
-                ...state,
-                active: false
-            };
+            return initialState;
         case SHOW_STATE_MACHINE_PROPERTIES:
             const showStateMachinePropertiesAction = <ShowStateMachinePropertiesAction>action;
             return {

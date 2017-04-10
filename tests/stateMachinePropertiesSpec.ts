@@ -1,5 +1,5 @@
 import * as deepFreeze from "deep-freeze";
-import { SHOW_STATE_MACHINE_PROPERTIES, SET_STATE_MACHINE_ID, HIDE_STATE_MACHINE_PROPERTIES } from "actions/stateMachineProperties";
+import { SHOW_STATE_MACHINE_PROPERTIES, SET_STATE_MACHINE_ID, HIDE_STATE_MACHINE_PROPERTIES } from "actions";
 import { stateMachinePropertiesReducer } from "reducers/stateMachineProperties";
 
 describe("Test stateMachineProperties reducer", () => {

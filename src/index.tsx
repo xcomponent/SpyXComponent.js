@@ -57,22 +57,13 @@ class XCSpyApp extends React.Component<XCSpyGlobalProps, XCSpyState> {
       );
     }
     sessionXCSpy.init(props.selectedApi, props.serverUrl);
-    const components = props.compositionModel.value.components;
-    const parsers = [];
-    components.map((component) => {
-      const parser = new Parser(component);
-      parser.parse();
-      parsers.push(parser);
-      subscribeAllStateMachines(store.dispatch, parser.getComponentName(), parser.getStateMachineNames());
-      snapshotEntryPoint(store.dispatch, parser.getComponentName(), parser.getEntryPointStateMachine());
-    });
     return (
       <Split flex="right">
         <SideBar />
         <Box full={true} direction="column">
           <AppHeader />
           <Box full={true}>
-            <Components parsers={parsers} compositionModel={props.compositionModel.value} />
+            <Components compositionModel={props.compositionModel.value} />
           </Box>
           <Box >
             <Footer />

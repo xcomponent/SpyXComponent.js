@@ -4,7 +4,6 @@ import { updateGraphic } from "actions";
 import { XCSpyState } from "reducers/SpyReducer";
 
 export const subscribeAllStateMachines = (dispatch: Dispatch<XCSpyState>, component: string, stateMachines: string[]): void => {
-    const thisObject = this;
     sessionXCSpy.getPromiseCreateSession()
         .then((session) => {
             const subscriber = session.createSubscriber();
@@ -44,20 +43,18 @@ export const snapshot = (dispatch: Dispatch<XCSpyState>, currentComponent: strin
 };
 
 export const snapshotAll = (dispatch: Dispatch<XCSpyState>, component: string, stateMachines: string[]): void => {
-    dispatch((dispatch: Dispatch<XCSpyState>) => {
-        sessionXCSpy.getPromiseCreateSession()
-            .then((session) => {
-                const subscriber = session.createSubscriber();
-                for (let i = 0; i < stateMachines.length; i++) {
-                    subscriber.getSnapshot(component, stateMachines[i], (items) => {
-                        console.log(items);
-                        for (let j = 0; j < items.length; j++) {
-                            dispatch(updateGraphic(component, stateMachines[i], items[j]));
-                        }
-                    });
-                }
-            });
-    });
+    sessionXCSpy.getPromiseCreateSession()
+        .then((session) => {
+            const subscriber = session.createSubscriber();
+            for (let i = 0; i < stateMachines.length; i++) {
+                subscriber.getSnapshot(component, stateMachines[i], (items) => {
+                    console.log(items);
+                    for (let j = 0; j < items.length; j++) {
+                        dispatch(updateGraphic(component, stateMachines[i], items[j]));
+                    }
+                });
+            }
+        });
 };
 
 export const send = (component: string, stateMachine: string, messageType: string, jsonMessageString: string) => {
@@ -73,7 +70,6 @@ export const send = (component: string, stateMachine: string, messageType: strin
                 console.error(e);
             }
         });
-
 };
 
 export const sendContext = (stateMachineRef: any, messageType: string, jsonMessageString: string): void => {
