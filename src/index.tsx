@@ -38,47 +38,41 @@ interface XCSpyCallbackProps {
   setCompositionModel: (xcApiName: string, serverUrl: string) => void;
 };
 
-class XCSpyApp extends React.Component<XCSpyGlobalProps, XCSpyState> {
-  constructor(props: XCSpyGlobalProps) {
-    super(props);
-  }
-
-  render() {
-    const props = this.props;
-    if (!props.submitted) {
-      return (
-        <ConfigForm />
-      );
-    }
-    if (props.submitted && !props.compositionModel.initialized) {
-      props.setCompositionModel(props.selectedApi, props.serverUrl);
-      return (
-        <ConfigForm />
-      );
-    }
-    sessionXCSpy.init(props.selectedApi, props.serverUrl);
+let XCSpyApp = (props: XCSpyGlobalProps) => {
+  if (!props.submitted) {
     return (
-      <Split flex="right">
-        <SideBar />
-        <Box full={true} direction="column">
-          <AppHeader />
-          <Box full={true}>
-            <Components compositionModel={props.compositionModel.value} />
-          </Box>
-          <Box >
-            <Footer />
-          </Box>
-          <Box >
-            {<StateMachineProperties />}
-          </Box>
-          <Box >
-            {<TransitionProperties />}
-          </Box>
-        </Box>
-      </Split>
+      <ConfigForm />
     );
   }
-}
+  if (props.submitted && !props.compositionModel.initialized) {
+    props.setCompositionModel(props.selectedApi, props.serverUrl);
+    return (
+      <ConfigForm />
+    );
+  }
+  sessionXCSpy.init(props.selectedApi, props.serverUrl);
+
+  return (
+    <Split flex="right">
+      <SideBar />
+      <Box full={true} direction="column">
+        <AppHeader />
+        <Box full={true}>
+          <Components compositionModel={props.compositionModel.value} />
+        </Box>
+        <Box >
+          <Footer />
+        </Box>
+        <Box >
+          {<StateMachineProperties />}
+        </Box>
+        <Box >
+          {<TransitionProperties />}
+        </Box>
+      </Box>
+    </Split>
+  );
+};
 
 const mapStateToProps = (state: XCSpyState) => {
   return {

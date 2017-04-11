@@ -1,5 +1,5 @@
 import * as deepFreeze from "deep-freeze";
-import { INITIALIZATION, SET_CURRENT_COMPONENT, SET_AUTO_CLEAR } from "actions/components";
+import { INITIALIZATION, SET_CURRENT_COMPONENT, SET_AUTO_CLEAR } from "actions";
 import { componentsReducer } from "reducers/components";
 
 describe("Test components reducer", () => {

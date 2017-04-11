@@ -34,8 +34,8 @@ interface AppHeaderCallbackProps {
 };
 
 const mapStateToProps = (state: XCSpyState): AppHeaderProps => {
+    const initialized = state.components.initialized;
     const components = ((): string[] => {
-        const initialized = state.components.initialized;
         if (!initialized)
             return [];
         return Object.keys(state.components.componentProperties);
@@ -43,7 +43,6 @@ const mapStateToProps = (state: XCSpyState): AppHeaderProps => {
     return {
         currentComponent: state.components.currentComponent,
         getStateMachines: (component: string): string[] => {
-            const initialized = state.components.initialized;
             if (!initialized)
                 return [];
             const componentProperties = state.components.componentProperties;

@@ -68,8 +68,8 @@ describe("Test stateMachineProperties reducer", () => {
         deepFreeze(action);
         const stateAfter = {
             active: false,
-            stateMachine,
-            id
+            stateMachine: undefined,
+            id: undefined
         };
         expect(
             stateMachinePropertiesReducer(stateBefore, action)
