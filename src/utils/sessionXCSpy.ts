@@ -21,11 +21,11 @@ class SessionXCSpy {
         });
     }
 
-    getDefaultPrivateTopic(): string {
+    get DefaultPrivateTopic(): string {
         return this.defaultPrivateTopic;
     }
 
-    getPrivateTopics(): string[] {
+    get PrivateTopics(): string[] {
         return this.privateTopics;
     }
 

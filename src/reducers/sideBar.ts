@@ -9,10 +9,6 @@ const initialState: SideBarState = {
     isVisible: true
 };
 
-const defaultAction = {
-    type: undefined
-};
-
 export const sideBarReducer: Reducer<SideBarState> = (state: SideBarState = initialState, action: GlobalSideBarAction): SideBarState => {
     switch (action.type) {
         case SHOW_SIDE_BAR:

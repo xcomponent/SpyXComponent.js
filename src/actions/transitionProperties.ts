@@ -64,7 +64,7 @@ export const showTransitionProperties = (stateMachine: string, messageType: stri
                         messageType,
                         jsonMessageString,
                         id: firstId,
-                        privateTopic: sessionXCSpy.getDefaultPrivateTopic()
+                        privateTopic: sessionXCSpy.DefaultPrivateTopic
                     });
                 } else {
                     alert(`API cannot send ${messageType} event to ${stateMachine}`);

@@ -54,14 +54,7 @@ const mapStateToProps = (state: XCSpyState): TransitionPropertiesProps => {
     const privateTopic = state.transitionProperties.privateTopic;
     const jsonMessageString = state.transitionProperties.jsonMessageString;
     const messageType = state.transitionProperties.messageType;
-    const stateMachineRef = (() => {
-        if (!id)
-            return null;
-        const instance = componentProperties[currentComponent].stateMachineProperties[stateMachine][id];
-        if (instance.isFinal)
-            return null;
-        return instance.stateMachineRef;
-    })();
+    const stateMachineRef = (!id || !active || componentProperties[currentComponent].stateMachineProperties[stateMachine][id].isFinal) ? null : componentProperties[currentComponent].stateMachineProperties[stateMachine][id].stateMachineRef;
     return {
         instances,
         privateTopic,
@@ -158,7 +151,7 @@ const TransitionProperties = ({
                             <Box size={"medium"}>
                                 <TextInput
                                     value={privateTopic}
-                                    suggestions={sessionXCSpy.getPrivateTopics()}
+                                    suggestions={sessionXCSpy.PrivateTopics}
                                     onSelect={(e) => {
                                         e.target.value = e.suggestion;
                                         setPrivateTopic(e.suggestion);

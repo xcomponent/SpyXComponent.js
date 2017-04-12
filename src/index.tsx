@@ -20,6 +20,7 @@ import AppHeader from "components/AppHeader";
 import Footer from "components/Footer";
 import TransitionProperties from "components/TransitionProperties";
 import StateMachineProperties from "components/StateMachineProperties";
+import { BrowserRouter as Router, Route, NavLink } from "react-router-dom";
 
 const middleware = applyMiddleware(thunk, logger());
 const store = createStore(SpyReducer, middleware);

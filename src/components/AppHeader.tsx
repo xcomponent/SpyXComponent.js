@@ -35,17 +35,13 @@ interface AppHeaderCallbackProps {
 
 const mapStateToProps = (state: XCSpyState): AppHeaderProps => {
     const initialized = state.components.initialized;
-    const components = ((): string[] => {
-        if (!initialized)
-            return [];
-        return Object.keys(state.components.componentProperties);
-    })();
+    const componentProperties = state.components.componentProperties;
+    const components = (!initialized) ? [] : Object.keys(componentProperties);
     return {
         currentComponent: state.components.currentComponent,
         getStateMachines: (component: string): string[] => {
             if (!initialized)
                 return [];
-            const componentProperties = state.components.componentProperties;
             return Object.keys(componentProperties[component].stateMachineProperties);
         },
         components: components,

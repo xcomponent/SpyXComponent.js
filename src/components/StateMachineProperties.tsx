@@ -46,11 +46,7 @@ const mapStateToProps = (state: XCSpyState): StateMachinePropertiesProps => {
     const stateMachine = state.stateMachineProperties.stateMachine;
     const instances = (!active) ? null : componentProperties[currentComponent].stateMachineProperties[stateMachine];
     const ids = (instances !== null) ? Object.keys(instances) : null;
-    const stateMachineRef = (() => {
-        if (!id)
-            return null;
-        return componentProperties[currentComponent].stateMachineProperties[stateMachine][id].stateMachineRef;
-    })();
+    const stateMachineRef = (!id) ? null : componentProperties[currentComponent].stateMachineProperties[stateMachine][id].stateMachineRef;
     const publicMember = (!id) ? null : JSON.stringify(instances[id].jsonMessage);
     return {
         active,

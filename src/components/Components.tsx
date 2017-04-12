@@ -95,11 +95,9 @@ class Components extends React.Component<ComponentsGlobalProps, XCSpyState> {
         const props = this.props;
         const componentProperties = {};
         const components = props.compositionModel.components;
-        const parsers = [];
         components.map((component) => {
             const parser = new Parser(component);
             parser.parse();
-            parsers.push(parser);
             props.subscribeAllStateMachines(parser.getComponentName(), parser.getStateMachineNames());
             props.snapshotEntryPoint(parser.getComponentName(), parser.getEntryPointStateMachine());
             const drawComponent = new DrawComponent();
@@ -116,7 +114,7 @@ class Components extends React.Component<ComponentsGlobalProps, XCSpyState> {
             };
             this.addDiagramEventClick(drawComponent.diagram);
         });
-        props.initialization(componentProperties, parsers[0].getComponentName(), props.compositionModel.projectName);
+        props.initialization(componentProperties, components[0].name, props.compositionModel.projectName);
     }
 
     getContainersForGraphs(diagram: go.Diagram) {
