@@ -95,7 +95,7 @@ class Components extends React.Component<ComponentsGlobalProps, XCSpyState> {
         const props = this.props;
         const componentProperties = {};
         const components = props.compositionModel.components;
-        components.map((component) => {
+        components.forEach((component) => {
             const parser = new Parser(component);
             parser.parse();
             props.subscribeAllStateMachines(parser.getComponentName(), parser.getStateMachineNames());
