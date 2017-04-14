@@ -11,16 +11,11 @@ export const UPDATE_GRAPHIC = "UPDATE_GRAPHIC";
 export const CLEAR_FINAL_STATES = "CLEAR_FINAL_STATES";
 export const SET_AUTO_CLEAR = "SET_AUTO_CLEAR";
 
-export type GlobalComponentsAction = InitializationAction | SetCurrentComponentAction | UpdateGraphicAction | ClearFinalStatesAction | SetAutoClearAction;
+export type GlobalComponentsAction = InitializationAction | UpdateGraphicAction | ClearFinalStatesAction | SetAutoClearAction;
 
 export interface InitializationAction extends Action {
     componentProperties: { [componentName: string]: ComponentProperties };
-    currentComponent: string;
     projectName: string;
-};
-
-export interface SetCurrentComponentAction extends Action {
-    currentComponent: string;
 };
 
 export interface UpdateGraphicAction extends Action {
@@ -42,17 +37,10 @@ export const initialization = (componentProperties: { [componentName: string]: C
     return {
         type: INITIALIZATION,
         componentProperties,
-        currentComponent,
         projectName
     };
 };
 
-export const setCurrentComponent = (currentComponent: string): SetCurrentComponentAction => {
-    return {
-        type: SET_CURRENT_COMPONENT,
-        currentComponent
-    };
-};
 
 export const updateGraphic = (component: string, stateMachine: string, data: any): ThunkAction<void, void, void> => {
     return (dispatch: Dispatch<XCSpyState>, getState: () => XCSpyState): void => {

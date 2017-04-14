@@ -20,12 +20,14 @@ import AppHeader from "components/AppHeader";
 import Footer from "components/Footer";
 import TransitionProperties from "components/TransitionProperties";
 import StateMachineProperties from "components/StateMachineProperties";
-import { BrowserRouter as Router, Route, NavLink } from "react-router-dom";
+import { BrowserRouter as Router, Route, Link, withRouter, Redirect } from "react-router-dom";
+import XCSpyMainPage from "components/XCSpyMainPage";
 
 const middleware = applyMiddleware(thunk, logger());
 const store = createStore(SpyReducer, middleware);
 
 interface XCSpyGlobalProps extends XCSpyProps, XCSpyCallbackProps {
+  history: any;
 };
 
 interface XCSpyProps {
@@ -53,25 +55,10 @@ let XCSpyApp = (props: XCSpyGlobalProps) => {
   }
   sessionXCSpy.init(props.selectedApi, props.serverUrl);
 
+  const url = encodeURIComponent(props.serverUrl);
+  const api = props.selectedApi.replace(".xcApi", "");
   return (
-    <Split flex="right">
-      <SideBar />
-      <Box full={true} direction="column">
-        <AppHeader />
-        <Box full={true}>
-          <Components compositionModel={props.compositionModel.value} />
-        </Box>
-        <Box >
-          <Footer />
-        </Box>
-        <Box >
-          {<StateMachineProperties />}
-        </Box>
-        <Box >
-          {<TransitionProperties />}
-        </Box>
-      </Box>
-    </Split>
+    <Redirect to={`/${url}/${api}/${props.compositionModel.value.components[0].name}`} />
   );
 };
 
@@ -92,11 +79,16 @@ const mapDispatchToProps = (dispatch: Dispatch<XCSpyState>) => {
   };
 };
 
-const App = connect(mapStateToProps, mapDispatchToProps)(XCSpyApp);
+XCSpyApp = connect(mapStateToProps, mapDispatchToProps)(XCSpyApp);
 
 ReactDOM.render(
   <Provider store={store} >
-    <App />
+    <Router>
+      <div>
+        <Route exact path="/" component={XCSpyApp} />
+        <Route path="/:serverUrl/:api/:currentComponent" component={XCSpyMainPage} />
+      </div>
+    </Router>
   </Provider>,
   document.getElementById("app")
 );

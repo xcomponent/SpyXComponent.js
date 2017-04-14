@@ -13,6 +13,7 @@ import { updateGraphic, clearFinalStates, setAutoClear, snapshotAllAction } from
 import { XCSpyState } from "reducers/spyReducer";
 import { Dispatch } from "redux";
 import { snapshotAll } from "core";
+import { withRouter } from "react-router-dom";
 
 interface AppHeaderGlobalProps extends AppHeaderProps, AppHeaderCallbackProps {
 };
@@ -33,12 +34,12 @@ interface AppHeaderCallbackProps {
     setAutoClear: (autoClear: boolean) => void;
 };
 
-const mapStateToProps = (state: XCSpyState): AppHeaderProps => {
+const mapStateToProps = (state: XCSpyState, ownProps): AppHeaderProps => {
     const initialized = state.components.initialized;
     const componentProperties = state.components.componentProperties;
     const components = (!initialized) ? [] : Object.keys(componentProperties);
     return {
-        currentComponent: state.components.currentComponent,
+        currentComponent: ownProps.match.params.currentComponent,
         getStateMachines: (component: string): string[] => {
             if (!initialized)
                 return [];
@@ -143,4 +144,4 @@ const AppHeader = ({
     );
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(AppHeader);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(AppHeader));
