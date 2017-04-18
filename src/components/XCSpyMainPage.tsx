@@ -13,6 +13,7 @@ import { Dispatch } from "redux";
 import { setCompositionModel } from "actions";
 import { withRouter, Redirect } from "react-router-dom";
 import sessionXCSpy from "utils/sessionXCSpy";
+import { API, CURRENT_COMPONENT, SERVER_URL } from "utils/urlParams";
 
 interface XCSpyMainPageGlobalProps extends XCSpyMainPageProps, XCSpyMainPageCallbackProps {
 };
@@ -36,7 +37,7 @@ class XCSpyMainPage extends React.Component<XCSpyMainPageGlobalProps, XCSpyState
     componentWillMount() {
         if (!this.props.initialized) {
             const serverUrl = this.props.serverUrl;
-            const api = this.props.api + ".xcApi";
+            const api = this.props.api;
             sessionXCSpy.init(api, serverUrl);
             this.props.setCompositionModel(api, serverUrl);
         }
@@ -70,11 +71,15 @@ class XCSpyMainPage extends React.Component<XCSpyMainPageGlobalProps, XCSpyState
 }
 
 const mapStateToProps = (state: XCSpyState, ownProps): XCSpyMainPageProps => {
+    const urlSearchParams = new URLSearchParams(ownProps.location.search);
+    const currentComponent = urlSearchParams.get(CURRENT_COMPONENT);
+    const serverUrl = urlSearchParams.get(SERVER_URL);
+    const api = urlSearchParams.get(API);
     return {
         initialized: state.compositionModel.initialized,
-        api: decodeURIComponent(ownProps.match.params.api),
-        serverUrl: decodeURIComponent(ownProps.match.params.serverUrl),
-        currentComponent: ownProps.match.params.currentComponent
+        api,
+        serverUrl,
+        currentComponent
     };
 };
 

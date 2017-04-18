@@ -17,6 +17,7 @@ import { Dispatch } from "redux";
 import { snapshot } from "core";
 import { Instance } from "reducers/components";
 import { withRouter } from "react-router-dom";
+import { CURRENT_COMPONENT } from "utils/urlParams";
 
 interface StateMachinePropertiesGlobalProps extends StateMachinePropertiesProps, StateMachinePropertiesCallbackProps {
 };
@@ -40,10 +41,11 @@ interface StateMachinePropertiesCallbackProps {
 };
 
 const mapStateToProps = (state: XCSpyState, ownProps): StateMachinePropertiesProps => {
+    const urlSearchParams = new URLSearchParams(ownProps.location.search);
     const id = state.stateMachineProperties.id;
     const active = state.stateMachineProperties.active;
     const componentProperties = state.components.componentProperties;
-    const currentComponent = ownProps.match.params.currentComponent;
+    const currentComponent = urlSearchParams.get(CURRENT_COMPONENT);
     const stateMachine = state.stateMachineProperties.stateMachine;
     const instances = (!active) ? null : componentProperties[currentComponent].stateMachineProperties[stateMachine];
     const ids = (instances !== null) ? Object.keys(instances) : null;
@@ -108,7 +110,7 @@ class StateMachineProperties extends React.Component<StateMachinePropertiesGloba
                     <FormField>
                         <fieldset>
                             <label htmlFor="instances">Instance identifier:
-                            <Instances onChange={setStateMachineId} stateMachine={this.props.stateMachine} instances={this.props.instances} />
+                            <Instances onChange={this.props.setStateMachineId} stateMachine={this.props.stateMachine} instances={this.props.instances} />
                             </label>
                         </fieldset>
                     </FormField>

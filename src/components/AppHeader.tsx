@@ -13,7 +13,8 @@ import { updateGraphic, clearFinalStates, setAutoClear, snapshotAllAction } from
 import { XCSpyState } from "reducers/spyReducer";
 import { Dispatch } from "redux";
 import { snapshotAll } from "core";
-import { withRouter } from "react-router-dom";
+import { BrowserRouter as Router, Route, Link, withRouter, Redirect } from "react-router-dom";
+import { CURRENT_COMPONENT } from "utils/urlParams";
 
 interface AppHeaderGlobalProps extends AppHeaderProps, AppHeaderCallbackProps {
 };
@@ -27,6 +28,7 @@ interface AppHeaderProps {
 };
 
 interface AppHeaderCallbackProps {
+    returnHome: () => void;
     clearFinalStates: (component: string, stateMachines: string[]) => void;
     showSideBar: () => void;
     hideSideBar: () => void;
@@ -38,8 +40,10 @@ const mapStateToProps = (state: XCSpyState, ownProps): AppHeaderProps => {
     const initialized = state.components.initialized;
     const componentProperties = state.components.componentProperties;
     const components = (!initialized) ? [] : Object.keys(componentProperties);
+    const urlSearchParams = new URLSearchParams(ownProps.location.search);
+    const currentComponent = urlSearchParams.get(CURRENT_COMPONENT);
     return {
-        currentComponent: ownProps.match.params.currentComponent,
+        currentComponent,
         getStateMachines: (component: string): string[] => {
             if (!initialized)
                 return [];
@@ -51,8 +55,11 @@ const mapStateToProps = (state: XCSpyState, ownProps): AppHeaderProps => {
     };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<XCSpyState>): AppHeaderCallbackProps => {
+const mapDispatchToProps = (dispatch: Dispatch<XCSpyState>, ownProps): AppHeaderCallbackProps => {
     return {
+        returnHome: (): void => {
+            ownProps.history.push("/");
+        },
         clearFinalStates: (component: string, stateMachines: string[]): void => {
             for (let i = 0; i < stateMachines.length; i++) {
                 dispatch(clearFinalStates(component, stateMachines[i]));
@@ -74,6 +81,7 @@ const mapDispatchToProps = (dispatch: Dispatch<XCSpyState>): AppHeaderCallbackPr
 };
 
 const AppHeader = ({
+    returnHome,
     showSideBar,
     getStateMachines,
     currentComponent,
@@ -134,9 +142,7 @@ const AppHeader = ({
             </Box>
             <Box align="end" justify="center" size="large" basis="1/3">
                 <Button title={"Home"} icon={<HomeIcon size="medium" />}
-                    onClick={() => {
-                        window.location.reload();
-                    }}
+                    onClick={returnHome}
                 />
             </Box>
         </Box>

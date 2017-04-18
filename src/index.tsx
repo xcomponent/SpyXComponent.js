@@ -22,6 +22,7 @@ import TransitionProperties from "components/TransitionProperties";
 import StateMachineProperties from "components/StateMachineProperties";
 import { BrowserRouter as Router, Route, Link, withRouter, Redirect } from "react-router-dom";
 import XCSpyMainPage from "components/XCSpyMainPage";
+import {API, CURRENT_COMPONENT, SERVER_URL } from "utils/urlParams";
 
 const middleware = applyMiddleware(thunk, logger());
 const store = createStore(SpyReducer, middleware);
@@ -55,10 +56,11 @@ let XCSpyApp = (props: XCSpyGlobalProps) => {
   }
   sessionXCSpy.init(props.selectedApi, props.serverUrl);
 
-  const url = encodeURIComponent(props.serverUrl);
-  const api = props.selectedApi.replace(".xcApi", "");
+
+  const currentComponent = props.compositionModel.value.components[0].name;
+
   return (
-    <Redirect to={`/${url}/${api}/${props.compositionModel.value.components[0].name}`} />
+    <Redirect to={{ pathname: "/app/", search: `${SERVER_URL}=${props.serverUrl}&${API}=${props.selectedApi}&${CURRENT_COMPONENT}=${currentComponent}` }} />
   );
 };
 
@@ -86,7 +88,7 @@ ReactDOM.render(
     <Router>
       <div>
         <Route exact path="/" component={XCSpyApp} />
-        <Route path="/:serverUrl/:api/:currentComponent" component={XCSpyMainPage} />
+        <Route path="/app" component={XCSpyMainPage} />
       </div>
     </Router>
   </Provider>,
