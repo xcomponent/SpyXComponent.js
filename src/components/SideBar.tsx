@@ -15,7 +15,7 @@ import { hideSideBar } from "actions";
 import { XCSpyState } from "reducers/spyReducer";
 import { Dispatch } from "redux";
 import { Link, withRouter } from "react-router-dom";
-import { API, CURRENT_COMPONENT, SERVER_URL } from "utils/urlParams";
+import { routes } from "utils/routes";
 
 interface SideBarGlobalProps extends SideBarProps, SideBarCallbackProps {
 };
@@ -36,9 +36,9 @@ interface SideBarCallbackProps {
 
 const mapStateToProps = (state: XCSpyState, ownProps): SideBarProps => {
     const urlSearchParams = new URLSearchParams(ownProps.location.search);
-    const currentComponent = urlSearchParams.get(CURRENT_COMPONENT);
-    const serverUrl = urlSearchParams.get(SERVER_URL);
-    const api = urlSearchParams.get(API);
+    const currentComponent = urlSearchParams.get(routes.params.currentComponent);
+    const serverUrl = urlSearchParams.get(routes.params.serverUrl);
+    const api = urlSearchParams.get(routes.params.api);
     return {
         isVisible: state.sideBar.isVisible,
         initialized: state.components.initialized,
@@ -89,7 +89,7 @@ class SideBar extends React.Component<SideBarGlobalProps, XCSpyState> {
                 <Link
                     key={component}
                     value={component}
-                    to={{ pathname: "/app/", search: `${SERVER_URL}=${props.serverUrl}&${API}=${props.api}&${CURRENT_COMPONENT}=${component}` }}
+                    to={{ pathname: routes.paths.app, search: `${routes.params.serverUrl}=${props.serverUrl}&${routes.params.api}=${props.api}&${routes.params.currentComponent}=${component}` }}
                     className={(props.currentComponent === component) ? "active" : ""}>
                     {component}
                 </Link>

@@ -1,94 +1,83 @@
 import { Provider, connect } from "react-redux";
 import * as React from "react";
+import ConfigForm from "./ConfigForm";
 import Components from "./Components";
-import SideBar from "components/SideBar";
-import * as Split from "grommet/components/Split";
-import * as Box from "grommet/components/Box";
-import AppHeader from "components/AppHeader";
-import Footer from "components/Footer";
-import TransitionProperties from "components/TransitionProperties";
-import StateMachineProperties from "components/StateMachineProperties";
-import { XCSpyState } from "reducers/SpyReducer";
-import { Dispatch } from "redux";
-import { setCompositionModel } from "actions";
-import { withRouter, Redirect } from "react-router-dom";
+import { setCompositionModel } from "actions/compositionModel";
 import sessionXCSpy from "utils/sessionXCSpy";
-import { API, CURRENT_COMPONENT, SERVER_URL } from "utils/urlParams";
+import { Dispatch } from "redux";
+import { Parser } from "utils/parser";
+import { BrowserRouter as Router, Route, Link, withRouter, Redirect } from "react-router-dom";
+import { routes } from "utils/routes";
+import { XCSpyState } from "reducers/SpyReducer";
+import { initSession } from "actions";
 
-interface XCSpyMainPageGlobalProps extends XCSpyMainPageProps, XCSpyMainPageCallbackProps {
+interface XCSpyGlobalProps extends XCSpyProps, XCSpyCallbackProps {
 };
 
-interface XCSpyMainPageProps {
-    initialized: boolean;
-    api: string;
-    serverUrl: string;
-    currentComponent: string;
+interface XCSpyProps {
+  submitted: boolean;
+  selectedApi: string;
+  serverUrl: string;
+  compositionModel: any;
 };
 
-interface XCSpyMainPageCallbackProps {
-    setCompositionModel: (xcApiName: string, serverUrl: string) => void;
+interface XCSpyCallbackProps {
+  setCompositionModel: (xcApiName: string, serverUrl: string) => void;
+  initSession: (xcApiName: string, serverUrl: string) => void;
 };
 
-class XCSpyMainPage extends React.Component<XCSpyMainPageGlobalProps, XCSpyState> {
-    constructor(props: XCSpyMainPageGlobalProps) {
-        super(props);
-    }
+class XCSpyMainPage extends React.Component<XCSpyGlobalProps, XCSpyState> {
+  constructor(props: XCSpyGlobalProps) {
+    super(props);
+  }
 
-    componentWillMount() {
-        if (!this.props.initialized) {
-            const serverUrl = this.props.serverUrl;
-            const api = this.props.api;
-            sessionXCSpy.init(api, serverUrl);
-            this.props.setCompositionModel(api, serverUrl);
-        }
-    }
+  componentWillMount() {
+    const props = this.props;
+    if (props.submitted && props.compositionModel.initialized) {
 
-    render() {
-        if (!this.props.initialized) {
-            return (<div>
-                Loading...
-            </div>);
-        }
-        return (
-            <Split flex="right">
-                <SideBar />
-                <Box full={true} direction="column">
-                    <AppHeader />
-                    <Components />
-                    <Box >
-                        <Footer />
-                    </Box>
-                    <Box >
-                        {<StateMachineProperties />}
-                    </Box>
-                    <Box >
-                        {<TransitionProperties />}
-                    </Box>
-                </Box>
-            </Split>
-        );
     }
+  }
+
+  render() {
+    const props = this.props;
+    if (!props.submitted) {
+      return (
+        <ConfigForm />
+      );
+    }
+    if (props.submitted && !props.compositionModel.initialized) {
+      props.setCompositionModel(props.selectedApi, props.serverUrl);
+      return (
+        <ConfigForm />
+      );
+    }
+    props.initSession(props.selectedApi, props.serverUrl);
+    const currentComponent = props.compositionModel.value.components[0].name;
+
+    return (
+      <Redirect to={{ pathname: routes.paths.app, search: `${routes.params.serverUrl}=${props.serverUrl}&${routes.params.api}=${props.selectedApi}&${routes.params.currentComponent}=${currentComponent}` }} />
+    );
+  }
 }
 
-const mapStateToProps = (state: XCSpyState, ownProps): XCSpyMainPageProps => {
-    const urlSearchParams = new URLSearchParams(ownProps.location.search);
-    const currentComponent = urlSearchParams.get(CURRENT_COMPONENT);
-    const serverUrl = urlSearchParams.get(SERVER_URL);
-    const api = urlSearchParams.get(API);
-    return {
-        initialized: state.compositionModel.initialized,
-        api,
-        serverUrl,
-        currentComponent
-    };
+const mapStateToProps = (state: XCSpyState) => {
+  return {
+    submitted: state.configForm.formSubmited,
+    selectedApi: state.configForm.selectedApi,
+    serverUrl: state.configForm.serverUrl,
+    compositionModel: state.compositionModel
+  };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<XCSpyState>): XCSpyMainPageCallbackProps => {
-    return {
-        setCompositionModel: (xcApiName: string, serverUrl: string) => {
-            dispatch(setCompositionModel(xcApiName, serverUrl));
-        }
-    };
+const mapDispatchToProps = (dispatch: Dispatch<XCSpyState>) => {
+  return {
+    setCompositionModel: (xcApiName: string, serverUrl: string) => {
+      dispatch(setCompositionModel(xcApiName, serverUrl));
+    },
+    initSession: (xcApiName: string, serverUrl: string): void => {
+      dispatch(initSession(xcApiName, serverUrl));
+    }
+  };
 };
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(XCSpyMainPage));
+export default connect(mapStateToProps, mapDispatchToProps)(XCSpyMainPage);

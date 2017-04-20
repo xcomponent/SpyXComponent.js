@@ -14,7 +14,7 @@ import { XCSpyState } from "reducers/spyReducer";
 import { Dispatch } from "redux";
 import { snapshotAll } from "core";
 import { BrowserRouter as Router, Route, Link, withRouter, Redirect } from "react-router-dom";
-import { CURRENT_COMPONENT } from "utils/urlParams";
+import { routes } from "utils/routes";
 
 interface AppHeaderGlobalProps extends AppHeaderProps, AppHeaderCallbackProps {
 };
@@ -41,7 +41,7 @@ const mapStateToProps = (state: XCSpyState, ownProps): AppHeaderProps => {
     const componentProperties = state.components.componentProperties;
     const components = (!initialized) ? [] : Object.keys(componentProperties);
     const urlSearchParams = new URLSearchParams(ownProps.location.search);
-    const currentComponent = urlSearchParams.get(CURRENT_COMPONENT);
+    const currentComponent = urlSearchParams.get(routes.params.currentComponent);
     return {
         currentComponent,
         getStateMachines: (component: string): string[] => {
@@ -58,7 +58,7 @@ const mapStateToProps = (state: XCSpyState, ownProps): AppHeaderProps => {
 const mapDispatchToProps = (dispatch: Dispatch<XCSpyState>, ownProps): AppHeaderCallbackProps => {
     return {
         returnHome: (): void => {
-            ownProps.history.push("/");
+            ownProps.history.push(routes.paths.home);
         },
         clearFinalStates: (component: string, stateMachines: string[]): void => {
             for (let i = 0; i < stateMachines.length; i++) {

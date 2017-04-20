@@ -17,7 +17,7 @@ import { Dispatch } from "redux";
 import { snapshot } from "core";
 import { Instance } from "reducers/components";
 import { withRouter } from "react-router-dom";
-import { CURRENT_COMPONENT } from "utils/urlParams";
+import { routes } from "utils/routes";
 
 interface StateMachinePropertiesGlobalProps extends StateMachinePropertiesProps, StateMachinePropertiesCallbackProps {
 };
@@ -45,7 +45,7 @@ const mapStateToProps = (state: XCSpyState, ownProps): StateMachinePropertiesPro
     const id = state.stateMachineProperties.id;
     const active = state.stateMachineProperties.active;
     const componentProperties = state.components.componentProperties;
-    const currentComponent = urlSearchParams.get(CURRENT_COMPONENT);
+    const currentComponent = urlSearchParams.get(routes.params.currentComponent);
     const stateMachine = state.stateMachineProperties.stateMachine;
     const instances = (!active) ? null : componentProperties[currentComponent].stateMachineProperties[stateMachine];
     const ids = (instances !== null) ? Object.keys(instances) : null;

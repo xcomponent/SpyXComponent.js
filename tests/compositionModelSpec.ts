@@ -1,5 +1,5 @@
 import * as deepFreeze from "deep-freeze";
-import { INIT_COMPOSITION_MODEL } from "actions/compositionModel";
+import { INIT_COMPOSITION_MODEL } from "actions";
 import { compositionModelReducer } from "reducers/compositionModel";
 
 describe("Test components reducer", () => {

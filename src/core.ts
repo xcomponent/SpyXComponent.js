@@ -1,7 +1,17 @@
 import sessionXCSpy from "utils/sessionXCSpy";
 import { Dispatch } from "redux";
-import { updateGraphic } from "actions";
+import { updateGraphic, INIT_COMPOSITION_MODEL } from "actions";
 import { XCSpyState } from "reducers/SpyReducer";
+import xcomponentapi from "reactivexcomponent.js";
+
+export const getCompositionModel = (dispatch: Dispatch<XCSpyState>, xcApiName: string, serverUrl: string): void => {
+    xcomponentapi.getModel(xcApiName, serverUrl, (connection, compositionModel) => {
+        dispatch({
+            type: INIT_COMPOSITION_MODEL,
+            compositionModel
+        });
+    });
+};
 
 export const subscribeAllStateMachines = (dispatch: Dispatch<XCSpyState>, component: string, stateMachines: string[]): void => {
     sessionXCSpy.getPromiseCreateSession()

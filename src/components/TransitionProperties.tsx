@@ -19,7 +19,7 @@ import { XCSpyState } from "reducers/SpyReducer";
 import { Dispatch } from "redux";
 import { Instance } from "reducers/components";
 import { withRouter } from "react-router-dom";
-import { CURRENT_COMPONENT } from "utils/urlParams";
+import { routes} from "utils/routes";
 
 interface TransitionPropertiesGlobalProps extends TransitionPropertiesProps, TransitionPropertiesCallbackProps {
 };
@@ -51,7 +51,7 @@ const mapStateToProps = (state: XCSpyState, ownProps): TransitionPropertiesProps
     const active = state.transitionProperties.active;
     const id = state.transitionProperties.id;
     const componentProperties = state.components.componentProperties;
-    const currentComponent = urlSearchParams.get(CURRENT_COMPONENT);
+    const currentComponent = urlSearchParams.get(routes.params.currentComponent);
     const stateMachine = state.transitionProperties.stateMachine;
     const instances = (!active) ? null : componentProperties[currentComponent].stateMachineProperties[stateMachine];
     const privateTopic = state.transitionProperties.privateTopic;

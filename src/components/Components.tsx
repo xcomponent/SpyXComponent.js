@@ -15,10 +15,9 @@ import { XCSpyState } from "reducers/SpyReducer";
 import { ComponentProperties } from "reducers/components";
 import * as Box from "grommet/components/Box";
 import { withRouter } from "react-router-dom";
-import {API, CURRENT_COMPONENT, SERVER_URL } from "utils/urlParams";
+import { routes } from "utils/routes";
 
 interface ComponentsGlobalProps extends ComponentsProps, ComponentsCallbackProps {
-    history: any;
 };
 
 interface ComponentsProps {
@@ -39,7 +38,7 @@ interface ComponentsCallbackProps {
 
 const mapStateToProps = (state: XCSpyState, ownProps): ComponentsProps => {
     const urlSearchParams = new URLSearchParams(ownProps.location.search);
-    const currentComponent = urlSearchParams.get(CURRENT_COMPONENT);
+    const currentComponent = urlSearchParams.get(routes.params.currentComponent);
     const componentProperties = state.components.componentProperties;
     const diagram = (!state.components.initialized) ? null : componentProperties[currentComponent].diagram;
     return {

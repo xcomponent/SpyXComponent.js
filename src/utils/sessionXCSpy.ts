@@ -11,6 +11,10 @@ class SessionXCSpy {
     init(xcApiFileName: string, serverUrl: string) {
         this.promiseCreateSession = new Promise((resolve, reject) => {
             xcomponentapi.createSession(xcApiFileName, serverUrl, (error, session: any) => {
+                if (error) {
+                    reject(error);
+                    return;
+                }
                 resolve(session);
                 this.privateTopics = ["private topic"];
                 this.defaultPrivateTopic = "private topic";
