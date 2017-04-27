@@ -11,6 +11,13 @@ export interface GlobalCompositionModelAction extends Action {
     compositionModel: any;
 };
 
+export const initCompositionModelAction = (compositionModel): GlobalCompositionModelAction => {
+    return {
+        type: INIT_COMPOSITION_MODEL,
+        compositionModel
+    };
+};
+
 export const setCompositionModel = (xcApiName: string, serverUrl: string): ThunkAction<void, void, void> => {
     return (dispatch: Dispatch<XCSpyState>): void => {
         getCompositionModel(dispatch, xcApiName, serverUrl);

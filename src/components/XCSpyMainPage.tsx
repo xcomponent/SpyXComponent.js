@@ -23,42 +23,28 @@ interface XCSpyProps {
 
 interface XCSpyCallbackProps {
   setCompositionModel: (xcApiName: string, serverUrl: string) => void;
-  initSession: (xcApiName: string, serverUrl: string) => void;
+  initSession: (xcApiName: string, serverUrl: string, init: (xcApi: string, serverUrl: string) => Promise<any>) => void;
 };
 
-class XCSpyMainPage extends React.Component<XCSpyGlobalProps, XCSpyState> {
-  constructor(props: XCSpyGlobalProps) {
-    super(props);
-  }
-
-  componentWillMount() {
-    const props = this.props;
-    if (props.submitted && props.compositionModel.initialized) {
-
-    }
-  }
-
-  render() {
-    const props = this.props;
-    if (!props.submitted) {
-      return (
-        <ConfigForm />
-      );
-    }
-    if (props.submitted && !props.compositionModel.initialized) {
-      props.setCompositionModel(props.selectedApi, props.serverUrl);
-      return (
-        <ConfigForm />
-      );
-    }
-    props.initSession(props.selectedApi, props.serverUrl);
-    const currentComponent = props.compositionModel.value.components[0].name;
-
+const XCSpyMainPage = (props: XCSpyGlobalProps) => {
+  if (!props.submitted) {
     return (
-      <Redirect to={{ pathname: routes.paths.app, search: `${routes.params.serverUrl}=${props.serverUrl}&${routes.params.api}=${props.selectedApi}&${routes.params.currentComponent}=${currentComponent}` }} />
+      <ConfigForm />
     );
   }
-}
+  if (props.submitted && !props.compositionModel.initialized) {
+    props.setCompositionModel(props.selectedApi, props.serverUrl);
+    return (
+      <ConfigForm />
+    );
+  }
+  props.initSession(props.selectedApi, props.serverUrl, sessionXCSpy.init);
+  const currentComponent = props.compositionModel.value.components[0].name;
+
+  return (
+    <Redirect to={{ pathname: routes.paths.app, search: `${routes.params.serverUrl}=${props.serverUrl}&${routes.params.api}=${props.selectedApi}&${routes.params.currentComponent}=${currentComponent}` }} />
+  );
+};
 
 const mapStateToProps = (state: XCSpyState) => {
   return {
@@ -74,8 +60,8 @@ const mapDispatchToProps = (dispatch: Dispatch<XCSpyState>) => {
     setCompositionModel: (xcApiName: string, serverUrl: string) => {
       dispatch(setCompositionModel(xcApiName, serverUrl));
     },
-    initSession: (xcApiName: string, serverUrl: string): void => {
-      dispatch(initSession(xcApiName, serverUrl));
+    initSession: (xcApiName: string, serverUrl: string, init: (xcApi: string, serverUrl: string) => Promise<any>): void => {
+      dispatch(initSession(xcApiName, serverUrl, init));
     }
   };
 };

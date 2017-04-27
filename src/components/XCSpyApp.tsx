@@ -28,7 +28,7 @@ interface XCSpyAppProps {
 
 interface XCSpyAppCallbackProps {
     setCompositionModel: (xcApiName: string, serverUrl: string) => void;
-    initSession: (xcApiName: string, serverUrl: string) => void;
+    initSession: (xcApiName: string, serverUrl: string, init: (xcApi: string, serverUrl: string) => Promise<any>) => void;
 };
 
 class XCSpyApp extends React.Component<XCSpyAppGlobalProps, XCSpyState> {
@@ -40,7 +40,7 @@ class XCSpyApp extends React.Component<XCSpyAppGlobalProps, XCSpyState> {
         if (!this.props.initialized) {
             const serverUrl = this.props.serverUrl;
             const api = this.props.api;
-            this.props.initSession(api, serverUrl);
+            this.props.initSession(api, serverUrl, sessionXCSpy.init);
             this.props.setCompositionModel(api, serverUrl);
         }
     }
@@ -90,8 +90,8 @@ const mapDispatchToProps = (dispatch: Dispatch<XCSpyState>): XCSpyAppCallbackPro
         setCompositionModel: (xcApiName: string, serverUrl: string): void => {
             dispatch(setCompositionModel(xcApiName, serverUrl));
         },
-        initSession: (xcApiName: string, serverUrl: string): void => {
-            dispatch(initSession(xcApiName, serverUrl));
+        initSession: (xcApiName: string, serverUrl: string, init: (xcApi: string, serverUrl: string) => Promise<any>): void => {
+            dispatch(initSession(xcApiName, serverUrl, init));
         }
     };
 };

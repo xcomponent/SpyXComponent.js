@@ -143,6 +143,7 @@ class StateMachineProperties extends React.Component<StateMachinePropertiesGloba
                     <Footer></Footer>
                     <Button primary={true} type="button" label="Snapshot" onClick={() => {
                         this.props.snapshot(this.props.currentComponent, this.props.stateMachine);
+                        this.props.hideStateMachineProperties();
                     }} />
                     <Button primary={true} type="button" label="Clear" onClick={() => {
                         this.props.clearFinalStates(this.props.currentComponent, this.props.stateMachine);
