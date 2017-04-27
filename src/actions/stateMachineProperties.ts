@@ -19,11 +19,10 @@ export interface SetStateMachineIdAction extends Action {
     id: string;
 };
 
-export const showStateMachineProperties = (stateMachine: string): any => {
+export const showStateMachineProperties = (component: string, stateMachine: string): any => {
     return (dispatch: Dispatch<XCSpyState>, getState: () => XCSpyState) => {
         const componentProperties = getState().components.componentProperties;
-        const currentComponent = getState().components.currentComponent;
-        const firstId = Object.keys(componentProperties[currentComponent].stateMachineProperties[stateMachine])[0];
+        const firstId = Object.keys(componentProperties[component].stateMachineProperties[stateMachine])[0];
         dispatch({
             type: SHOW_STATE_MACHINE_PROPERTIES,
             stateMachine,

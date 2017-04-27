@@ -1,4 +1,4 @@
-import { INITIALIZATION, SET_CURRENT_COMPONENT, UPDATE_GRAPHIC, CLEAR_FINAL_STATES, SET_AUTO_CLEAR, GlobalComponentsAction, InitializationAction, SetCurrentComponentAction, UpdateGraphicAction, ClearFinalStatesAction, SetAutoClearAction } from "actions";
+import { INITIALIZATION, UPDATE_GRAPHIC, CLEAR_FINAL_STATES, SET_AUTO_CLEAR, GlobalComponentsAction, InitializationAction, UpdateGraphicAction, ClearFinalStatesAction, SetAutoClearAction } from "actions";
 import * as go from "gojs";
 import { DrawComponent } from "utils/drawComponent";
 import { modelTags } from "utils/configurationParser";
@@ -20,7 +20,6 @@ export interface ComponentProperties {
 
 export interface ComponentsState {
     componentProperties: { [componentName: string]: ComponentProperties };
-    currentComponent: string;
     projectName: string;
     initialized: boolean;
     autoClear: boolean;
@@ -28,7 +27,6 @@ export interface ComponentsState {
 
 const initialState: ComponentsState = {
     componentProperties: {},
-    currentComponent: undefined,
     projectName: undefined,
     initialized: false,
     autoClear: false
@@ -74,15 +72,8 @@ export const componentsReducer: Reducer<ComponentsState> = (state: ComponentsSta
             return {
                 ...state,
                 componentProperties: initAction.componentProperties,
-                currentComponent: initAction.currentComponent,
                 projectName: initAction.projectName,
                 initialized: true
-            };
-        case SET_CURRENT_COMPONENT:
-            const setCurrentComponentAction = <InitializationAction>action;
-            return {
-                ...state,
-                currentComponent: setCurrentComponentAction.currentComponent
             };
         case UPDATE_GRAPHIC:
             const updateGraphicAction = <UpdateGraphicAction>action;

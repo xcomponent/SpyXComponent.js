@@ -1,10 +1,17 @@
 import sessionXCSpy from "utils/sessionXCSpy";
 import { Dispatch } from "redux";
-import { updateGraphic } from "actions";
+import { updateGraphic, INIT_COMPOSITION_MODEL, initCompositionModelAction } from "actions";
 import { XCSpyState } from "reducers/SpyReducer";
+import xcomponentapi from "reactivexcomponent.js";
+
+export const getCompositionModel = (dispatch: Dispatch<XCSpyState>, xcApiName: string, serverUrl: string): void => {
+    xcomponentapi.getModel(xcApiName, serverUrl, (connection, compositionModel) => {
+        dispatch(initCompositionModelAction(compositionModel));
+    });
+};
 
 export const subscribeAllStateMachines = (dispatch: Dispatch<XCSpyState>, component: string, stateMachines: string[]): void => {
-    sessionXCSpy.getPromiseCreateSession()
+    sessionXCSpy.PromiseCreateSession
         .then((session) => {
             const subscriber = session.createSubscriber();
             for (let j = 0; j < stateMachines.length; j++) {
@@ -20,7 +27,7 @@ export const subscribeAllStateMachines = (dispatch: Dispatch<XCSpyState>, compon
 };
 
 export const snapshotEntryPoint = (dispatch: Dispatch<XCSpyState>, component: string, entryPoint: string): void => {
-    sessionXCSpy.getPromiseCreateSession()
+    sessionXCSpy.PromiseCreateSession
         .then((session) => {
             session.createSubscriber().getSnapshot(component, entryPoint, (items) => {
                 for (let i = 0; i < items.length; i++) {
@@ -31,7 +38,7 @@ export const snapshotEntryPoint = (dispatch: Dispatch<XCSpyState>, component: st
 };
 
 export const snapshot = (dispatch: Dispatch<XCSpyState>, currentComponent: string, stateMachine: string): void => {
-    sessionXCSpy.getPromiseCreateSession()
+    sessionXCSpy.PromiseCreateSession
         .then((session) => {
             session.createSubscriber().getSnapshot(currentComponent, stateMachine, (items) => {
                 for (let i = 0; i < items.length; i++) {
@@ -43,7 +50,7 @@ export const snapshot = (dispatch: Dispatch<XCSpyState>, currentComponent: strin
 };
 
 export const snapshotAll = (dispatch: Dispatch<XCSpyState>, component: string, stateMachines: string[]): void => {
-    sessionXCSpy.getPromiseCreateSession()
+    sessionXCSpy.PromiseCreateSession
         .then((session) => {
             const subscriber = session.createSubscriber();
             for (let i = 0; i < stateMachines.length; i++) {
@@ -58,7 +65,7 @@ export const snapshotAll = (dispatch: Dispatch<XCSpyState>, component: string, s
 };
 
 export const send = (component: string, stateMachine: string, messageType: string, jsonMessageString: string) => {
-    sessionXCSpy.getPromiseCreateSession()
+    sessionXCSpy.PromiseCreateSession
         .then((session) => {
             const publisher = session.createPublisher();
             let jsonMessage;

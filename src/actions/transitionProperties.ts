@@ -50,14 +50,13 @@ export interface SendContextAction extends Action {
     jsonMessageString: string;
 };
 
-export const showTransitionProperties = (stateMachine: string, messageType: string, jsonMessageString: string): ThunkAction<void, XCSpyState, void> => {
+export const showTransitionProperties = (component: string, stateMachine: string, messageType: string, jsonMessageString: string): ThunkAction<void, XCSpyState, void> => {
     return (dispatch: Dispatch<XCSpyState>, getState: () => XCSpyState) => {
-        sessionXCSpy.getPromiseCreateSession()
+        sessionXCSpy.PromiseCreateSession
             .then((session) => {
-                if (session.createPublisher().canPublish(getState().components.currentComponent, stateMachine, messageType)) {
+                if (session.createPublisher().canPublish(component, stateMachine, messageType)) {
                     const componentProperties = getState().components.componentProperties;
-                    const currentComponent = getState().components.currentComponent;
-                    const firstId = Object.keys(componentProperties[currentComponent].stateMachineProperties[stateMachine])[0];
+                    const firstId = Object.keys(componentProperties[component].stateMachineProperties[stateMachine])[0];
                     dispatch({
                         type: SHOW_TRANSITION_PROPERTIES,
                         stateMachine,

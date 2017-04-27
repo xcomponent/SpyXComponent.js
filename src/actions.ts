@@ -4,3 +4,4 @@ export * from "actions/configForm";
 export * from "actions/sideBar";
 export * from "actions/stateMachineProperties";
 export * from "actions/transitionProperties";
+export * from "actions/session";

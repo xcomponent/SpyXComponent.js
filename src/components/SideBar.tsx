@@ -7,14 +7,15 @@ import * as Menu from "grommet/components/Menu";
 import * as Anchor from "grommet/components/Anchor";
 import * as Footer from "grommet/components/Footer";
 import * as Button from "grommet/components/Button";
-import { Link } from "react-router";
 import * as CloseIcon from "grommet/components/icons/base/Close";
 
 import * as User from "grommet/components/icons/base/User";
 import { connect } from "react-redux";
-import { setCurrentComponent, hideSideBar } from "actions";
+import { hideSideBar } from "actions";
 import { XCSpyState } from "reducers/spyReducer";
 import { Dispatch } from "redux";
+import { Link, withRouter } from "react-router-dom";
+import { routes } from "utils/routes";
 
 interface SideBarGlobalProps extends SideBarProps, SideBarCallbackProps {
 };
@@ -25,28 +26,32 @@ interface SideBarProps {
     components: string[];
     currentComponent: string;
     projectName: string;
+    serverUrl: string;
+    api: string;
 };
 
 interface SideBarCallbackProps {
-    setCurrentComponent: (currentComponent: string) => void;
     hideSideBar: () => void;
 };
 
-const mapStateToProps = (state: XCSpyState): SideBarProps => {
+const mapStateToProps = (state: XCSpyState, ownProps): SideBarProps => {
+    const urlSearchParams = new URLSearchParams(ownProps.location.search);
+    const currentComponent = urlSearchParams.get(routes.params.currentComponent);
+    const serverUrl = urlSearchParams.get(routes.params.serverUrl);
+    const api = urlSearchParams.get(routes.params.api);
     return {
         isVisible: state.sideBar.isVisible,
         initialized: state.components.initialized,
         components: Object.keys(state.components.componentProperties),
-        currentComponent: state.components.currentComponent,
-        projectName: state.components.projectName
+        currentComponent,
+        projectName: state.components.projectName,
+        serverUrl,
+        api
     };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch<XCSpyState>): SideBarCallbackProps => {
     return {
-        setCurrentComponent: (currentComponent: string) => {
-            dispatch(setCurrentComponent(currentComponent));
-        },
         hideSideBar: () => {
             dispatch(hideSideBar());
         }
@@ -75,22 +80,19 @@ class SideBar extends React.Component<SideBarGlobalProps, XCSpyState> {
         );
     }
 
-    getComponentList(): Anchor[] {
+    getComponentList() {
         const list = [];
         const props = this.props;
         const components = props.components;
         components.map((component: string) => {
             list.push(
-                <Anchor
-                    primary={true}
+                <Link
                     key={component}
                     value={component}
-                    className={(props.currentComponent === component) ? "active" : ""}
-                    onClick={(e) => {
-                        props.setCurrentComponent(e.target.getAttribute("value"));
-                    }}>
+                    to={{ pathname: routes.paths.app, search: `${routes.params.serverUrl}=${props.serverUrl}&${routes.params.api}=${props.api}&${routes.params.currentComponent}=${component}` }}
+                    className={(props.currentComponent === component) ? "active" : ""}>
                     {component}
-                </Anchor>
+                </Link>
             );
         });
         return list;
@@ -102,7 +104,7 @@ class SideBar extends React.Component<SideBarGlobalProps, XCSpyState> {
         return (
             <GrommetSidebar fixed={true} colorIndex="neutral-1">
                 {this.getTitle()}
-                <Menu>
+                <Menu primary={true}>
                     {this.getComponentList()}
                 </Menu>
             </GrommetSidebar>
@@ -110,4 +112,4 @@ class SideBar extends React.Component<SideBarGlobalProps, XCSpyState> {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(SideBar);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(SideBar));

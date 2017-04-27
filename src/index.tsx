@@ -20,83 +20,22 @@ import AppHeader from "components/AppHeader";
 import Footer from "components/Footer";
 import TransitionProperties from "components/TransitionProperties";
 import StateMachineProperties from "components/StateMachineProperties";
-import { BrowserRouter as Router, Route, NavLink } from "react-router-dom";
+import { BrowserRouter as Router, Route, Link, withRouter, Redirect } from "react-router-dom";
+import XCSpyApp from "components/XCSpyApp";
+import XCSpyMainPage from "components/XCSpyMainPage";
+import { routes } from "utils/routes";
 
 const middleware = applyMiddleware(thunk, logger());
 const store = createStore(SpyReducer, middleware);
 
-interface XCSpyGlobalProps extends XCSpyProps, XCSpyCallbackProps {
-};
-
-interface XCSpyProps {
-  submitted: boolean;
-  selectedApi: string;
-  serverUrl: string;
-  compositionModel: any;
-};
-
-interface XCSpyCallbackProps {
-  setCompositionModel: (xcApiName: string, serverUrl: string) => void;
-};
-
-let XCSpyApp = (props: XCSpyGlobalProps) => {
-  if (!props.submitted) {
-    return (
-      <ConfigForm />
-    );
-  }
-  if (props.submitted && !props.compositionModel.initialized) {
-    props.setCompositionModel(props.selectedApi, props.serverUrl);
-    return (
-      <ConfigForm />
-    );
-  }
-  sessionXCSpy.init(props.selectedApi, props.serverUrl);
-
-  return (
-    <Split flex="right">
-      <SideBar />
-      <Box full={true} direction="column">
-        <AppHeader />
-        <Box full={true}>
-          <Components compositionModel={props.compositionModel.value} />
-        </Box>
-        <Box >
-          <Footer />
-        </Box>
-        <Box >
-          {<StateMachineProperties />}
-        </Box>
-        <Box >
-          {<TransitionProperties />}
-        </Box>
-      </Box>
-    </Split>
-  );
-};
-
-const mapStateToProps = (state: XCSpyState) => {
-  return {
-    submitted: state.configForm.formSubmited,
-    selectedApi: state.configForm.selectedApi,
-    serverUrl: state.configForm.serverUrl,
-    compositionModel: state.compositionModel
-  };
-};
-
-const mapDispatchToProps = (dispatch: Dispatch<XCSpyState>) => {
-  return {
-    setCompositionModel: (xcApiName: string, serverUrl: string) => {
-      dispatch(setCompositionModel(xcApiName, serverUrl));
-    }
-  };
-};
-
-const App = connect(mapStateToProps, mapDispatchToProps)(XCSpyApp);
-
 ReactDOM.render(
   <Provider store={store} >
-    <App />
+    <Router>
+      <div>
+        <Route exact path={routes.paths.home} component={XCSpyMainPage} />
+        <Route path={routes.paths.app} component={XCSpyApp} />
+      </div>
+    </Router>
   </Provider>,
   document.getElementById("app")
 );

@@ -19,6 +19,7 @@ export const compositionModelReducer: Reducer<CompositionModelState> = (state: C
                 initialized: true,
                 value: action.compositionModel
             };
+
     }
     return state;
 };

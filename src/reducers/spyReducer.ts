@@ -5,6 +5,7 @@ import { componentsReducer, ComponentsState } from "reducers/components";
 import { stateMachinePropertiesReducer, StateMachinePropertiesState } from "reducers/stateMachineProperties";
 import { sideBarReducer, SideBarState } from "reducers/sideBar";
 import { transitionPropertiesReducer, TransitionPropertiesState } from "reducers/transitionProperties";
+import { sessionReducer, SessionState } from "reducers/session";
 
 export interface XCSpyState {
     configForm: ConfigFormState;
@@ -13,6 +14,7 @@ export interface XCSpyState {
     stateMachineProperties: StateMachinePropertiesState;
     sideBar: SideBarState;
     transitionProperties: TransitionPropertiesState;
+    session: SessionState;
 };
 
 export const SpyReducer = combineReducers({
@@ -21,5 +23,6 @@ export const SpyReducer = combineReducers({
     components: componentsReducer,
     stateMachineProperties: stateMachinePropertiesReducer,
     sideBar: sideBarReducer,
-    transitionProperties: transitionPropertiesReducer
+    transitionProperties: transitionPropertiesReducer,
+    session: sessionReducer
 });
