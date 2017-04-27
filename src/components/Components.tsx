@@ -14,33 +14,37 @@ import { Dispatch } from "redux";
 import { XCSpyState } from "reducers/SpyReducer";
 import { ComponentProperties } from "reducers/components";
 import * as Box from "grommet/components/Box";
+import { withRouter } from "react-router-dom";
+import { routes } from "utils/routes";
 
 interface ComponentsGlobalProps extends ComponentsProps, ComponentsCallbackProps {
-    compositionModel: any;
 };
 
 interface ComponentsProps {
     currentComponent: string;
     diagram: go.Diagram;
+    compositionModel: any;
 };
 
 interface ComponentsCallbackProps {
     initialization: (componentProperties: { [componentName: string]: ComponentProperties }, currentComponent: string, projectName: string) => void;
-    showStateMachineProperties: (stateMachine: string) => void;
+    showStateMachineProperties: (component: string, stateMachine: string) => void;
     updateGraphic: (component: string, stateMachine: string, data: any) => void;
-    showTransitionProperties: (stateMachine: string, messageType: string, jsonMessageString: string) => void;
+    showTransitionProperties: (component: string, stateMachine: string, messageType: string, jsonMessageString: string) => void;
     clearFinalStates: (component: string, stateMachines: string[]) => void;
     subscribeAllStateMachines: (component: string, stateMachines: string[]) => void;
     snapshotEntryPoint: (component: string, entryPoint: string) => void;
 };
 
-const mapStateToProps = (state: XCSpyState): ComponentsProps => {
-    const currentComponent = state.components.currentComponent;
+const mapStateToProps = (state: XCSpyState, ownProps): ComponentsProps => {
+    const urlSearchParams = new URLSearchParams(ownProps.location.search);
+    const currentComponent = urlSearchParams.get(routes.params.currentComponent);
     const componentProperties = state.components.componentProperties;
     const diagram = (!state.components.initialized) ? null : componentProperties[currentComponent].diagram;
     return {
         currentComponent,
-        diagram
+        diagram,
+        compositionModel: state.compositionModel.value
     };
 };
 
@@ -49,14 +53,14 @@ const mapDispatchToProps = (dispatch: Dispatch<XCSpyState>): ComponentsCallbackP
         initialization: (componentProperties: { [componentName: string]: ComponentProperties }, currentComponent: string, projectName: string): void => {
             dispatch(initialization(componentProperties, currentComponent, projectName));
         },
-        showStateMachineProperties: (stateMachine: string): void => {
-            dispatch(showStateMachineProperties(stateMachine));
+        showStateMachineProperties: (component: string, stateMachine: string): void => {
+            dispatch(showStateMachineProperties(component, stateMachine));
         },
         updateGraphic: (component: string, stateMachine: string, data: any): void => {
             dispatch(updateGraphic(component, stateMachine, data));
         },
-        showTransitionProperties: (stateMachine: string, messageType: string, jsonMessageString: string): void => {
-            dispatch(showTransitionProperties(stateMachine, messageType, jsonMessageString));
+        showTransitionProperties: (component: string, stateMachine: string, messageType: string, jsonMessageString: string): void => {
+            dispatch(showTransitionProperties(component, stateMachine, messageType, jsonMessageString));
         },
         clearFinalStates: (component: string, stateMachines: string[]): void => {
             for (let i = 0; i < stateMachines.length; i++) {
@@ -84,9 +88,9 @@ class Components extends React.Component<ComponentsGlobalProps, XCSpyState> {
         diagram.addDiagramListener("ObjectDoubleClicked", ((diagramEvent: go.DiagramEvent) => {
             const data = diagramEvent.subject.part.data;
             if (data.isGroup) { // it is a stateMachine
-                props.showStateMachineProperties(data.key);
+                props.showStateMachineProperties(this.props.currentComponent, data.key);
             } else if (data.stateMachineTarget) { // it is a transition
-                props.showTransitionProperties(data.stateMachineTarget, data.messageType, "{}");
+                props.showTransitionProperties(this.props.currentComponent, data.stateMachineTarget, data.messageType, "{}");
             }
         }).bind(this));
     }
@@ -150,4 +154,4 @@ class Components extends React.Component<ComponentsGlobalProps, XCSpyState> {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Components);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Components));

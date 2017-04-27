@@ -8,17 +8,19 @@ class SessionXCSpy {
     constructor() {
     }
 
-    init(xcApiFileName: string, serverUrl: string) {
-        this.promiseCreateSession = new Promise((resolve, reject) => {
+    init(xcApiFileName: string, serverUrl: string): any {
+        const promiseCreateSession = new Promise((resolve, reject) => {
             xcomponentapi.createSession(xcApiFileName, serverUrl, (error, session: any) => {
+                if (error) {
+                    reject(error);
+                    return;
+                }
                 resolve(session);
                 this.privateTopics = ["private topic"];
                 this.defaultPrivateTopic = "private topic";
-                // to change with new version of api
-                // this.privateTopics = session.privateTopics;
-                // this.defaultPrivateTopic = session.privateTopic;
             });
         });
+        return promiseCreateSession;
     }
 
     get DefaultPrivateTopic(): string {
@@ -29,7 +31,11 @@ class SessionXCSpy {
         return this.privateTopics;
     }
 
-    getPromiseCreateSession(): Promise<any> {
+    set PromiseCreateSession(promiseCreateSession) {
+        this.promiseCreateSession = promiseCreateSession;
+    }
+
+    get PromiseCreateSession(): Promise<any> {
         return this.promiseCreateSession;
     }
 
