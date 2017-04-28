@@ -18,6 +18,7 @@ import { snapshot } from "core";
 import { Instance } from "reducers/components";
 import { withRouter } from "react-router-dom";
 import { routes } from "utils/routes";
+import { xcMessages } from "reactivexcomponent.js/lib/types";
 
 interface StateMachinePropertiesGlobalProps extends StateMachinePropertiesProps, StateMachinePropertiesCallbackProps {
 };
@@ -30,7 +31,7 @@ interface StateMachinePropertiesProps {
     ids: string[];
     instances: { [id: number]: Instance };
     publicMember: string;
-    stateMachineRef: any;
+    stateMachineRef: xcMessages.StateMachineRef;
 };
 
 interface StateMachinePropertiesCallbackProps {

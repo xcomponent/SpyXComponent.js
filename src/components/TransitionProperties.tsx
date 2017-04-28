@@ -8,7 +8,7 @@ import * as Form from "grommet/components/Form";
 import * as FormField from "grommet/components/FormField";
 import * as Button from "grommet/components/Button";
 import * as Footer from "grommet/components/Footer";
-import sessionXCSpy from "utils/sessionXCSpy";
+import { SessionXCSpy } from "utils/sessionXCSpy";
 import { updateGraphic, setStateMachineId, hideTransitionProperties, setJsonMessageString, setCurrentId, setPrivateTopic, send, sendContext } from "actions";
 import * as Select from "grommet/components/Select";
 import * as Box from "grommet/components/Box";
@@ -19,12 +19,16 @@ import { XCSpyState } from "reducers/SpyReducer";
 import { Dispatch } from "redux";
 import { Instance } from "reducers/components";
 import { withRouter } from "react-router-dom";
-import { routes} from "utils/routes";
+import { routes } from "utils/routes";
+import { xcMessages } from "reactivexcomponent.js/lib/types";
+import * as HomeIcon from "grommet/components/icons/base/home";
+import * as CloseIcon from "grommet/components/icons/base/Close";
 
 interface TransitionPropertiesGlobalProps extends TransitionPropertiesProps, TransitionPropertiesCallbackProps {
 };
 
 interface TransitionPropertiesProps {
+    privateTopics: string[];
     privateTopic: string;
     id: string;
     jsonMessageString: string;
@@ -32,7 +36,7 @@ interface TransitionPropertiesProps {
     active: boolean;
     stateMachine: string;
     currentComponent: string;
-    stateMachineRef: any;
+    stateMachineRef: xcMessages.StateMachineRef;
     instances: { [id: number]: Instance };
 };
 
@@ -41,8 +45,8 @@ interface TransitionPropertiesCallbackProps {
     setCurrentId: (id: string) => void;
     setJsonMessageString: (jsonMessageString: string) => void;
     hideTransitionProperties: () => void;
-    send: (component: string, stateMachine: string, messageType: string, jsonMessageString: string) => void;
-    sendContext: (stateMachineRef: any, messageType: string, jsonMessageString: string) => void;
+    send: (component: string, stateMachine: string, messageType: string, jsonMessageString: string, privateTopic: string) => void;
+    sendContext: (stateMachineRef: xcMessages.StateMachineRef, messageType: string, jsonMessageString: string, privateTopic: string) => void;
 };
 
 
@@ -54,13 +58,15 @@ const mapStateToProps = (state: XCSpyState, ownProps): TransitionPropertiesProps
     const currentComponent = urlSearchParams.get(routes.params.currentComponent);
     const stateMachine = state.transitionProperties.stateMachine;
     const instances = (!active) ? null : componentProperties[currentComponent].stateMachineProperties[stateMachine];
-    const privateTopic = state.transitionProperties.privateTopic;
+    const privateTopic = state.transitionProperties.defaultPrivateTopic;
+    const privateTopics = state.transitionProperties.privateTopics;
     const jsonMessageString = state.transitionProperties.jsonMessageString;
     const messageType = state.transitionProperties.messageType;
     const stateMachineRef = (!id || !active || componentProperties[currentComponent].stateMachineProperties[stateMachine][id].isFinal) ? null : componentProperties[currentComponent].stateMachineProperties[stateMachine][id].stateMachineRef;
     return {
         instances,
         privateTopic,
+        privateTopics,
         id,
         jsonMessageString,
         messageType,
@@ -85,11 +91,11 @@ const mapDispatchToProps = (dispatch: Dispatch<XCSpyState>): TransitionPropertie
         hideTransitionProperties: (): void => {
             dispatch(hideTransitionProperties());
         },
-        send: (component: string, stateMachine: string, messageType: string, jsonMessageString: string): void => {
-            dispatch(send(component, stateMachine, messageType, jsonMessageString));
+        send: (component: string, stateMachine: string, messageType: string, jsonMessageString: string, privateTopic: string): void => {
+            dispatch(send(component, stateMachine, messageType, jsonMessageString, privateTopic));
         },
-        sendContext: (stateMachineRef: any, messageType: string, jsonMessageString: string): void => {
-            dispatch(sendContext(stateMachineRef, messageType, jsonMessageString));
+        sendContext: (stateMachineRef: xcMessages.StateMachineRef, messageType: string, jsonMessageString: string, privateTopic: string): void => {
+            dispatch(sendContext(stateMachineRef, messageType, jsonMessageString, privateTopic));
         }
     };
 };
@@ -106,6 +112,7 @@ const TransitionProperties = ({
     setCurrentId,
     stateMachineRef,
     privateTopic,
+    privateTopics,
     setPrivateTopic,
     send,
     sendContext,
@@ -113,11 +120,19 @@ const TransitionProperties = ({
 }: TransitionPropertiesGlobalProps) => {
     if (!active)
         return null;
-    return <Layer onClose={hideTransitionProperties} closer={true} align="right">
+    return <Layer onClose={hideTransitionProperties} align="right">
         <Form compact={false}>
-            <Header>
-                <Title>Send event form </Title>
-            </Header>
+            <Box direction="row" align="center" justify="center">
+                <Box align="start" justify="center" size="large" basis="1/2">
+                    <Title>
+                        Send Event
+                    </Title>
+                </Box>
+                <Box align="end" justify="center" size="large" basis="1/2">
+                    <Button title={"Close"} icon={<CloseIcon size="medium" />}
+                        onClick={hideTransitionProperties} />
+                </Box>
+            </Box>
             <FormField>
                 <fieldset>
                     <label htmlFor="componentName">Component: {currentComponent}</label>
@@ -154,9 +169,8 @@ const TransitionProperties = ({
                             <Box size={"medium"}>
                                 <TextInput
                                     value={privateTopic}
-                                    suggestions={sessionXCSpy.PrivateTopics}
+                                    suggestions={privateTopics}
                                     onSelect={(e) => {
-                                        e.target.value = e.suggestion;
                                         setPrivateTopic(e.suggestion);
                                     }}
                                     onDOMChange={(e) => {
@@ -181,15 +195,14 @@ const TransitionProperties = ({
 
             <Footer>
                 <Button primary={true} type="button" label="Send" onClick={() => {
-                    send(currentComponent, stateMachine, messageType, jsonMessageString);
+                    send(currentComponent, stateMachine, messageType, jsonMessageString, privateTopic);
                 }} />
                 <Button primary={true} type="button" label="Send context" onClick={() => {
-                    sendContext(stateMachineRef, messageType, jsonMessageString);
+                    sendContext(stateMachineRef, messageType, jsonMessageString, privateTopic);
                 }} />
             </Footer>
         </Form >
     </Layer>;
-    ;
 };
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(TransitionProperties));

@@ -10,6 +10,8 @@ import { BrowserRouter as Router, Route, Link, withRouter, Redirect } from "reac
 import { routes } from "utils/routes";
 import { XCSpyState } from "reducers/SpyReducer";
 import { initSession } from "actions";
+import { xcMessages } from "reactivexcomponent.js/lib/types";
+import { CompositionModelState } from "reducers/compositionModel";
 
 interface XCSpyGlobalProps extends XCSpyProps, XCSpyCallbackProps {
 };
@@ -18,7 +20,7 @@ interface XCSpyProps {
   submitted: boolean;
   selectedApi: string;
   serverUrl: string;
-  compositionModel: any;
+  compositionModel: CompositionModelState;
 };
 
 interface XCSpyCallbackProps {
