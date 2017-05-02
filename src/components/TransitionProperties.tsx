@@ -23,11 +23,13 @@ import { routes } from "utils/routes";
 import { xcMessages } from "reactivexcomponent.js/lib/types";
 import * as HomeIcon from "grommet/components/icons/base/home";
 import * as CloseIcon from "grommet/components/icons/base/Close";
+import { injectIntl, InjectedIntl } from "react-intl";
 
 interface TransitionPropertiesGlobalProps extends TransitionPropertiesProps, TransitionPropertiesCallbackProps {
 };
 
 interface TransitionPropertiesProps {
+    intl?: InjectedIntl;
     privateTopics: string[];
     privateTopic: string;
     id: string;
@@ -101,6 +103,7 @@ const mapDispatchToProps = (dispatch: Dispatch<XCSpyState>): TransitionPropertie
 };
 
 const TransitionProperties = ({
+    intl,
     messageType,
     active,
     hideTransitionProperties,
@@ -125,7 +128,7 @@ const TransitionProperties = ({
             <Box direction="row" align="center" justify="center">
                 <Box align="start" justify="center" size="large" basis="1/2">
                     <Title>
-                        Send Event
+                        {intl.formatMessage({ id: "app.send.event" })}
                     </Title>
                 </Box>
                 <Box align="end" justify="center" size="large" basis="1/2">
@@ -135,25 +138,25 @@ const TransitionProperties = ({
             </Box>
             <FormField>
                 <fieldset>
-                    <label htmlFor="componentName">Component: {currentComponent}</label>
+                    <label htmlFor="componentName">{intl.formatMessage({ id: "app.component" })} : {currentComponent}</label>
                 </fieldset>
             </FormField>
 
             <FormField>
                 <fieldset>
-                    <label htmlFor="stateMachineTarget">State machine: {stateMachine}</label>
+                    <label htmlFor="stateMachineTarget">{intl.formatMessage({ id: "app.state.machine" })} : {stateMachine}</label>
                 </fieldset>
             </FormField>
 
             <FormField>
                 <fieldset>
-                    <label htmlFor="messageType">Message type: {messageType}</label>
+                    <label htmlFor="messageType">{intl.formatMessage({ id: "app.message.type" })} : {messageType}</label>
                 </fieldset>
             </FormField>
 
             <FormField>
                 <fieldset>
-                    <label htmlFor="instances">Instance identifier:
+                    <label htmlFor="instances">{intl.formatMessage({ id: "app.instance.identifier" })}
                         <Instances onChange={setCurrentId} stateMachine={stateMachine} instances={instances} />
                     </label>
                 </fieldset>
@@ -164,7 +167,7 @@ const TransitionProperties = ({
                     <label htmlFor="instances">
                         <Box size={"medium"} direction={"row"}>
                             <Box pad={{ horizontal: "none", vertical: "small", between: "small" }}>
-                                Topic:
+                                {intl.formatMessage({ id: "app.topic" })}
                             </Box>
                             <Box size={"medium"}>
                                 <TextInput
@@ -185,7 +188,7 @@ const TransitionProperties = ({
 
             <FormField >
                 <fieldset>
-                    <label htmlFor="jsonEvent" >Json Event:
+                    <label htmlFor="jsonEvent" >{intl.formatMessage({ id: "app.json.event" })}:
                         <textarea defaultValue={jsonMessageString} onChange={(e) => {
                             setJsonMessageString(e.currentTarget.value);
                         }}></textarea>
@@ -194,10 +197,10 @@ const TransitionProperties = ({
             </FormField>
 
             <Footer>
-                <Button primary={true} type="button" label="Send" onClick={() => {
+                <Button primary={true} type="button" label={intl.formatMessage({ id: "app.send" })} onClick={() => {
                     send(currentComponent, stateMachine, messageType, jsonMessageString, privateTopic);
                 }} />
-                <Button primary={true} type="button" label="Send context" onClick={() => {
+                <Button primary={true} type="button" label={intl.formatMessage({ id: "app.send.context" })} onClick={() => {
                     sendContext(stateMachineRef, messageType, jsonMessageString, privateTopic);
                 }} />
             </Footer>
@@ -205,4 +208,4 @@ const TransitionProperties = ({
     </Layer>;
 };
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(TransitionProperties));
+export default withRouter(injectIntl(connect(mapStateToProps, mapDispatchToProps)(TransitionProperties)));

@@ -24,18 +24,22 @@ import { BrowserRouter as Router, Route, Link, withRouter, Redirect } from "reac
 import XCSpyApp from "components/XCSpyApp";
 import XCSpyMainPage from "components/XCSpyMainPage";
 import { routes } from "utils/routes";
+import { IntlProvider } from "react-intl";
+import { getLocalizedResources } from "locales/localeConfiguration";
 
 const middleware = applyMiddleware(thunk, logger());
 const store = createStore(SpyReducer, middleware);
 
 ReactDOM.render(
   <Provider store={store} >
-    <Router>
-      <div>
-        <Route exact path={routes.paths.home} component={XCSpyMainPage} />
-        <Route path={routes.paths.app} component={XCSpyApp} />
-      </div>
-    </Router>
+    <IntlProvider locale="en" messages={getLocalizedResources()}>
+      <Router>
+        <div>
+          <Route exact path={routes.paths.home} component={XCSpyMainPage} />
+          <Route path={routes.paths.app} component={XCSpyApp} />
+        </div>
+      </Router>
+    </IntlProvider>
   </Provider>,
   document.getElementById("app")
 );

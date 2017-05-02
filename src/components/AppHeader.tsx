@@ -15,11 +15,14 @@ import { Dispatch } from "redux";
 import { snapshotAll } from "core";
 import { BrowserRouter as Router, Route, Link, withRouter, Redirect } from "react-router-dom";
 import { routes } from "utils/routes";
+import { injectIntl, InjectedIntl } from "react-intl";
+import sessionXCSpy from "utils/sessionXCSpy";
 
 interface AppHeaderGlobalProps extends AppHeaderProps, AppHeaderCallbackProps {
 };
 
 interface AppHeaderProps {
+    intl?: InjectedIntl;
     currentComponent: string;
     getStateMachines: (component: string) => string[];
     components: string[];
@@ -81,6 +84,7 @@ const mapDispatchToProps = (dispatch: Dispatch<XCSpyState>, ownProps): AppHeader
 };
 
 const AppHeader = ({
+    intl,
     returnHome,
     showSideBar,
     getStateMachines,
@@ -98,25 +102,25 @@ const AppHeader = ({
             responsive={true}
             primary={true}
             inline={false}
-            title="Menu"
+            title={intl.formatMessage({ id: "app.menu" })}
             icon={<MenuIcon size="medium" />}>
-            <Anchor href="#" onClick={() => {
+            <Anchor onClick={() => {
                 snapshotAll(currentComponent, getStateMachines(currentComponent));
             }}>
-                Snapshot All
+                {intl.formatMessage({ id: "app.snapshot.all" })}
             </Anchor>
-            <Anchor href="#" onClick={() => {
+            <Anchor onClick={() => {
                 clearFinalStates(currentComponent, getStateMachines(currentComponent));
             }}>
-                Clear All
+                {intl.formatMessage({ id: "app.clear.all" })}
             </Anchor>
-            <Anchor href="#" onClick={() => {
+            <Anchor onClick={() => {
                 (!sideBar) ? showSideBar() : hideSideBar();
             }}>
-                <CheckBox label="SideBar" toggle={true} checked={sideBar} onChange={() => { }} />
+                <CheckBox label={intl.formatMessage({ id: "app.side.bar" })} toggle={true} checked={sideBar} onChange={() => { }} />
             </Anchor>
 
-            <Anchor href="#" onClick={() => {
+            <Anchor onClick={() => {
                 if (!autoClear) {
                     for (let i = 0; i < components.length; i++) {
                         clearFinalStates(components[i], getStateMachines(components[i]));
@@ -124,9 +128,8 @@ const AppHeader = ({
                 }
                 setAutoClear(!autoClear);
             }} >
-                <CheckBox label="autoClear" toggle={true} checked={autoClear} onChange={() => { }} />
+                <CheckBox label={intl.formatMessage({ id: "app.auto.clear" })} toggle={true} checked={autoClear} onChange={() => { }} />
             </Anchor>
-
         </Menu>
     );
 
@@ -137,11 +140,11 @@ const AppHeader = ({
             </Box>
             <Box align="center" justify="center" size="large" basis="1/3">
                 <Title>
-                    XCSpy Application
+                    {intl.formatMessage({ id: "app.title" })}
                 </Title>
             </Box>
             <Box align="end" justify="center" size="large" basis="1/3">
-                <Button title={"Home"} icon={<HomeIcon size="medium" />}
+                <Button title={intl.formatMessage({ id: "app.home" })} icon={<HomeIcon size="medium" />}
                     onClick={returnHome}
                 />
             </Box>
@@ -150,4 +153,4 @@ const AppHeader = ({
     );
 };
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(AppHeader));
+export default withRouter(injectIntl(connect(mapStateToProps, mapDispatchToProps)(AppHeader)));
