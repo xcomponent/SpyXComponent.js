@@ -29,10 +29,11 @@ import { getLocalizedResources } from "locales/localeConfiguration";
 
 const middleware = applyMiddleware(thunk, logger());
 const store = createStore(SpyReducer, middleware);
+const locale = "fr";
 
 ReactDOM.render(
   <Provider store={store} >
-    <IntlProvider locale="en" messages={getLocalizedResources()}>
+    <IntlProvider locale={locale} messages={getLocalizedResources(locale)}>
       <Router>
         <div>
           <Route exact path={routes.paths.home} component={XCSpyMainPage} />

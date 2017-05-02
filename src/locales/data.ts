@@ -53,7 +53,14 @@ const data = {
     "app.state.machine": "Machine à état",
     "app.message.type": "Type du Message",
     "app.home": "Acceuil",
-    "app.menu": "Menu"
+    "app.menu": "Menu",
+    "Title": "Titre",
+    "close": "fermer",
+    "Close": "Fermer",
+    "Open": "Ouvrir",
+    "Menu": "Menu",
+    "menu": "menu",
+    "home": "Acceuil"
   }
 };
 

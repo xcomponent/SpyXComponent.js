@@ -132,7 +132,6 @@ const AppHeader = ({
             </Anchor>
         </Menu>
     );
-
     return (
         <Box direction="row">
             <Box justify="center" size="large" basis="1/3">
@@ -149,7 +148,6 @@ const AppHeader = ({
                 />
             </Box>
         </Box>
-
     );
 };
 
