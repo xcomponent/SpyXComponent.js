@@ -29,7 +29,7 @@ import { getLocalizedResources } from "locales/localeConfiguration";
 
 const middleware = applyMiddleware(thunk, logger());
 const store = createStore(SpyReducer, middleware);
-const locale = "fr";
+const locale = "en";
 
 ReactDOM.render(
   <Provider store={store} >
