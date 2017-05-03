@@ -18,11 +18,15 @@ import { snapshot } from "core";
 import { Instance } from "reducers/components";
 import { withRouter } from "react-router-dom";
 import { routes } from "utils/routes";
+import { xcMessages } from "reactivexcomponent.js/lib/types";
+import { injectIntl, InjectedIntl } from "react-intl";
+import * as CloseIcon from "grommet/components/icons/base/Close";
 
 interface StateMachinePropertiesGlobalProps extends StateMachinePropertiesProps, StateMachinePropertiesCallbackProps {
 };
 
 interface StateMachinePropertiesProps {
+    intl?: InjectedIntl;
     active: boolean;
     stateMachine: string;
     id: string;
@@ -30,7 +34,7 @@ interface StateMachinePropertiesProps {
     ids: string[];
     instances: { [id: number]: Instance };
     publicMember: string;
-    stateMachineRef: any;
+    stateMachineRef: xcMessages.StateMachineRef;
 };
 
 interface StateMachinePropertiesCallbackProps {
@@ -80,7 +84,6 @@ const mapDispatchToProps = (dispatch: Dispatch<XCSpyState>): StateMachinePropert
     };
 };
 
-
 class StateMachineProperties extends React.Component<StateMachinePropertiesGlobalProps, XCSpyState> {
     constructor(props: StateMachinePropertiesGlobalProps) {
         super(props);
@@ -97,19 +100,24 @@ class StateMachineProperties extends React.Component<StateMachinePropertiesGloba
             return null;
         return (
             <Layer
-                closer={true}
                 align="right"
                 onClose={this.props.hideStateMachineProperties}>
                 <Form compact={false}>
-                    <Header>
-                        <Box align="center">
-                            <Title>{this.props.stateMachine}</Title>
+                    <Box direction="row" align="center" justify="center">
+                        <Box align="start" justify="center" size="large" basis="1/2">
+                            <Title>
+                                {this.props.stateMachine}
+                            </Title>
                         </Box>
-                    </Header>
+                        <Box align="end" justify="center" size="large" basis="1/2">
+                            <Button title={"Close"} icon={<CloseIcon size="medium" />}
+                                onClick={this.props.hideStateMachineProperties} />
+                        </Box>
+                    </Box>
 
                     <FormField>
                         <fieldset>
-                            <label htmlFor="instances">Instance identifier:
+                            <label htmlFor="instances">{this.props.intl.formatMessage({ id: "app.instance.identifier" })} :
                             <Instances onChange={this.props.setStateMachineId} stateMachine={this.props.stateMachine} instances={this.props.instances} />
                             </label>
                         </fieldset>
@@ -117,7 +125,7 @@ class StateMachineProperties extends React.Component<StateMachinePropertiesGloba
 
                     <FormField>
                         <fieldset>
-                            <label htmlFor="publicMember">Public member : <br />
+                            <label htmlFor="publicMember">{this.props.intl.formatMessage({ id: "app.public.member" })} : <br />
                                 {this.props.publicMember}
                             </label>
                         </fieldset>
@@ -125,7 +133,7 @@ class StateMachineProperties extends React.Component<StateMachinePropertiesGloba
 
                     <FormField>
                         <fieldset>
-                            <label htmlFor="currentState">Current state : {" "}
+                            <label htmlFor="currentState">{this.props.intl.formatMessage({ id: "app.current.state" })} : {" "}
                                 {(this.props.stateMachineRef) ? this.props.stateMachineRef.StateName : null}
                             </label>
                         </fieldset>
@@ -133,7 +141,7 @@ class StateMachineProperties extends React.Component<StateMachinePropertiesGloba
 
                     <FormField>
                         <fieldset>
-                            <label htmlFor="agentId">Agent Id : {" "}
+                            <label htmlFor="agentId">{this.props.intl.formatMessage({ id: "app.agent.id" })} : {" "}
                                 {(this.props.stateMachineRef) ? this.props.stateMachineRef.AgentId : null}
                             </label>
                         </fieldset>
@@ -141,11 +149,11 @@ class StateMachineProperties extends React.Component<StateMachinePropertiesGloba
 
 
                     <Footer></Footer>
-                    <Button primary={true} type="button" label="Snapshot" onClick={() => {
+                    <Button primary={true} type="button" label={this.props.intl.formatMessage({ id: "app.snapshot" })} onClick={() => {
                         this.props.snapshot(this.props.currentComponent, this.props.stateMachine);
                         this.props.hideStateMachineProperties();
                     }} />
-                    <Button primary={true} type="button" label="Clear" onClick={() => {
+                    <Button primary={true} type="button" label={this.props.intl.formatMessage({ id: "app.clear" })} onClick={() => {
                         this.props.clearFinalStates(this.props.currentComponent, this.props.stateMachine);
                         this.props.hideStateMachineProperties();
                     }} />
@@ -155,4 +163,4 @@ class StateMachineProperties extends React.Component<StateMachinePropertiesGloba
     }
 }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(StateMachineProperties));
+export default withRouter(injectIntl(connect(mapStateToProps, mapDispatchToProps)(StateMachineProperties)));

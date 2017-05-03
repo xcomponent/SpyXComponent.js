@@ -1,23 +1,23 @@
-import sessionXCSpy from "utils/sessionXCSpy";
+import sessionXCSpy, { SessionXCSpy } from "utils/sessionXCSpy";
 import { Dispatch } from "redux";
 import { updateGraphic, INIT_COMPOSITION_MODEL, initCompositionModelAction } from "actions";
 import { XCSpyState } from "reducers/SpyReducer";
-import xcomponentapi from "reactivexcomponent.js";
+import xcomponentapi, { Session, xcMessages, Connection } from "reactivexcomponent.js";
 
 export const getCompositionModel = (dispatch: Dispatch<XCSpyState>, xcApiName: string, serverUrl: string): void => {
-    xcomponentapi.getModel(xcApiName, serverUrl, (connection, compositionModel) => {
+    xcomponentapi.getModel(xcApiName, serverUrl, (connection: Connection, compositionModel: xcMessages.CompositionModel) => {
         dispatch(initCompositionModelAction(compositionModel));
     });
 };
 
 export const subscribeAllStateMachines = (dispatch: Dispatch<XCSpyState>, component: string, stateMachines: string[]): void => {
     sessionXCSpy.PromiseCreateSession
-        .then((session) => {
+        .then((session: Session) => {
             const subscriber = session.createSubscriber();
             for (let j = 0; j < stateMachines.length; j++) {
                 if (!subscriber.canSubscribe(component, stateMachines[j]))
                     continue;
-                ((stateMachine) => {
+                ((stateMachine: string) => {
                     subscriber.subscribe(component, stateMachine, (data) => {
                         dispatch(updateGraphic(component, stateMachine, data));
                     });
@@ -28,8 +28,8 @@ export const subscribeAllStateMachines = (dispatch: Dispatch<XCSpyState>, compon
 
 export const snapshotEntryPoint = (dispatch: Dispatch<XCSpyState>, component: string, entryPoint: string): void => {
     sessionXCSpy.PromiseCreateSession
-        .then((session) => {
-            session.createSubscriber().getSnapshot(component, entryPoint, (items) => {
+        .then((session: Session) => {
+            session.createSubscriber().getSnapshot(component, entryPoint, (items: xcMessages.Packet[]) => {
                 for (let i = 0; i < items.length; i++) {
                     dispatch(updateGraphic(component, entryPoint, items[i]));
                 }
@@ -39,8 +39,8 @@ export const snapshotEntryPoint = (dispatch: Dispatch<XCSpyState>, component: st
 
 export const snapshot = (dispatch: Dispatch<XCSpyState>, currentComponent: string, stateMachine: string): void => {
     sessionXCSpy.PromiseCreateSession
-        .then((session) => {
-            session.createSubscriber().getSnapshot(currentComponent, stateMachine, (items) => {
+        .then((session: Session) => {
+            session.createSubscriber().getSnapshot(currentComponent, stateMachine, (items: xcMessages.Packet[]) => {
                 for (let i = 0; i < items.length; i++) {
                     dispatch(updateGraphic(currentComponent, stateMachine, items[i]));
                 }
@@ -51,10 +51,10 @@ export const snapshot = (dispatch: Dispatch<XCSpyState>, currentComponent: strin
 
 export const snapshotAll = (dispatch: Dispatch<XCSpyState>, component: string, stateMachines: string[]): void => {
     sessionXCSpy.PromiseCreateSession
-        .then((session) => {
+        .then((session: Session) => {
             const subscriber = session.createSubscriber();
             for (let i = 0; i < stateMachines.length; i++) {
-                subscriber.getSnapshot(component, stateMachines[i], (items) => {
+                subscriber.getSnapshot(component, stateMachines[i], (items: xcMessages.Packet[]) => {
                     console.log(items);
                     for (let j = 0; j < items.length; j++) {
                         dispatch(updateGraphic(component, stateMachines[i], items[j]));
@@ -64,14 +64,20 @@ export const snapshotAll = (dispatch: Dispatch<XCSpyState>, component: string, s
         });
 };
 
-export const send = (component: string, stateMachine: string, messageType: string, jsonMessageString: string) => {
+export const send = (component: string, stateMachine: string, messageType: string, jsonMessageString: string, privateTopic: string = undefined) => {
     sessionXCSpy.PromiseCreateSession
-        .then((session) => {
+        .then((session: Session) => {
             const publisher = session.createPublisher();
             let jsonMessage;
             try {
                 jsonMessage = JSON.parse(jsonMessageString);
-                publisher.send(component, stateMachine, messageType, jsonMessage);
+                if (!privateTopic || privateTopic.length === 0) {
+                    publisher.send(component, stateMachine, messageType, jsonMessage, false, null);
+                } else {
+                    if (session.getPrivateTopics().indexOf(privateTopic) === -1)
+                        session.addPrivateTopic(privateTopic);
+                    publisher.send(component, stateMachine, messageType, jsonMessage, true, privateTopic);
+                }
             } catch (e) {
                 alert("Json format incorrect");
                 console.error(e);
@@ -79,17 +85,26 @@ export const send = (component: string, stateMachine: string, messageType: strin
         });
 };
 
-export const sendContext = (stateMachineRef: any, messageType: string, jsonMessageString: string): void => {
-    if (!stateMachineRef) {
-        alert("Please select an instance!");
-        return;
-    }
-    let jsonMessage;
-    try {
-        jsonMessage = JSON.parse(jsonMessageString);
-        stateMachineRef.send(messageType, jsonMessage);
-    } catch (e) {
-        alert("Json format incorrect");
-        console.error(e);
-    }
+export const sendContext = (stateMachineRef: xcMessages.StateMachineRef, messageType: string, jsonMessageString: string, privateTopic: string = undefined): void => {
+    sessionXCSpy.PromiseCreateSession
+        .then((session: Session) => {
+            if (!stateMachineRef) {
+                alert("Please select an instance!");
+                return;
+            }
+            let jsonMessage;
+            try {
+                jsonMessage = JSON.parse(jsonMessageString);
+                if (!privateTopic || privateTopic.length === 0) {
+                    stateMachineRef.send(messageType, jsonMessage, false, null);
+                } else {
+                    if (session.getPrivateTopics().indexOf(privateTopic) === -1)
+                        session.addPrivateTopic(privateTopic);
+                    stateMachineRef.send(messageType, jsonMessage, true, privateTopic);
+                }
+            } catch (e) {
+                alert("Json format incorrect");
+                console.error(e);
+            }
+        });
 };

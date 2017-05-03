@@ -1,4 +1,4 @@
-import xcomponentapi from "reactivexcomponent.js";
+import xcomponentapi, { xcMessages } from "reactivexcomponent.js";
 import { Action } from "redux";
 import { ThunkAction } from "redux-thunk";
 import { getCompositionModel } from "core";
@@ -8,7 +8,7 @@ import { XCSpyState } from "reducers/SpyReducer";
 export const INIT_COMPOSITION_MODEL = "INIT_COMPOSITION_MODEL";
 
 export interface GlobalCompositionModelAction extends Action {
-    compositionModel: any;
+    compositionModel: xcMessages.CompositionModel;
 };
 
 export const initCompositionModelAction = (compositionModel): GlobalCompositionModelAction => {
