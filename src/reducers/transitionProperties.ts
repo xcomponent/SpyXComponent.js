@@ -9,7 +9,8 @@ export interface TransitionPropertiesState {
     messageType: string;
     jsonMessageString: string;
     id: string;
-    privateTopic: string;
+    defaultPrivateTopic: string;
+    privateTopics: string[];
 };
 
 const initialState: TransitionPropertiesState = {
@@ -18,13 +19,17 @@ const initialState: TransitionPropertiesState = {
     messageType: undefined,
     jsonMessageString: undefined,
     id: undefined,
-    privateTopic: undefined
+    defaultPrivateTopic: undefined,
+    privateTopics: []
 };
 
 export const transitionPropertiesReducer: Reducer<TransitionPropertiesState> = (state: TransitionPropertiesState = initialState, action: GlobalTransitionPropertiesAction): TransitionPropertiesState => {
     switch (action.type) {
         case HIDE_TRANSITION_PROPERTIES:
-            return initialState;
+            return {
+                ...state,
+                active: false
+            };
         case SHOW_TRANSITION_PROPERTIES:
             const showTransitionPropertiesAction = <ShowTransitionPropertiesAction>action;
             return {
@@ -34,7 +39,8 @@ export const transitionPropertiesReducer: Reducer<TransitionPropertiesState> = (
                 messageType: showTransitionPropertiesAction.messageType,
                 jsonMessageString: showTransitionPropertiesAction.jsonMessageString,
                 id: showTransitionPropertiesAction.id,
-                privateTopic: showTransitionPropertiesAction.privateTopic
+                defaultPrivateTopic: showTransitionPropertiesAction.privateTopic,
+                privateTopics: showTransitionPropertiesAction.privateTopics
             };
         case SET_JSON_MESSAGE_STRING:
             const setJsonMessageStringAction = <SetJsonMessageStringAction>action;
@@ -52,15 +58,15 @@ export const transitionPropertiesReducer: Reducer<TransitionPropertiesState> = (
             const setPrivateTopicAction = <SetPrivateTopicAction>action;
             return {
                 ...state,
-                privateTopic: setPrivateTopicAction.privateTopic
+                defaultPrivateTopic: setPrivateTopicAction.privateTopic
             };
         case SEND:
             const sendAction = <SendAction>action;
-            send(sendAction.component, sendAction.stateMachine, sendAction.messageType, sendAction.jsonMessageString);
+            send(sendAction.component, sendAction.stateMachine, sendAction.messageType, sendAction.jsonMessageString, sendAction.privateTopic);
             return state;
         case SEND_CONTEXT:
             const sendContextAction = <SendContextAction>action;
-            sendContext(sendContextAction.stateMachineRef, sendContextAction.messageType, sendContextAction.jsonMessageString);
+            sendContext(sendContextAction.stateMachineRef, sendContextAction.messageType, sendContextAction.jsonMessageString, sendContextAction.privateTopic);
             return state;
     }
     return state;

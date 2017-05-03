@@ -19,7 +19,7 @@ export interface SetStateMachineIdAction extends Action {
     id: string;
 };
 
-export const showStateMachineProperties = (component: string, stateMachine: string): any => {
+export const showStateMachineProperties = (component: string, stateMachine: string): ThunkAction<void, XCSpyState, void> => {
     return (dispatch: Dispatch<XCSpyState>, getState: () => XCSpyState) => {
         const componentProperties = getState().components.componentProperties;
         const firstId = Object.keys(componentProperties[component].stateMachineProperties[stateMachine])[0];

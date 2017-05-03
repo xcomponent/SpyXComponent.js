@@ -1,6 +1,7 @@
 import * as deepFreeze from "deep-freeze";
 import { HIDE_TRANSITION_PROPERTIES, SHOW_TRANSITION_PROPERTIES, SET_JSON_MESSAGE_STRING, SET_CURRENT_ID } from "actions/transitionProperties";
 import { transitionPropertiesReducer } from "reducers/transitionProperties";
+import { SET_PRIVATE_TOPIC } from "actions";
 
 describe("Test transitionProperties reducer", () => {
     it("When a HIDE_TRANSITION_PROPERTIES action is received, it should set the active properties to false", () => {
@@ -10,7 +11,8 @@ describe("Test transitionProperties reducer", () => {
             messageType: undefined,
             jsonMessageString: undefined,
             id: undefined,
-            privateTopic: undefined
+            defaultPrivateTopic: undefined,
+            privateTopics: []
         };
         deepFreeze(stateBefore);
         const action = {
@@ -23,7 +25,8 @@ describe("Test transitionProperties reducer", () => {
             messageType: undefined,
             jsonMessageString: undefined,
             id: undefined,
-            privateTopic: undefined
+            defaultPrivateTopic: undefined,
+            privateTopics: []
         };
         expect(
             transitionPropertiesReducer(stateBefore, action)
@@ -41,7 +44,8 @@ describe("Test transitionProperties reducer", () => {
             messageType: undefined,
             jsonMessageString: undefined,
             id: undefined,
-            privateTopic: undefined
+            defaultPrivateTopic: undefined,
+            privateTopics: []
         };
         deepFreeze(stateBefore);
         const action = {
@@ -49,7 +53,9 @@ describe("Test transitionProperties reducer", () => {
             stateMachine,
             messageType,
             jsonMessageString,
-            id
+            id,
+            defaultPrivateTopic: undefined,
+            privateTopics: []
         };
         deepFreeze(action);
         const stateAfter = {
@@ -58,7 +64,8 @@ describe("Test transitionProperties reducer", () => {
             messageType,
             jsonMessageString,
             id,
-            privateTopic: undefined            
+            defaultPrivateTopic: undefined,
+            privateTopics: []
         };
         expect(
             transitionPropertiesReducer(stateBefore, action)
@@ -78,7 +85,8 @@ describe("Test transitionProperties reducer", () => {
             messageType,
             jsonMessageString,
             id,
-            privateTopic: undefined
+            defaultPrivateTopic: undefined,
+            privateTopics: []
         };
         deepFreeze(stateBefore);
         const action = {
@@ -94,7 +102,9 @@ describe("Test transitionProperties reducer", () => {
             stateMachine,
             messageType,
             jsonMessageString: newJsonMessageString,
-            id
+            id,
+            defaultPrivateTopic: undefined,
+            privateTopics: []
         };
         expect(
             transitionPropertiesReducer(stateBefore, action)
@@ -114,7 +124,8 @@ describe("Test transitionProperties reducer", () => {
             messageType,
             jsonMessageString,
             id,
-            privateTopic: undefined
+            defaultPrivateTopic: undefined,
+            privateTopics: []
         };
         deepFreeze(stateBefore);
         const action = {
@@ -131,7 +142,39 @@ describe("Test transitionProperties reducer", () => {
             messageType,
             jsonMessageString,
             id: newId,
-            privateTopic: undefined
+            defaultPrivateTopic: undefined,
+            privateTopics: []
+        };
+        expect(
+            transitionPropertiesReducer(stateBefore, action)
+        ).toEqual(stateAfter);
+    });
+
+        it("When a SET_PRIVATE_TOPIC action is received, it should set the default private topic", () => {
+        const randomPrivateTopic = "edb1c096-d318-4abc-85e0-7865294fb4dd";
+        const stateBefore = {
+            active: undefined,
+            stateMachine: undefined,
+            messageType: undefined,
+            jsonMessageString: undefined,
+            id: undefined,
+            defaultPrivateTopic: undefined,
+            privateTopics: undefined
+        };
+        deepFreeze(stateBefore);
+        const action = {
+            type: SET_PRIVATE_TOPIC,
+            privateTopic: randomPrivateTopic
+        };
+        deepFreeze(action);
+        const stateAfter = {
+            active: undefined,
+            stateMachine: undefined,
+            messageType: undefined,
+            jsonMessageString: undefined,
+            id: undefined,
+            defaultPrivateTopic: randomPrivateTopic,
+            privateTopics: undefined
         };
         expect(
             transitionPropertiesReducer(stateBefore, action)

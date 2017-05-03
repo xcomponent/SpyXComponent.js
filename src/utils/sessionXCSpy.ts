@@ -1,34 +1,23 @@
 import xcomponentapi from "reactivexcomponent.js";
+import { Session } from "reactivexcomponent.js";
 
-class SessionXCSpy {
-    private promiseCreateSession: Promise<any> = null;
-    private privateTopics: string[] = [];
-    private defaultPrivateTopic: string = "";
+export class SessionXCSpy {
+    private promiseCreateSession: Promise<Object> = null;
 
     constructor() {
     }
 
-    init(xcApiFileName: string, serverUrl: string): any {
+    init(xcApiFileName: string, serverUrl: string): Promise<Object> {
         const promiseCreateSession = new Promise((resolve, reject) => {
-            xcomponentapi.createSession(xcApiFileName, serverUrl, (error, session: any) => {
+            xcomponentapi.createSession(xcApiFileName, serverUrl, (error, session: Session) => {
                 if (error) {
                     reject(error);
                     return;
                 }
                 resolve(session);
-                this.privateTopics = ["private topic"];
-                this.defaultPrivateTopic = "private topic";
             });
         });
         return promiseCreateSession;
-    }
-
-    get DefaultPrivateTopic(): string {
-        return this.defaultPrivateTopic;
-    }
-
-    get PrivateTopics(): string[] {
-        return this.privateTopics;
     }
 
     set PromiseCreateSession(promiseCreateSession) {

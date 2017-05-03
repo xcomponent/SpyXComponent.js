@@ -16,11 +16,13 @@ import { getApiList, selectApi, formSubmit } from "actions";
 import Footer from "components/Footer";
 import { XCSpyState } from "reducers/SpyReducer";
 import { Dispatch } from "redux";
+import { injectIntl, InjectedIntl } from "react-intl";
 
 interface ConfigFormGlobalProps extends ConfigFormProps, ConfigFormCallbackProps {
 };
 
 interface ConfigFormProps {
+    intl?: InjectedIntl;
     apis: string[];
     selectedApi: string;
     serverUrlState: string;
@@ -55,6 +57,7 @@ const mapDispatchToProps = (dispatch: Dispatch<XCSpyState>): ConfigFormCallbackP
 };
 
 let ConfigForm = ({
+    intl,
     onClickSubmit,
     onChangeSelectedApi,
     onClickGetApiList,
@@ -70,13 +73,13 @@ let ConfigForm = ({
                     <Header>
                         <Box align="center" justify="between" flex={true}>
                             <Title>
-                                Configuration form
+                                {intl.formatMessage({ id: "app.configuration.form" })}
                             </Title>
                         </Box>
                     </Header>
                     <FormField>
                         <fieldset>
-                            <label htmlFor="serverUrl">Server Url:</label>
+                            <label htmlFor="serverUrl"> {intl.formatMessage({ id: "app.serverURL" })}</label>
                             <TextInput id="serverUrl"
                                 onSelect={(e) => {
                                     e.target.value = e.suggestion;
@@ -90,7 +93,7 @@ let ConfigForm = ({
                     </FormField>
                     <FormField>
                         <fieldset>
-                            <label htmlFor="API">API Name:</label>
+                            <label htmlFor="API">{intl.formatMessage({ id: "app.api" })}</label>
                             <Select
                                 options={apis}
                                 value={selectedApi}
@@ -102,14 +105,14 @@ let ConfigForm = ({
                     <Button
                         primary={true}
                         type="button"
-                        label="getApiList"
+                        label={intl.formatMessage({ id: "app.get.apis" })}
                         onClick={() => {
                             onClickGetApiList(serverUrl);
                         }} />
                     <Button
                         primary={true}
                         type="button"
-                        label="Submit"
+                        label={intl.formatMessage({ id: "app.submit" })}
                         onClick={onClickSubmit} />
                 </Form >
             </Box>
@@ -118,4 +121,4 @@ let ConfigForm = ({
     );
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ConfigForm);
+export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(ConfigForm));

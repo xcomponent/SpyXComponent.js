@@ -1,10 +1,11 @@
 import * as go from "gojs";
 import { INIT_COMPOSITION_MODEL, GlobalCompositionModelAction } from "actions";
 import { Reducer } from "redux";
+import { xcMessages } from "reactivexcomponent.js/lib/types";
 
 export interface CompositionModelState {
     initialized: boolean;
-    value: any; // type comes from api
+    value: xcMessages.CompositionModel;
 };
 
 const initialState = {
