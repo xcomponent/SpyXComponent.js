@@ -1,3 +1,5 @@
+[![](http://slack.xcomponent.com/badge.svg)](http://slack.xcomponent.com/)
+
 # SpyXComponent.js
 
 SpyXComponent is web application made with TypeScript/ReactJS/Redux to monitor in real time microservices generated with XComponent software.
