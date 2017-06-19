@@ -3,7 +3,7 @@ import { Action } from "redux";
 import { ThunkAction } from "redux-thunk";
 import { getCompositionModel } from "core";
 import { Dispatch } from "redux";
-import { XCSpyState } from "reducers/SpyReducer";
+import { XCSpyState } from "reducers/spyReducer";
 
 export const INIT_COMPOSITION_MODEL = "INIT_COMPOSITION_MODEL";
 

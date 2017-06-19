@@ -1,6 +1,6 @@
 import { Action } from "redux";
 import { Dispatch } from "redux";
-import { XCSpyState } from "reducers/SpyReducer";
+import { XCSpyState } from "reducers/spyReducer";
 import { ThunkAction } from "redux-thunk";
 import { snapshot, snapshotAll } from "core";
 

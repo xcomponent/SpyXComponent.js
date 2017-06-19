@@ -8,7 +8,7 @@ import { Dispatch } from "redux";
 import { Parser } from "utils/parser";
 import { BrowserRouter as Router, Route, Link, withRouter, Redirect } from "react-router-dom";
 import { routes } from "utils/routes";
-import { XCSpyState } from "reducers/SpyReducer";
+import { XCSpyState } from "reducers/spyReducer";
 import { initSession } from "actions";
 import { xcMessages } from "reactivexcomponent.js/lib/types";
 import { CompositionModelState } from "reducers/compositionModel";

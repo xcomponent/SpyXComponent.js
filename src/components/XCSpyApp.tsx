@@ -8,7 +8,7 @@ import AppHeader from "components/AppHeader";
 import Footer from "components/Footer";
 import TransitionProperties from "components/TransitionProperties";
 import StateMachineProperties from "components/StateMachineProperties";
-import { XCSpyState } from "reducers/SpyReducer";
+import { XCSpyState } from "reducers/spyReducer";
 import { Dispatch } from "redux";
 import { setCompositionModel, initSession } from "actions";
 import { withRouter, Redirect } from "react-router-dom";

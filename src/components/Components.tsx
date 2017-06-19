@@ -11,7 +11,7 @@ import * as Title from "grommet/components/Title";
 import * as Button from "grommet/components/Button";
 import { backgroundColor } from "utils/graphicColors";
 import { Dispatch } from "redux";
-import { XCSpyState } from "reducers/SpyReducer";
+import { XCSpyState } from "reducers/spyReducer";
 import { ComponentProperties } from "reducers/components";
 import * as Box from "grommet/components/Box";
 import { withRouter } from "react-router-dom";

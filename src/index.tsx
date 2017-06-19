@@ -4,7 +4,7 @@ import * as ReactDOM from "react-dom";
 import { createStore, applyMiddleware } from "redux";
 import * as App from "grommet/components/App";
 import ConfigForm from "./components/ConfigForm";
-import { SpyReducer, XCSpyState } from "./reducers/SpyReducer";
+import { SpyReducer, XCSpyState } from "./reducers/spyReducer";
 import * as logger from "redux-logger";
 import thunk from "redux-thunk";
 import Components from "./components/Components";

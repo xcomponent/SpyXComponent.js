@@ -12,7 +12,7 @@ import sessionXCSpy from "utils/sessionXCSpy";
 import * as Select from "grommet/components/Select";
 import * as Box from "grommet/components/Box";
 import Instances from "components/Instances";
-import { XCSpyState } from "reducers/SpyReducer";
+import { XCSpyState } from "reducers/spyReducer";
 import { Dispatch } from "redux";
 import { snapshot } from "core";
 import { Instance } from "reducers/components";

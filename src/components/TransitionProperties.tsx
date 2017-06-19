@@ -15,13 +15,13 @@ import * as Box from "grommet/components/Box";
 import * as CheckBox from "grommet/components/CheckBox";
 import * as TextInput from "grommet/components/TextInput";
 import Instances from "components/Instances";
-import { XCSpyState } from "reducers/SpyReducer";
+import { XCSpyState } from "reducers/spyReducer";
 import { Dispatch } from "redux";
 import { Instance } from "reducers/components";
 import { withRouter } from "react-router-dom";
 import { routes } from "utils/routes";
 import { xcMessages } from "reactivexcomponent.js/lib/types";
-import * as HomeIcon from "grommet/components/icons/base/home";
+import * as HomeIcon from "grommet/components/icons/base/Home";
 import * as CloseIcon from "grommet/components/icons/base/Close";
 import { injectIntl, InjectedIntl } from "react-intl";
 

@@ -1,6 +1,6 @@
 import * as React from "react";
 import { connect } from "react-redux";
-import { XCSpyState } from "reducers/SpyReducer";
+import { XCSpyState } from "reducers/spyReducer";
 import { Instance } from "reducers/components";
 import { Dispatch } from "redux";
 

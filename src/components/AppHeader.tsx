@@ -5,7 +5,7 @@ import * as Box from "grommet/components/Box";
 import * as Title from "grommet/components/Title";
 import * as CheckBox from "grommet/components/CheckBox";
 import * as Button from "grommet/components/Button";
-import * as HomeIcon from "grommet/components/icons/base/home";
+import * as HomeIcon from "grommet/components/icons/base/Home";
 import * as MenuIcon from "grommet/components/icons/base/Menu";
 import { connect } from "react-redux";
 import { showSideBar, hideSideBar } from "actions/sideBar";

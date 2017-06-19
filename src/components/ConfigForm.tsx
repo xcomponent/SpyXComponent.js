@@ -14,7 +14,7 @@ import * as Image from "grommet/components/Image";
 import { connect } from "react-redux";
 import { getApiList, selectApi, formSubmit } from "actions";
 import Footer from "components/Footer";
-import { XCSpyState } from "reducers/SpyReducer";
+import { XCSpyState } from "reducers/spyReducer";
 import { Dispatch } from "redux";
 import { injectIntl, InjectedIntl } from "react-intl";
 
