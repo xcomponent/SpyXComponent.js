@@ -26,6 +26,7 @@ import XCSpyMainPage from "components/XCSpyMainPage";
 import { routes } from "utils/routes";
 import { IntlProvider } from "react-intl";
 import { getLocalizedResources } from "locales/localeConfiguration";
+import { ComponentClass } from "react";
 
 const middleware = applyMiddleware(thunk, logger());
 const store = createStore(SpyReducer, middleware);
@@ -37,7 +38,7 @@ ReactDOM.render(
       <Router>
         <div>
           <Route exact path={routes.paths.home} component={XCSpyMainPage} />
-          <Route path={routes.paths.app} component={XCSpyApp} />
+          <Route path={routes.paths.app} component={XCSpyApp as ComponentClass<any>} />
         </div>
       </Router>
     </IntlProvider>
