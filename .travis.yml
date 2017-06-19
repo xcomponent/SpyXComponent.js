@@ -5,7 +5,7 @@ sudo: false
 branches:
   only:
   - master
-
+  
 os:
 - linux
 
@@ -15,3 +15,10 @@ install:
 
 script:
 - npm test --silent
+
+notifications:
+  slack:
+    rooms:
+      secure: MfoWi0/xxfZybTk2ORZtU65g3LjSrnut9h+effzeg7VBbemny0pCzA/aIGrbRC3evfUagAqQQDHUaSoPGUNmea2OBJulj2NMmyczOl3hzNn6mkEk9yQkC4hopWBffuvN7xwuEjeismo2B/tqaLi8I3VkHWXe21xr686Rak2s9MdEeuOS/zw5y9kDdzKKeDOuXiinY5j4nJfKXg76ne3zdvFpWRWl1/0TwpYm1SDook6uSlsknSuTOKZr/NfpY/fSJopGrCEaUU6Z218E2GNcPkwZaAk5i/PDbgrbPsJ9fvU1GDL3mtxeAothxvhYw0rds8xl9wYxbYmCLqVcI8XeYGsKB620BbEVGOATpb2sTttzopdEOW626/kUy5+1PTP+7GrBe21CFgXGWL0SLMC+YyIj4hA/t4xXV1d3u7F345RXVm4tkMg5xALZhv4F6oQ2WKZl7T1krFXc0cxCBqM9hwH5h8N3Pjy1vm16M4bfImFYyCKOR7Go99Hadn3cYRhazuggDosS/Pom7VpxqRSBdBCQgifToySkfy1A2Yx8JJ1RQraoBDobYkk+hwx37+zD60yeKneDpDaw4fSHPc3uavhhoSz7s+fJSSEDt1PK4yuMP4YnM2nZUCrSwkteDEemPbHTMr7QnuIQ0999DgooInxLcGZ4tVdmScmCmMW6vOg=
+      on_success: change
+      on_failure: always
