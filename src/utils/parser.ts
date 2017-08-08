@@ -50,15 +50,15 @@ export class Parser {
             };
         }
 
-        let transitionGraphicalData;
+        // let transitionGraphicalData;
 
-        transitionGraphicalData = xmlGraphicalDom.getElementsByTagName(graphicalTags.Links)[0]
-            .getElementsByTagName(graphicalTags.TransitionGraphicalData);
-        this.controlPointTransition = this.getControlPointTransition(transitionGraphicalData);
+        // transitionGraphicalData = xmlGraphicalDom.getElementsByTagName(graphicalTags.Links)[0]
+        //     .getElementsByTagName(graphicalTags.TransitionGraphicalData);
+        // this.controlPointTransition = this.getControlPointTransition(transitionGraphicalData);
 
-        transitionGraphicalData = xmlGraphicalDom.getElementsByTagName(graphicalTags.TransversalLinks)[0]
-            .getElementsByTagName(graphicalTags.TransitionGraphicalData);
-        this.controlPointTriggerable = this.getControlPointTransition(transitionGraphicalData);
+        // transitionGraphicalData = xmlGraphicalDom.getElementsByTagName(graphicalTags.TransversalLinks)[0]
+        //     .getElementsByTagName(graphicalTags.TransitionGraphicalData);
+        // this.controlPointTriggerable = this.getControlPointTransition(transitionGraphicalData);
     }
 
     private parseModel(): void {
@@ -71,7 +71,7 @@ export class Parser {
         this.entryPointState = this.getEntyPointState();
         this.nodeDataArray = this.setNodeDataArray();
         this.nodeDataArray = this.nodeDataArray.concat(this.linksLabel);
-        this.addControlPoint();
+        // this.addControlPoint();
     }
 
     private setComponentName(scxmlDom: Document): void {

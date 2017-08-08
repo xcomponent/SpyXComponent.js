@@ -37,7 +37,7 @@ ReactDOM.render(
       <Router>
         <div>
           <Route exact path={routes.paths.home} component={XCSpyMainPage} />
-          <Route path={routes.paths.app} component={XCSpyApp} />
+          <Route path={routes.paths.app} component={() => <XCSpyApp/>} />
         </div>
       </Router>
     </IntlProvider>
