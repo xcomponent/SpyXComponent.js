@@ -1,5 +1,5 @@
 export const modelTags: { [key: string]: string } = {
-    ComponentViewModelData: "ComponentData",
+    ComponentViewModelData: "ComponentViewModelData",
     PublicMember: "PublicMember",
     // state machine
     StateMachineData: "StateMachineData",
