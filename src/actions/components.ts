@@ -43,7 +43,7 @@ export const initialization = (componentProperties: { [componentName: string]: C
 };
 
 
-export const updateGraphic = (component: string, stateMachine: string, data: xcMessages.Packet): ThunkAction<void, void, void> => {
+export const updateGraphic = (component: string, stateMachine: string, data: xcMessages.Packet): ThunkAction<void, XCSpyState, void> => {
     return (dispatch: Dispatch<XCSpyState>, getState: () => XCSpyState): void => {
         dispatch({
             type: UPDATE_GRAPHIC,
