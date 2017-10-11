@@ -52,10 +52,10 @@
     "react-intl": "^2.2.3",
     "react-redux": "^5.0.2",
     "react-router-dom": "^4.0.0-beta.8",
-    "reactivexcomponent.js": "next",
     "redux": "^3.6.0",
     "redux-logger": "^2.8.1",
-    "redux-thunk": "^2.2.0"
+    "redux-thunk": "^2.2.0",
+    "reactivexcomponent.js": "next"
   },
   "devDependencies": {
     "awesome-typescript-loader": "^3.0.0-beta.17",
