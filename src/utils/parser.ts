@@ -75,7 +75,7 @@ export class Parser {
     }
 
     private setComponentName(scxmlDom: Document): void {
-        this.componentName = scxmlDom.getElementsByTagName(modelTags.ComponentViewModelData)[0].getAttribute(modelTags.Name);
+        this.componentName = scxmlDom.getElementsByTagName(modelTags.ComponentData)[0].getAttribute(modelTags.Name);
     }
 
     private addControlPoint(): void {

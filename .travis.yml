@@ -8,10 +8,10 @@ branches:
 os:
 - linux
 install:
-- npm install
-- npm run build:prod
+- yarn install
+- yarn run build:prod
 script:
-- npm test --silent
+- yarn test --silent
 notifications:
   slack:
     secure: WL4G9ndyWEvkZl5njQF8gReRsbczVPEFI0KjNv4Z51iKoOb2M+VHsO75TRf1luBbG9c8971aV15uLIyMzzheOVtMCkeezarnu/YjdOizSBO4AtQooAar2rmcVD6yVuSESDuxv+faI7Y/NM6ORMnd3eul96yJNyS9mtsYblr898ZwN1eFJrYeYFWiObZWHKZjSx6CCRewqwNlHwfR8sG+gn+0XjvN7h4YK5re978fRVp6lWZ9E9PFy0NXuPUB1YrlQBrBqRAqj6gV28AUbAbTFYrQwmf4ygLgCUgxoW4JHfHqJvTVXYtcGXa/WtrwtApvpMKGE2WAmNl5jvRaBtMxfJH4zR/6UoNO9N8oNlqic2YpT4XdpYjOM2ne2IuE1ES/auKfkk/jU9XLQ82ORl3CeSpGFEfi8jQdp1MljmmU3eq42XWbN2mba+D4VJ/yVBKa1KmQNDkRDAdN01FJawQF1GDv+lQiEaBRjUifATe+9jl/iggWZecHvbz6fzVuETwlxgn68+UqhIdmC0ggOvuSjelKa0RJ8+b+JubJnWZfLK21ZHhOunaAGRv4FBTBLmjOlL4kSS+K2L1Bq6y19R7EC9ubPv6owK37Z2Q5qMWkHyqZ+iep3dPnRhgjKnJ8tfxAkknbpczJwKnyziJ5MzJT5FqPdjSp8SfI8B4zB0tbfBY=
