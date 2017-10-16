@@ -1,4 +1,4 @@
-import { GET_API_LIST, SELECT_API, FORM_SUBMIT, GlobalConfigFormAction, GetApiListAction, SelectApiAction } from "actions";
+import { GET_API_LIST, SELECT_API, FORM_SUBMIT, GlobalConfigFormAction, GetApiListAction, SelectApiAction, SET_SERVER_URL, SetServerUrlAction } from "actions";
 import { Reducer } from "redux";
 
 export interface ConfigFormState {
@@ -11,7 +11,7 @@ export interface ConfigFormState {
 const initialState = {
     apis: [],
     selectedApi: undefined,
-    serverUrl: undefined,
+    serverUrl: "",
     formSubmited: false
 };
 
@@ -47,6 +47,12 @@ export const configFormReducer: Reducer<ConfigFormState> = (state: ConfigFormSta
             } else {
                 return state;
             }
+        case SET_SERVER_URL:
+            const setSeverUrlAction = <SetServerUrlAction>action;
+            return {
+                ...state,
+                serverUrl: setSeverUrlAction.serverUrl
+            };
     }
     return state;
 };

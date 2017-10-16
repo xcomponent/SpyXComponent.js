@@ -2,7 +2,8 @@
 export const routes = {
     paths: {
         home: "/",
-        app: "/app"
+        app: "/app",
+        form: "/form"
     },
     params: {
         currentComponent: "currentComponent",

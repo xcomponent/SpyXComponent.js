@@ -4,8 +4,8 @@ import { Action } from "redux";
 export const GET_API_LIST = "GET_API_LIST";
 export const SELECT_API = "SELECT_API";
 export const FORM_SUBMIT = "FORM_SUBMIT";
-
-export type GlobalConfigFormAction = GetApiListAction | SelectApiAction;
+export const SET_SERVER_URL = "SET_SERVER_URL";
+export type GlobalConfigFormAction = GetApiListAction | SelectApiAction | SetServerUrlAction;
 
 export interface GetApiListAction extends Action {
     serverUrl: string;
@@ -14,6 +14,10 @@ export interface GetApiListAction extends Action {
 
 export interface SelectApiAction extends Action {
     selectedApi: string;
+};
+
+export interface SetServerUrlAction extends Action {
+    serverUrl: string;
 };
 
 export const getApiList = (serverUrl: string) => {
@@ -38,5 +42,12 @@ export const selectApi = (selectedApi: string): SelectApiAction => {
 export const formSubmit = (): Action => {
     return {
         type: FORM_SUBMIT
+    };
+};
+
+export const setServerUrl = (serverUrl: string): SetServerUrlAction => {
+    return {
+        type: SET_SERVER_URL,
+        serverUrl
     };
 };
