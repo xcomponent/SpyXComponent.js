@@ -38,6 +38,7 @@ ReactDOM.render(
       <Router>
         <div>
           <Route exact path={routes.paths.home} component={XCSpyMainPage} />
+          <Route path={routes.paths.form} component={XCSpyMainPage} />
           <Route path={routes.paths.app} component={XCSpyApp as ComponentClass<any>} />
         </div>
       </Router>
