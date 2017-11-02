@@ -1,3 +1,5 @@
+export const fatalErrorState = "FatalError";
+
 export const modelTags: { [key: string]: string } = {
     ComponentData: "ComponentData",
     PublicMember: "PublicMember",

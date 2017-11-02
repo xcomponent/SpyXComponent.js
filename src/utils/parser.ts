@@ -1,7 +1,8 @@
-import { graphicalTags, modelTags } from "utils/configurationParser";
+import { graphicalTags, modelTags, fatalErrorState } from "utils/configurationParser";
 import { LinkLabelTemplate, TransitionTemplate, TriggerableTransitionTemplate, StateMachineTemplate, StateTemplate, LinkDataArrayTemplate, NodeDataArrayTemplate } from "utils/gojsTemplates";
 import { Point, Curve, StateMachine, State, ComponentGraphicalModel } from "utils/parserObjects";
-import { finalStateColor, stateColor, transitionPatternStateColor, entryPointStateColor } from "utils/graphicColors";
+import { finalStateColor, stateColor, transitionPatternStateColor, entryPointStateColor, fatalErrorStateColor } from "utils/graphicColors";
+
 export class Parser {
     private locations: { [key: string]: Point };
     private controlPointTransition: { [key: string]: Curve };
@@ -141,9 +142,27 @@ export class Parser {
                 "numberOfStates": 0,
                 "fill": color,
                 "stroke": color,
-                "loc": loc
+                "loc": loc,
+                "visible": true,
+                "fatalError": false
             });
         }
+
+        for (let key in this.stateMachines) {
+            nodeDataArray.push({
+                "key": this.stateMachines[key].name + modelTags.Separator + fatalErrorState,
+                "text": fatalErrorState + " (0)",
+                "group": this.stateMachines[key].name,
+                "stateName": fatalErrorState,
+                "numberOfStates": 0,
+                "fill": fatalErrorStateColor,
+                "stroke": fatalErrorStateColor,
+                "loc": undefined,
+                "visible": false,
+                "fatalError": true
+            });
+        }
+
         return nodeDataArray;
     }
 
@@ -350,4 +369,5 @@ export class Parser {
     public getComponentName(): string {
         return this.componentName;
     };
+
 }

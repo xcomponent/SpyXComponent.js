@@ -19,6 +19,7 @@ export const subscribeAllStateMachines = (dispatch: Dispatch<XCSpyState>, compon
                     continue;
                 ((stateMachine: string) => {
                     subscriber.subscribe(component, stateMachine, (data) => {
+                        console.error(data);
                         dispatch(updateGraphic(component, stateMachine, data));
                     });
                 })(stateMachines[j]);

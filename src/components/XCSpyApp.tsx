@@ -96,4 +96,4 @@ const mapDispatchToProps = (dispatch: Dispatch<XCSpyState>): XCSpyAppCallbackPro
     };
 };
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(XCSpyApp));
+export default connect(mapStateToProps, mapDispatchToProps)(XCSpyApp);

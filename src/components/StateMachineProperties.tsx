@@ -139,6 +139,14 @@ class StateMachineProperties extends React.Component<StateMachinePropertiesGloba
                         </fieldset>
                     </FormField>
 
+                    <FormField>
+                        <fieldset>
+                            <label htmlFor="Error Message">{this.props.intl.formatMessage({ id: "app.error.message" })} : {" "}
+                                {(this.props.stateMachineRef) ? this.props.stateMachineRef.ErrorMessage : null}
+                            </label>
+                        </fieldset>
+                    </FormField>
+
                     <Footer></Footer>
                     <Button primary={true} type="button" label={this.props.intl.formatMessage({ id: "app.snapshot" })} onClick={() => {
                         this.props.snapshot(this.props.currentComponent, this.props.stateMachine);
