@@ -85,21 +85,22 @@ let ConfigForm = ({
                         </Box>
                     </Header>
                     <FormField>
-                        <Box direction="row">
-                            <Box>
-                                <TextInput
-                                    placeHolder={intl.formatMessage({ id: "app.serverURL" })}
-                                    id="serverUrl"
-                                    value={serverUrlState}
-                                    onDOMChange={(e) => {
-                                        onSetServerUrl(e.target.value);
-                                    }}
-                                    onSelect={(e) => {
-                                        onSetServerUrl(e.suggestion);
-                                    }}
-                                    suggestions={["wss://localhost:443"]} />
+                        <fieldset>
+                        <Box full="horizontal">
+                            <TextInput
+                                placeHolder={intl.formatMessage({ id: "app.serverURL" })}
+                                id="serverUrl"
+                                value={serverUrlState}
+                                onDOMChange={(e) => {
+                                    onSetServerUrl(e.target.value);
+                                }}
+                                onSelect={(e) => {
+                                    onSetServerUrl(e.suggestion);
+                                }}
+                                suggestions={["wss://localhost:443"]} />
                             </Box>
-                            <Box flex={true}>
+                                
+                            <Box align="end">
                                 <Button
                                     primary={true}
                                     type="button"
@@ -109,7 +110,7 @@ let ConfigForm = ({
                                     }} />
 
                             </Box>
-                        </Box>
+                        </fieldset>
 
                     </FormField>
                     <FormField>
