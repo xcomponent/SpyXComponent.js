@@ -6,7 +6,7 @@ import { Parser } from "../utils/parser";
 import { DrawComponent } from "../utils/drawComponent";
 import * as Anchor from "grommet/components/Anchor";
 import * as Menu from "grommet/components/Menu";
-import * as go from "gojs";
+import * as go from "../gojs/go";
 import * as Title from "grommet/components/Title";
 import * as Button from "grommet/components/Button";
 import { backgroundColor } from "utils/graphicColors";
