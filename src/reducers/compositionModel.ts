@@ -1,4 +1,4 @@
-import * as go from "gojs";
+import * as go from "../gojs/go";
 import { INIT_COMPOSITION_MODEL, GlobalCompositionModelAction } from "actions";
 import { Reducer } from "redux";
 import { xcMessages } from "reactivexcomponent.js/lib/types";

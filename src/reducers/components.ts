@@ -1,5 +1,5 @@
 import { INITIALIZATION, UPDATE_GRAPHIC, CLEAR_FINAL_STATES, SET_AUTO_CLEAR, GlobalComponentsAction, InitializationAction, UpdateGraphicAction, ClearFinalStatesAction, SetAutoClearAction } from "actions";
-import * as go from "gojs";
+import * as go from "../gojs/go";
 import { DrawComponent } from "utils/drawComponent";
 import { modelTags } from "utils/configurationParser";
 import { activeStateColor, stateColor } from "utils/graphicColors";

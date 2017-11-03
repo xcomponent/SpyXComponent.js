@@ -1,5 +1,5 @@
 
-import * as go from "gojs";
+import * as go from "../gojs/go";
 import { Parser } from "utils/parser";
 import { stateMachineColor } from "utils/graphicColors";
 import { NodeDataArrayTemplate, LinkDataArrayTemplate } from "utils/gojsTemplates";
