@@ -14,7 +14,6 @@ const data = {
     "app.instance.identifier": "Instance Identifier",
     "app.public.member": "Public Member",
     "app.current.state": "Current State",
-    "app.agent.id": "Agent Id",
     "app.snapshot": "Snapshot",
     "app.clear": "Clear",
     "app.send": "Send",
@@ -25,7 +24,8 @@ const data = {
     "app.state.machine": "StateMachine",
     "app.message.type": "Message Type",
     "app.home": "Home",
-    "app.menu": "Menu"
+    "app.menu": "Menu",
+    "app.error.message": "Error Message"
   },
   "fr": {
     "app.title": "XCSpy Application",
@@ -42,7 +42,6 @@ const data = {
     "app.instance.identifier": "Identifiant de l'instance",
     "app.public.member": "Public Member",
     "app.current.state": "Etat courant",
-    "app.agent.id": "Id de l'agent",
     "app.snapshot": "Snapshot",
     "app.clear": "Nettoyer",
     "app.send": "Envoyer",
@@ -60,7 +59,8 @@ const data = {
     "Open": "Ouvrir",
     "Menu": "Menu",
     "menu": "menu",
-    "home": "Acceuil"
+    "home": "Acceuil",
+    "app.error.message": "Message d'erreur"
   }
 };
 

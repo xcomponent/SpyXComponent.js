@@ -120,15 +120,13 @@ const AppHeader = ({
                 <CheckBox label={intl.formatMessage({ id: "app.side.bar" })} toggle={true} checked={sideBar} onChange={() => { }} />
             </Anchor>
 
-            <Anchor onClick={() => {
-                if (!autoClear) {
+            <Anchor>
+                {<CheckBox label={intl.formatMessage({ id: "app.auto.clear" })} toggle={true} checked={autoClear} onChange={() => {
                     for (let i = 0; i < components.length; i++) {
                         clearFinalStates(components[i], getStateMachines(components[i]));
                     }
-                }
-                setAutoClear(!autoClear);
-            }} >
-                <CheckBox label={intl.formatMessage({ id: "app.auto.clear" })} toggle={true} checked={autoClear} onChange={() => { }} />
+                    setAutoClear(!autoClear);
+                }} />}
             </Anchor>
         </Menu>
     );

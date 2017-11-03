@@ -13,6 +13,8 @@ export interface StateTemplate {
     fill: string;
     stroke: string;
     loc: string;
+    visible: boolean;
+    fatalError: boolean;
 };
 
 export interface StateMachineTemplate {

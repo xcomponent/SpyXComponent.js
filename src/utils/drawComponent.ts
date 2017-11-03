@@ -96,7 +96,8 @@ export class DrawComponent {
                     },
                     new go.Binding("fill", "fill"), new go.Binding("stroke", "stroke")
                 ),
-                new go.Binding("location", "loc", go.Point.parse).makeTwoWay(go.Point.stringify)
+                new go.Binding("location", "loc", go.Point.parse).makeTwoWay(go.Point.stringify),
+                new go.Binding("visible", "visible")
             );
         return nodeTemplate;
     }

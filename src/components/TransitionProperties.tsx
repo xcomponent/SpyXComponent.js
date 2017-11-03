@@ -199,9 +199,11 @@ const TransitionProperties = ({
             <Footer>
                 <Button primary={true} type="button" label={intl.formatMessage({ id: "app.send" })} onClick={() => {
                     send(currentComponent, stateMachine, messageType, jsonMessageString, privateTopic);
+                    hideTransitionProperties();
                 }} />
                 <Button primary={true} type="button" label={intl.formatMessage({ id: "app.send.context" })} onClick={() => {
                     sendContext(stateMachineRef, messageType, jsonMessageString, privateTopic);
+                    hideTransitionProperties();
                 }} />
             </Footer>
         </Form >
