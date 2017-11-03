@@ -141,6 +141,14 @@ class StateMachineProperties extends React.Component<StateMachinePropertiesGloba
 
                     <FormField>
                         <fieldset>
+                            <label htmlFor="workerId">{this.props.intl.formatMessage({ id: "app.worker.id" })} : {" "}
+                                {(this.props.stateMachineRef) ? this.props.stateMachineRef.WorkerId : null}
+                            </label>
+                        </fieldset>
+                    </FormField>
+
+                    <FormField>
+                        <fieldset>
                             <label htmlFor="Error Message">{this.props.intl.formatMessage({ id: "app.error.message" })} : {" "}
                                 {(this.props.stateMachineRef) ? this.props.stateMachineRef.ErrorMessage : null}
                             </label>

@@ -25,7 +25,8 @@ const data = {
     "app.message.type": "Message Type",
     "app.home": "Home",
     "app.menu": "Menu",
-    "app.error.message": "Error Message"
+    "app.error.message": "Error Message",
+    "app.worker.id": "Worker Id"
   },
   "fr": {
     "app.title": "XCSpy Application",
@@ -60,7 +61,8 @@ const data = {
     "Menu": "Menu",
     "menu": "menu",
     "home": "Acceuil",
-    "app.error.message": "Message d'erreur"
+    "app.error.message": "Message d'erreur",
+    "app.worker.id": "Id du Worker"
   }
 };
 
