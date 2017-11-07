@@ -13,20 +13,21 @@ import sessionXCSpy from "utils/sessionXCSpy";
 import { Dispatch } from "redux";
 import { Parser } from "utils/parser";
 import { subscribeAllStateMachines, snapshotEntryPoint } from "core";
-import SideBar from "components/SideBar";
+import SideBar from "./components/SideBar";
 import * as Split from "grommet/components/Split";
 import * as Box from "grommet/components/Box";
-import AppHeader from "components/AppHeader";
-import Footer from "components/Footer";
-import TransitionProperties from "components/TransitionProperties";
-import StateMachineProperties from "components/StateMachineProperties";
+import AppHeader from "./components/AppHeader";
+import Footer from "./components/Footer";
+import TransitionProperties from "./components/TransitionProperties";
+import StateMachineProperties from "./components/StateMachineProperties";
 import { BrowserRouter as Router, Route, Link, withRouter, Redirect } from "react-router-dom";
-import XCSpyApp from "components/XCSpyApp";
-import XCSpyMainPage from "components/XCSpyMainPage";
-import { routes } from "utils/routes";
+import XCSpyApp from "./components/XCSpyApp";
+import XCSpyMainPage from "./components/XCSpyMainPage";
+import { routes } from "./utils/routes";
 import { IntlProvider } from "react-intl";
-import { getLocalizedResources } from "locales/localeConfiguration";
+import { getLocalizedResources } from "./locales/localeConfiguration";
 import { ComponentClass } from "react";
+import registerServiceWorker from "./registerServiceWorker";
 
 const middleware = applyMiddleware(thunk, logger());
 const store = createStore(SpyReducer, middleware);
@@ -46,3 +47,4 @@ ReactDOM.render(
   </Provider>,
   document.getElementById("app")
 );
+registerServiceWorker();

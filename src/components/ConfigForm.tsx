@@ -12,12 +12,12 @@ import * as TextInput from "grommet/components/TextInput";
 import * as Select from "grommet/components/Select";
 import * as Image from "grommet/components/Image";
 import { connect } from "react-redux";
-import { getApiList, selectApi, formSubmit, setServerUrl } from "actions";
-import Footer from "components/Footer";
+import { getApiList, selectApi, formSubmit, setServerUrl } from "../actions";
+import Footer from "./Footer";
 import { XCSpyState } from "reducers/spyReducer";
 import { Dispatch } from "redux";
 import { injectIntl, InjectedIntl } from "react-intl";
-import { routes } from "utils/routes";
+import { routes } from "../utils/routes";
 import { withRouter } from "react-router-dom";
 
 interface ConfigFormGlobalProps extends ConfigFormProps, ConfigFormCallbackProps {

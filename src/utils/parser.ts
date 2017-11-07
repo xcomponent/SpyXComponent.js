@@ -1,7 +1,7 @@
-import { graphicalTags, modelTags, fatalErrorState } from "utils/configurationParser";
-import { LinkLabelTemplate, TransitionTemplate, TriggerableTransitionTemplate, StateMachineTemplate, StateTemplate, LinkDataArrayTemplate, NodeDataArrayTemplate } from "utils/gojsTemplates";
-import { Point, Curve, StateMachine, State, ComponentGraphicalModel } from "utils/parserObjects";
-import { finalStateColor, stateColor, transitionPatternStateColor, entryPointStateColor, fatalErrorStateColor } from "utils/graphicColors";
+import { graphicalTags, modelTags, fatalErrorState } from "./configurationParser";
+import { LinkLabelTemplate, TransitionTemplate, TriggerableTransitionTemplate, StateMachineTemplate, StateTemplate, LinkDataArrayTemplate, NodeDataArrayTemplate } from "./gojsTemplates";
+import { Point, Curve, StateMachine, State, ComponentGraphicalModel } from "./parserObjects";
+import { finalStateColor, stateColor, transitionPatternStateColor, entryPointStateColor, fatalErrorStateColor } from "./graphicColors";
 
 export class Parser {
     private locations: { [key: string]: Point };

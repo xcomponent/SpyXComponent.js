@@ -1,6 +1,6 @@
-import sessionXCSpy, { SessionXCSpy } from "utils/sessionXCSpy";
+import sessionXCSpy, { SessionXCSpy } from "./utils/sessionXCSpy";
 import { Dispatch } from "redux";
-import { updateGraphic, INIT_COMPOSITION_MODEL, initCompositionModelAction } from "actions";
+import { updateGraphic, INIT_COMPOSITION_MODEL, initCompositionModelAction } from "./actions";
 import { XCSpyState } from "reducers/spyReducer";
 import xcomponentapi, { Session, xcMessages, Connection } from "reactivexcomponent.js";
 

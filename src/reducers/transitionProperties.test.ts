@@ -1,7 +1,7 @@
 import * as deepFreeze from "deep-freeze";
-import { HIDE_TRANSITION_PROPERTIES, SHOW_TRANSITION_PROPERTIES, SET_JSON_MESSAGE_STRING, SET_CURRENT_ID } from "actions/transitionProperties";
-import { transitionPropertiesReducer } from "reducers/transitionProperties";
-import { SET_PRIVATE_TOPIC } from "actions";
+import { HIDE_TRANSITION_PROPERTIES, SHOW_TRANSITION_PROPERTIES, SET_JSON_MESSAGE_STRING, SET_CURRENT_ID } from "../actions/transitionProperties";
+import { transitionPropertiesReducer } from "./transitionProperties";
+import { SET_PRIVATE_TOPIC } from "../actions";
 
 describe("Test transitionProperties reducer", () => {
     it("When a HIDE_TRANSITION_PROPERTIES action is received, it should set the active properties to false", () => {

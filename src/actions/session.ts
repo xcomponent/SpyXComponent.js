@@ -1,5 +1,5 @@
 import { Action } from "redux";
-import sessionXCSpy from "utils/sessionXCSpy";
+import sessionXCSpy from "../utils/sessionXCSpy";
 
 export const INIT_SESSION = "INIT_SESSION";
 

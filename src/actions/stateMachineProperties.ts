@@ -2,7 +2,7 @@ import { Action } from "redux";
 import { Dispatch } from "redux";
 import { XCSpyState } from "reducers/spyReducer";
 import { ThunkAction } from "redux-thunk";
-import { snapshot, snapshotAll } from "core";
+import { snapshot, snapshotAll } from "../core";
 
 export const SHOW_STATE_MACHINE_PROPERTIES = "SHOW_STATE_MACHINE_PROPERTIES ";
 export const HIDE_STATE_MACHINE_PROPERTIES = "HIDE_STATE_MACHINE_PROPERTIES";

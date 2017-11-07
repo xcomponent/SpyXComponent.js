@@ -1,6 +1,6 @@
 import { Reducer, Action } from "redux";
-import { INIT_SESSION, InitSessionAction } from "actions";
-import sessionXCSpy from "utils/sessionXCSpy";
+import { INIT_SESSION, InitSessionAction } from "../actions";
+import sessionXCSpy from "../utils/sessionXCSpy";
 
 export interface SessionState {
     initialized: boolean;

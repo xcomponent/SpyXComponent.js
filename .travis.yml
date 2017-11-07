@@ -9,7 +9,7 @@ os:
 - linux
 install:
 - yarn install
-- yarn run build:prod
+- yarn build
 script:
 - yarn test --silent
 notifications:

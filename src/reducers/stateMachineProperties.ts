@@ -1,4 +1,4 @@
-import { SHOW_STATE_MACHINE_PROPERTIES, HIDE_STATE_MACHINE_PROPERTIES, SET_STATE_MACHINE_ID, GlobalStateMachinePropertiesAction, ShowStateMachinePropertiesAction, SetStateMachineIdAction } from "actions";
+import { SHOW_STATE_MACHINE_PROPERTIES, HIDE_STATE_MACHINE_PROPERTIES, SET_STATE_MACHINE_ID, GlobalStateMachinePropertiesAction, ShowStateMachinePropertiesAction, SetStateMachineIdAction } from "../actions";
 import { Reducer } from "redux";
 
 export interface StateMachinePropertiesState {
