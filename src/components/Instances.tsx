@@ -1,9 +1,9 @@
 import * as React from "react";
 import { connect } from "react-redux";
-import { XCSpyState } from "reducers/spyReducer";
-import { Instance } from "reducers/components";
+import { XCSpyState } from "../reducers/spyReducer";
+import { Instance } from "../reducers/components";
 import { Dispatch } from "redux";
-import { stateColor, finalStateInstanceColor, fatalErrorStateInstanceColor } from "utils/graphicColors";
+import { stateColor, finalStateInstanceColor, fatalErrorStateInstanceColor } from "../utils/graphicColors";
 
 interface InstancesGlobalProps extends InstancesProps, InstancesCallbackProps {
 };

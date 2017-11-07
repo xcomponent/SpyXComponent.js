@@ -2,16 +2,16 @@ import { Provider, connect } from "react-redux";
 import * as React from "react";
 import ConfigForm from "./ConfigForm";
 import Components from "./Components";
-import { setCompositionModel } from "actions/compositionModel";
-import sessionXCSpy from "utils/sessionXCSpy";
+import { setCompositionModel } from "../actions/compositionModel";
+import sessionXCSpy from "../utils/sessionXCSpy";
 import { Dispatch } from "redux";
-import { Parser } from "utils/parser";
+import { Parser } from "../utils/parser";
 import { BrowserRouter as Router, Route, Link, withRouter, Redirect } from "react-router-dom";
-import { routes } from "utils/routes";
+import { routes } from "../utils/routes";
 import { XCSpyState } from "reducers/spyReducer";
-import { initSession, setServerUrl } from "actions";
+import { initSession, setServerUrl } from "../actions";
 import { xcMessages } from "reactivexcomponent.js/lib/types";
-import { CompositionModelState } from "reducers/compositionModel";
+import { CompositionModelState } from "../reducers/compositionModel";
 
 interface XCSpyGlobalProps extends XCSpyProps, XCSpyCallbackProps {
 };

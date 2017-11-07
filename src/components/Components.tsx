@@ -1,7 +1,7 @@
 import "grommet/grommet-hpinc.min.css";
 import * as React from "react";
 import { connect } from "react-redux";
-import { setCompositionModel, getApiList, selectApi, formSubmit, showStateMachineProperties, showTransitionProperties, initialization, updateGraphic, clearFinalStates, subscribeAllStateMachinesAction, snapshotEntryPointAction } from "actions";
+import { setCompositionModel, getApiList, selectApi, formSubmit, showStateMachineProperties, showTransitionProperties, initialization, updateGraphic, clearFinalStates, subscribeAllStateMachinesAction, snapshotEntryPointAction } from "../actions";
 import { Parser } from "../utils/parser";
 import { DrawComponent } from "../utils/drawComponent";
 import * as Anchor from "grommet/components/Anchor";
@@ -9,13 +9,13 @@ import * as Menu from "grommet/components/Menu";
 import * as go from "../gojs/go";
 import * as Title from "grommet/components/Title";
 import * as Button from "grommet/components/Button";
-import { backgroundColor } from "utils/graphicColors";
+import { backgroundColor } from "../utils/graphicColors";
 import { Dispatch } from "redux";
-import { XCSpyState } from "reducers/spyReducer";
-import { ComponentProperties } from "reducers/components";
+import { XCSpyState } from "../reducers/spyReducer";
+import { ComponentProperties } from "../reducers/components";
 import * as Box from "grommet/components/Box";
 import { withRouter } from "react-router-dom";
-import { routes } from "utils/routes";
+import { routes } from "../utils/routes";
 import { xcMessages } from "reactivexcomponent.js/lib/types";
 
 interface ComponentsGlobalProps extends ComponentsProps, ComponentsCallbackProps {

@@ -3,7 +3,7 @@ import { ComponentProperties } from "reducers/components";
 import { ThunkAction } from "redux-thunk";
 import { Dispatch } from "redux";
 import { XCSpyState } from "reducers/spyReducer";
-import { snapshotEntryPoint, subscribeAllStateMachines } from "core";
+import { snapshotEntryPoint, subscribeAllStateMachines } from "../core";
 import { xcMessages } from "reactivexcomponent.js";
 
 export const INITIALIZATION = "INITIALIZATION";

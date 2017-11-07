@@ -1,7 +1,7 @@
 import xcomponentapi, { xcMessages } from "reactivexcomponent.js";
 import { Action } from "redux";
 import { ThunkAction } from "redux-thunk";
-import { getCompositionModel } from "core";
+import { getCompositionModel } from "../core";
 import { Dispatch } from "redux";
 import { XCSpyState } from "reducers/spyReducer";
 

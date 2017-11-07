@@ -4,7 +4,7 @@ test_output/
 test_out/
 .DS_Store
 *.tgz
-dist/
+build/
 lib/
 junit.xml
 settings.json

@@ -8,15 +8,15 @@ import * as Button from "grommet/components/Button";
 import * as HomeIcon from "grommet/components/icons/base/Home";
 import * as MenuIcon from "grommet/components/icons/base/Menu";
 import { connect } from "react-redux";
-import { showSideBar, hideSideBar } from "actions/sideBar";
-import { updateGraphic, clearFinalStates, setAutoClear, snapshotAllAction } from "actions";
-import { XCSpyState } from "reducers/spyReducer";
+import { showSideBar, hideSideBar } from "../actions/sideBar";
+import { updateGraphic, clearFinalStates, setAutoClear, snapshotAllAction } from "../actions";
+import { XCSpyState } from "../reducers/spyReducer";
 import { Dispatch } from "redux";
 import { snapshotAll } from "core";
 import { BrowserRouter as Router, Route, Link, withRouter, Redirect } from "react-router-dom";
-import { routes } from "utils/routes";
+import { routes } from "../utils/routes";
 import { injectIntl, InjectedIntl } from "react-intl";
-import sessionXCSpy from "utils/sessionXCSpy";
+import sessionXCSpy from "../utils/sessionXCSpy";
 
 interface AppHeaderGlobalProps extends AppHeaderProps, AppHeaderCallbackProps {
 };
