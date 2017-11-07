@@ -9,31 +9,6 @@
     "test": "react-scripts-ts test --env=jsdom",
     "lint": "tslint -c tslint.json -e src/gojs/go.d.ts src/**/*.ts*"
   },
-  "jest": {
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js"
-    ],
-    "transform": {
-      "\\.(ts|tsx)$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
-    },
-    "testRegex": "/tests/.*\\.(ts|tsx|js)$",
-    "modulePaths": [
-      "<rootDir>/node_modules/",
-      "<rootDir>/src/"
-    ],
-    "collectCoverage": true,
-    "collectCoverageFrom": [
-      "**/src/**/*.ts",
-      "!**/src/**/*.d.ts"
-    ],
-    "setupTestFrameworkScriptFile": "./setup-jasmine-env.js",
-    "unmockedModulePathPatterns": [
-      "./node_modules/jasmine-reporters"
-    ],
-    "testEnvironment": "jsdom"
-  },
   "author": "XComponent <dev@xcomponent.com> (http://www.xcomponent.com)",
   "license": "UNLICENSED",
   "dependencies": {

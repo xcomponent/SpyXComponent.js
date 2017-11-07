@@ -27,6 +27,7 @@ import { routes } from "./utils/routes";
 import { IntlProvider } from "react-intl";
 import { getLocalizedResources } from "./locales/localeConfiguration";
 import { ComponentClass } from "react";
+import registerServiceWorker from "./registerServiceWorker";
 
 const middleware = applyMiddleware(thunk, logger());
 const store = createStore(SpyReducer, middleware);
@@ -46,3 +47,4 @@ ReactDOM.render(
   </Provider>,
   document.getElementById("app")
 );
+registerServiceWorker();
