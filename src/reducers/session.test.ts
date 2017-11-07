@@ -1,6 +1,6 @@
 import * as deepFreeze from "deep-freeze";
-import { INIT_SESSION } from "actions";
-import { sessionReducer } from "reducers/session";
+import { INIT_SESSION } from "../actions";
+import { sessionReducer } from "./session";
 
 describe("Test session reducer", () => {
     it("When an INIT_SESSION action is received, it should init the session", () => {
