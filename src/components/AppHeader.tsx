@@ -9,7 +9,7 @@ import * as HomeIcon from "grommet/components/icons/base/Home";
 import * as MenuIcon from "grommet/components/icons/base/Menu";
 import { connect } from "react-redux";
 import { showSideBar, hideSideBar } from "../actions/sideBar";
-import { updateGraphic, clearFinalStates, setAutoClear, snapshotAllAction } from "../actions";
+import { updateGraphic, clearFinalStates, setAutoClear, snapshotAllAction, logout } from "../actions";
 import { XCSpyState } from "../reducers/spyReducer";
 import { Dispatch } from "redux";
 import { snapshotAll } from "core";
@@ -61,6 +61,7 @@ const mapStateToProps = (state: XCSpyState, ownProps): AppHeaderProps => {
 const mapDispatchToProps = (dispatch: Dispatch<XCSpyState>, ownProps): AppHeaderCallbackProps => {
     return {
         returnHome: (): void => {
+            dispatch(logout());
             ownProps.history.push(routes.paths.home);
         },
         clearFinalStates: (component: string, stateMachines: string[]): void => {
