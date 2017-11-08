@@ -4,7 +4,7 @@ import * as ReactDOM from "react-dom";
 import { createStore, applyMiddleware } from "redux";
 import * as App from "grommet/components/App";
 import ConfigForm from "./components/ConfigForm";
-import { SpyReducer, XCSpyState } from "./reducers/spyReducer";
+import { XCSpyState, RootReducer } from "./reducers/spyReducer";
 import * as logger from "redux-logger";
 import thunk from "redux-thunk";
 import Components from "./components/Components";
@@ -30,7 +30,7 @@ import { ComponentClass } from "react";
 import registerServiceWorker from "./registerServiceWorker";
 
 const middleware = applyMiddleware(thunk, logger());
-const store = createStore(SpyReducer, middleware);
+const store = createStore(RootReducer, middleware);
 const locale = "en";
 
 ReactDOM.render(

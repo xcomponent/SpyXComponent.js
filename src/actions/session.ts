@@ -2,6 +2,7 @@ import { Action } from "redux";
 import sessionXCSpy from "../utils/sessionXCSpy";
 
 export const INIT_SESSION = "INIT_SESSION";
+export const LOGOUT = "LOGOUT";
 
 export interface InitSessionAction extends Action {
     serverUrl: string;
@@ -15,5 +16,11 @@ export const initSession = (api: string, serverUrl: string, init: (xcApi: string
         serverUrl,
         api,
         init
+    };
+};
+
+export const logout = (): Action => {
+    return {
+        type: LOGOUT
     };
 };

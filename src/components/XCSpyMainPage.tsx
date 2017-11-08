@@ -33,31 +33,32 @@ interface XCSpyCallbackProps {
 class XCSpyMainPage extends React.Component<XCSpyGlobalProps, XCSpyState> {
 
   componentDidMount() {
+
     if (this.props.serverUrlParams) {
       this.props.onSetServerUrl(this.props.serverUrlParams);
     }
   }
 
-  render() {
+  componentDidUpdate() {
     const props = this.props;
-    if (!props.submitted) {
-      return (
-        <ConfigForm />
-      );
-    }
     if (props.submitted && !props.compositionModel.initialized) {
       props.setCompositionModel(props.selectedApi, props.serverUrl);
+    }
+    if (props.compositionModel.initialized) {
+      props.initSession(props.selectedApi, props.serverUrl, sessionXCSpy.init);
+    }
+  }
+  render() {
+    const props = this.props;
+    if (!props.submitted || (props.submitted && !props.compositionModel.initialized)) {
       return (
         <ConfigForm />
       );
     }
-    props.initSession(props.selectedApi, props.serverUrl, sessionXCSpy.init);
     const currentComponent = props.compositionModel.value.components[0].name;
-
     return (
       <Redirect to={{ pathname: routes.paths.app, search: `${routes.params.serverUrl}=${props.serverUrl}&${routes.params.api}=${props.selectedApi}&${routes.params.currentComponent}=${currentComponent}` }} />
     );
-
   }
 
 }
