@@ -1,6 +1,6 @@
 import * as deepFreeze from "deep-freeze";
-import { INIT_COMPOSITION_MODEL } from "actions";
-import { compositionModelReducer } from "reducers/compositionModel";
+import { INIT_COMPOSITION_MODEL } from "../actions";
+import { compositionModelReducer } from "./compositionModel";
 
 describe("Test components reducer", () => {
     it("When an INIT_COMPOSITION_MODEL action is received, it should initialize the component model value", () => {

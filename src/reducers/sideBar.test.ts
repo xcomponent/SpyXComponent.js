@@ -1,6 +1,6 @@
 import * as deepFreeze from "deep-freeze";
-import { SHOW_SIDE_BAR, HIDE_SIDE_BAR } from "actions/sideBar";
-import { sideBarReducer } from "reducers/sideBar";
+import { SHOW_SIDE_BAR, HIDE_SIDE_BAR } from "../actions/sideBar";
+import { sideBarReducer } from "./sideBar";
 
 describe("Test sideBar reducer", () => {
     it("When an SHOW_SIDE_BAR action is received, it should set the state to true", () => {

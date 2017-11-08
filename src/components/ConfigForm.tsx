@@ -12,11 +12,13 @@ import * as TextInput from "grommet/components/TextInput";
 import * as Select from "grommet/components/Select";
 import * as Image from "grommet/components/Image";
 import { connect } from "react-redux";
-import { getApiList, selectApi, formSubmit } from "actions";
-import Footer from "components/Footer";
-import { XCSpyState } from "reducers/SpyReducer";
+import { getApiList, selectApi, formSubmit, setServerUrl } from "../actions";
+import Footer from "./Footer";
+import { XCSpyState } from "reducers/spyReducer";
 import { Dispatch } from "redux";
 import { injectIntl, InjectedIntl } from "react-intl";
+import { routes } from "../utils/routes";
+import { withRouter } from "react-router-dom";
 
 interface ConfigFormGlobalProps extends ConfigFormProps, ConfigFormCallbackProps {
 };
@@ -32,9 +34,10 @@ interface ConfigFormCallbackProps {
     onClickGetApiList: (serverUrl: string) => void;
     onChangeSelectedApi: (selectedApi: string) => void;
     onClickSubmit: () => void;
+    onSetServerUrl: (serverUrl: string) => void;
 };
 
-const mapStateToProps = (state: XCSpyState): ConfigFormProps => {
+const mapStateToProps = (state: XCSpyState, ownProps): ConfigFormProps => {
     return {
         apis: state.configForm.apis,
         selectedApi: state.configForm.selectedApi,
@@ -42,7 +45,7 @@ const mapStateToProps = (state: XCSpyState): ConfigFormProps => {
     };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<XCSpyState>): ConfigFormCallbackProps => {
+const mapDispatchToProps = (dispatch: Dispatch<XCSpyState>, ownProps): ConfigFormCallbackProps => {
     return {
         onClickGetApiList: (serverUrl: string): void => {
             dispatch(getApiList(serverUrl));
@@ -52,6 +55,10 @@ const mapDispatchToProps = (dispatch: Dispatch<XCSpyState>): ConfigFormCallbackP
         },
         onClickSubmit: (): void => {
             dispatch(formSubmit());
+        },
+        onSetServerUrl: (serverUrl: string) => {
+            ownProps.history.push(`/form?serverUrl=${serverUrl}`);
+            dispatch(setServerUrl(serverUrl));
         }
     };
 };
@@ -61,11 +68,11 @@ let ConfigForm = ({
     onClickSubmit,
     onChangeSelectedApi,
     onClickGetApiList,
+    onSetServerUrl,
     apis,
     serverUrlState,
     selectedApi
 }: ConfigFormGlobalProps) => {
-    let serverUrl = serverUrlState;
     return (
         <Box full={true}>
             <Box pad="medium" align="center" justify="center" flex={true}>
@@ -79,46 +86,59 @@ let ConfigForm = ({
                     </Header>
                     <FormField>
                         <fieldset>
-                            <label htmlFor="serverUrl"> {intl.formatMessage({ id: "app.serverURL" })}</label>
-                            <TextInput id="serverUrl"
-                                onSelect={(e) => {
-                                    e.target.value = e.suggestion;
-                                    serverUrl = e.suggestion;
-                                }}
+                        <Box full="horizontal">
+                            <TextInput
+                                placeHolder={intl.formatMessage({ id: "app.serverURL" })}
+                                id="serverUrl"
+                                value={serverUrlState}
                                 onDOMChange={(e) => {
-                                    serverUrl = e.target.value;
+                                    onSetServerUrl(e.target.value);
                                 }}
-                                suggestions={["wss://localhost:443", "wss://commandcenter.xcomponent.com/bridge:443"]} />
+                                onSelect={(e) => {
+                                    onSetServerUrl(e.suggestion);
+                                }}
+                                suggestions={["wss://localhost:443"]} />
+                            </Box>
+                                
+                            <Box align="end">
+                                <Button
+                                    primary={true}
+                                    type="button"
+                                    label={intl.formatMessage({ id: "app.get.apis" })}
+                                    onClick={() => {
+                                        onClickGetApiList(serverUrlState);
+                                    }} />
+
+                            </Box>
                         </fieldset>
+
                     </FormField>
                     <FormField>
                         <fieldset>
-                            <label htmlFor="API">{intl.formatMessage({ id: "app.api" })}</label>
                             <Select
+                                placeHolder={intl.formatMessage({ id: "app.api" })}
                                 options={apis}
                                 value={selectedApi}
                                 onChange={(e) => {
                                     onChangeSelectedApi(e.value);
                                 }} />
+                            <Box align="end">
+                                <Button
+                                    primary={true}
+                                    type="button"
+                                    label={intl.formatMessage({ id: "app.submit" })}
+                                    onClick={onClickSubmit} />
+                            </Box>
                         </fieldset>
                     </FormField>
-                    <Button
-                        primary={true}
-                        type="button"
-                        label={intl.formatMessage({ id: "app.get.apis" })}
-                        onClick={() => {
-                            onClickGetApiList(serverUrl);
-                        }} />
-                    <Button
-                        primary={true}
-                        type="button"
-                        label={intl.formatMessage({ id: "app.submit" })}
-                        onClick={onClickSubmit} />
+
+
                 </Form >
+
             </Box>
             <Footer />
         </Box>
     );
 };
 
-export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(ConfigForm));
+export default withRouter(injectIntl(connect(mapStateToProps, mapDispatchToProps)(ConfigForm)));

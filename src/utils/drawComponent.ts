@@ -1,8 +1,8 @@
 
-import * as go from "gojs";
-import { Parser } from "utils/parser";
-import { stateMachineColor } from "utils/graphicColors";
-import { NodeDataArrayTemplate, LinkDataArrayTemplate } from "utils/gojsTemplates";
+import * as go from "../gojs/go";
+import { Parser } from "./parser";
+import { stateMachineColor } from "./graphicColors";
+import { NodeDataArrayTemplate, LinkDataArrayTemplate } from "./gojsTemplates";
 
 export class DrawComponent {
 
@@ -96,7 +96,8 @@ export class DrawComponent {
                     },
                     new go.Binding("fill", "fill"), new go.Binding("stroke", "stroke")
                 ),
-                new go.Binding("location", "loc", go.Point.parse).makeTwoWay(go.Point.stringify)
+                new go.Binding("location", "loc", go.Point.parse).makeTwoWay(go.Point.stringify),
+                new go.Binding("visible", "visible")
             );
         return nodeTemplate;
     }

@@ -1,6 +1,6 @@
 import * as deepFreeze from "deep-freeze";
-import { SHOW_STATE_MACHINE_PROPERTIES, SET_STATE_MACHINE_ID, HIDE_STATE_MACHINE_PROPERTIES } from "actions";
-import { stateMachinePropertiesReducer } from "reducers/stateMachineProperties";
+import { SHOW_STATE_MACHINE_PROPERTIES, SET_STATE_MACHINE_ID, HIDE_STATE_MACHINE_PROPERTIES } from "../actions";
+import { stateMachinePropertiesReducer } from "./stateMachineProperties";
 
 describe("Test stateMachineProperties reducer", () => {
     it("When a SHOW_STATE_MACHINE_PROPERTIES action is received, it should set the stateMachine and its id", () => {

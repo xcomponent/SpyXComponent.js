@@ -1,7 +1,7 @@
 import { Action } from "redux";
 import { Dispatch } from "redux";
-import { XCSpyState } from "reducers/SpyReducer";
-import sessionXCSpy, { SessionXCSpy } from "utils/sessionXCSpy";
+import { XCSpyState } from "reducers/spyReducer";
+import sessionXCSpy, { SessionXCSpy } from "../utils/sessionXCSpy";
 import { ThunkAction } from "redux-thunk";
 import { xcMessages, Session } from "reactivexcomponent.js/lib/types";
 

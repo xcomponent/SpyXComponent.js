@@ -1,8 +1,9 @@
 import * as React from "react";
 import { connect } from "react-redux";
-import { XCSpyState } from "reducers/SpyReducer";
-import { Instance } from "reducers/components";
+import { XCSpyState } from "../reducers/spyReducer";
+import { Instance } from "../reducers/components";
 import { Dispatch } from "redux";
+import { stateColor, finalStateInstanceColor, fatalErrorStateInstanceColor } from "../utils/graphicColors";
 
 interface InstancesGlobalProps extends InstancesProps, InstancesCallbackProps {
 };
@@ -26,9 +27,14 @@ const mapStateToProps = (state: XCSpyState, ownProps): InstancesProps => {
 };
 
 const getStyle = (id: string, instances: { [id: number]: Instance }) => {
-    const redColor = "#ED0000";
-    const whiteColor = "#FFFFFF";
-    const backgroundColor = (id && instances[id].isFinal) ? redColor : whiteColor;
+    let backgroundColor;
+    if (id && instances[id].isFinal) {
+        backgroundColor = finalStateInstanceColor;
+    } else if (id && instances[id].stateMachineRef.StateName === "FatalError") {
+        backgroundColor = fatalErrorStateInstanceColor;
+    } else {
+        backgroundColor = stateColor;
+    }
     return {
         "backgroundColor": backgroundColor
     };

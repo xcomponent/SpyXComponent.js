@@ -1,11 +1,11 @@
 import { combineReducers } from "redux";
-import { configFormReducer, ConfigFormState } from "reducers/configForm";
-import { compositionModelReducer, CompositionModelState } from "reducers/compositionModel";
-import { componentsReducer, ComponentsState } from "reducers/components";
-import { stateMachinePropertiesReducer, StateMachinePropertiesState } from "reducers/stateMachineProperties";
-import { sideBarReducer, SideBarState } from "reducers/sideBar";
-import { transitionPropertiesReducer, TransitionPropertiesState } from "reducers/transitionProperties";
-import { sessionReducer, SessionState } from "reducers/session";
+import { configFormReducer, ConfigFormState } from "./configForm";
+import { compositionModelReducer, CompositionModelState } from "./compositionModel";
+import { componentsReducer, ComponentsState } from "./components";
+import { stateMachinePropertiesReducer, StateMachinePropertiesState } from "./stateMachineProperties";
+import { sideBarReducer, SideBarState } from "./sideBar";
+import { transitionPropertiesReducer, TransitionPropertiesState } from "./transitionProperties";
+import { sessionReducer, SessionState } from "./session";
 
 export interface XCSpyState {
     configForm: ConfigFormState;

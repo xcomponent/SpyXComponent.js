@@ -5,18 +5,18 @@ import * as Box from "grommet/components/Box";
 import * as Title from "grommet/components/Title";
 import * as CheckBox from "grommet/components/CheckBox";
 import * as Button from "grommet/components/Button";
-import * as HomeIcon from "grommet/components/icons/base/home";
+import * as HomeIcon from "grommet/components/icons/base/Home";
 import * as MenuIcon from "grommet/components/icons/base/Menu";
 import { connect } from "react-redux";
-import { showSideBar, hideSideBar } from "actions/sideBar";
-import { updateGraphic, clearFinalStates, setAutoClear, snapshotAllAction } from "actions";
-import { XCSpyState } from "reducers/spyReducer";
+import { showSideBar, hideSideBar } from "../actions/sideBar";
+import { updateGraphic, clearFinalStates, setAutoClear, snapshotAllAction } from "../actions";
+import { XCSpyState } from "../reducers/spyReducer";
 import { Dispatch } from "redux";
 import { snapshotAll } from "core";
 import { BrowserRouter as Router, Route, Link, withRouter, Redirect } from "react-router-dom";
-import { routes } from "utils/routes";
+import { routes } from "../utils/routes";
 import { injectIntl, InjectedIntl } from "react-intl";
-import sessionXCSpy from "utils/sessionXCSpy";
+import sessionXCSpy from "../utils/sessionXCSpy";
 
 interface AppHeaderGlobalProps extends AppHeaderProps, AppHeaderCallbackProps {
 };
@@ -120,15 +120,13 @@ const AppHeader = ({
                 <CheckBox label={intl.formatMessage({ id: "app.side.bar" })} toggle={true} checked={sideBar} onChange={() => { }} />
             </Anchor>
 
-            <Anchor onClick={() => {
-                if (!autoClear) {
+            <Anchor>
+                {<CheckBox label={intl.formatMessage({ id: "app.auto.clear" })} toggle={true} checked={autoClear} onChange={() => {
                     for (let i = 0; i < components.length; i++) {
                         clearFinalStates(components[i], getStateMachines(components[i]));
                     }
-                }
-                setAutoClear(!autoClear);
-            }} >
-                <CheckBox label={intl.formatMessage({ id: "app.auto.clear" })} toggle={true} checked={autoClear} onChange={() => { }} />
+                    setAutoClear(!autoClear);
+                }} />}
             </Anchor>
         </Menu>
     );

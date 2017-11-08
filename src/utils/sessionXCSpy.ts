@@ -10,6 +10,7 @@ export class SessionXCSpy {
     init(xcApiFileName: string, serverUrl: string): Promise<Object> {
         const promiseCreateSession = new Promise((resolve, reject) => {
             xcomponentapi.createSession(xcApiFileName, serverUrl, (error, session: Session) => {
+                xcomponentapi.setLogLevel(5);
                 if (error) {
                     reject(error);
                     return;

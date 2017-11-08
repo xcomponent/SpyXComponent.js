@@ -1,7 +1,7 @@
 import * as React from "react";
 import { connect } from "react-redux";
 import * as Layer from "grommet/components/Layer";
-import { hideStateMachineProperties } from "actions/stateMachineProperties";
+import { hideStateMachineProperties } from "../actions/stateMachineProperties";
 import * as Header from "grommet/components/Header";
 import * as Title from "grommet/components/Title";
 import * as Form from "grommet/components/Form";
@@ -9,19 +9,19 @@ import * as FormField from "grommet/components/FormField";
 import * as Button from "grommet/components/Button";
 import * as Footer from "grommet/components/Footer";
 import { SessionXCSpy } from "utils/sessionXCSpy";
-import { updateGraphic, setStateMachineId, hideTransitionProperties, setJsonMessageString, setCurrentId, setPrivateTopic, send, sendContext } from "actions";
+import { updateGraphic, setStateMachineId, hideTransitionProperties, setJsonMessageString, setCurrentId, setPrivateTopic, send, sendContext } from "../actions";
 import * as Select from "grommet/components/Select";
 import * as Box from "grommet/components/Box";
 import * as CheckBox from "grommet/components/CheckBox";
 import * as TextInput from "grommet/components/TextInput";
-import Instances from "components/Instances";
-import { XCSpyState } from "reducers/SpyReducer";
+import Instances from "./Instances";
+import { XCSpyState } from "../reducers/spyReducer";
 import { Dispatch } from "redux";
-import { Instance } from "reducers/components";
+import { Instance } from "../reducers/components";
 import { withRouter } from "react-router-dom";
-import { routes } from "utils/routes";
+import { routes } from "../utils/routes";
 import { xcMessages } from "reactivexcomponent.js/lib/types";
-import * as HomeIcon from "grommet/components/icons/base/home";
+import * as HomeIcon from "grommet/components/icons/base/Home";
 import * as CloseIcon from "grommet/components/icons/base/Close";
 import { injectIntl, InjectedIntl } from "react-intl";
 
@@ -199,9 +199,11 @@ const TransitionProperties = ({
             <Footer>
                 <Button primary={true} type="button" label={intl.formatMessage({ id: "app.send" })} onClick={() => {
                     send(currentComponent, stateMachine, messageType, jsonMessageString, privateTopic);
+                    hideTransitionProperties();
                 }} />
                 <Button primary={true} type="button" label={intl.formatMessage({ id: "app.send.context" })} onClick={() => {
                     sendContext(stateMachineRef, messageType, jsonMessageString, privateTopic);
+                    hideTransitionProperties();
                 }} />
             </Footer>
         </Form >

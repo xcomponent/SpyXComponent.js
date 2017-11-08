@@ -1,23 +1,23 @@
 import * as React from "react";
 import { connect } from "react-redux";
 import * as Layer from "grommet/components/Layer";
-import { hideStateMachineProperties, updateGraphic, clearFinalStates, setStateMachineId, snapshotAction } from "actions";
+import { hideStateMachineProperties, updateGraphic, clearFinalStates, setStateMachineId, snapshotAction } from "../actions";
 import * as Header from "grommet/components/Header";
 import * as Title from "grommet/components/Title";
 import * as Form from "grommet/components/Form";
 import * as FormField from "grommet/components/FormField";
 import * as Button from "grommet/components/Button";
 import * as Footer from "grommet/components/Footer";
-import sessionXCSpy from "utils/sessionXCSpy";
+import sessionXCSpy from "../utils/sessionXCSpy";
 import * as Select from "grommet/components/Select";
 import * as Box from "grommet/components/Box";
-import Instances from "components/Instances";
-import { XCSpyState } from "reducers/SpyReducer";
+import Instances from "./Instances";
+import { XCSpyState } from "../reducers/spyReducer";
 import { Dispatch } from "redux";
 import { snapshot } from "core";
-import { Instance } from "reducers/components";
+import { Instance } from "../reducers/components";
 import { withRouter } from "react-router-dom";
-import { routes } from "utils/routes";
+import { routes } from "../utils/routes";
 import { xcMessages } from "reactivexcomponent.js/lib/types";
 import { injectIntl, InjectedIntl } from "react-intl";
 import * as CloseIcon from "grommet/components/icons/base/Close";
@@ -141,12 +141,19 @@ class StateMachineProperties extends React.Component<StateMachinePropertiesGloba
 
                     <FormField>
                         <fieldset>
-                            <label htmlFor="agentId">{this.props.intl.formatMessage({ id: "app.agent.id" })} : {" "}
-                                {(this.props.stateMachineRef) ? this.props.stateMachineRef.AgentId : null}
+                            <label htmlFor="workerId">{this.props.intl.formatMessage({ id: "app.worker.id" })} : {" "}
+                                {(this.props.stateMachineRef) ? this.props.stateMachineRef.WorkerId : null}
                             </label>
                         </fieldset>
                     </FormField>
 
+                    <FormField>
+                        <fieldset>
+                            <label htmlFor="Error Message">{this.props.intl.formatMessage({ id: "app.error.message" })} : {" "}
+                                {(this.props.stateMachineRef) ? this.props.stateMachineRef.ErrorMessage : null}
+                            </label>
+                        </fieldset>
+                    </FormField>
 
                     <Footer></Footer>
                     <Button primary={true} type="button" label={this.props.intl.formatMessage({ id: "app.snapshot" })} onClick={() => {

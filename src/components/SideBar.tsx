@@ -11,11 +11,11 @@ import * as CloseIcon from "grommet/components/icons/base/Close";
 
 import * as User from "grommet/components/icons/base/User";
 import { connect } from "react-redux";
-import { hideSideBar } from "actions";
-import { XCSpyState } from "reducers/spyReducer";
+import { hideSideBar } from "../actions";
+import { XCSpyState } from "../reducers/spyReducer";
 import { Dispatch } from "redux";
 import { Link, withRouter } from "react-router-dom";
-import { routes } from "utils/routes";
+import { routes } from "../utils/routes";
 
 interface SideBarGlobalProps extends SideBarProps, SideBarCallbackProps {
 };

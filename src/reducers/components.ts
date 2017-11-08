@@ -1,8 +1,8 @@
-import { INITIALIZATION, UPDATE_GRAPHIC, CLEAR_FINAL_STATES, SET_AUTO_CLEAR, GlobalComponentsAction, InitializationAction, UpdateGraphicAction, ClearFinalStatesAction, SetAutoClearAction } from "actions";
-import * as go from "gojs";
-import { DrawComponent } from "utils/drawComponent";
-import { modelTags } from "utils/configurationParser";
-import { activeStateColor, stateColor } from "utils/graphicColors";
+import { INITIALIZATION, UPDATE_GRAPHIC, CLEAR_FINAL_STATES, SET_AUTO_CLEAR, GlobalComponentsAction, InitializationAction, UpdateGraphicAction, ClearFinalStatesAction, SetAutoClearAction } from "../actions";
+import * as go from "../gojs/go";
+import { DrawComponent } from "../utils/drawComponent";
+import { modelTags } from "../utils/configurationParser";
+import { activeStateColor, stateColor } from "../utils/graphicColors";
 import { Reducer } from "redux";
 import { xcMessages } from "reactivexcomponent.js/lib/types";
 
@@ -33,8 +33,11 @@ const initialState: ComponentsState = {
     autoClear: false
 };
 
-const updateState = (diagram: go.Diagram, stateKey: string, finalStates: string[], entryPointState: string, increment: number) => {
+const updateState = (diagram: go.Diagram, stateKey: string, finalStates: string[], entryPointState: string, increment: number, autoClear: boolean) => {
     const data = diagram.findNodeForKey(stateKey).data;
+    if (!autoClear) {
+        diagram.model.setDataProperty(data, "visible", true);
+    }
     const oldValue = data.numberOfStates;
     const newValue = oldValue + increment;
     diagram.model.setDataProperty(data, "numberOfStates", newValue);
@@ -44,7 +47,7 @@ const updateState = (diagram: go.Diagram, stateKey: string, finalStates: string[
     if (newValue === 0) {
         diagram.model.setDataProperty(data, "fill", stateColor);
         diagram.model.setDataProperty(data, "stroke", stateColor);
-    } else {
+    } else if (!data.fatalError) {
         diagram.model.setDataProperty(data, "fill", activeStateColor);
         diagram.model.setDataProperty(data, "stroke", activeStateColor);
     }
@@ -52,15 +55,22 @@ const updateState = (diagram: go.Diagram, stateKey: string, finalStates: string[
 
 const clearFinalStates = (diagram: go.Diagram, finalStatesToClear: string[], stateMachine: string, numberOfInstances: number) => {
     diagram.model.startTransaction(CLEAR_FINAL_STATES);
-    const stateMachineData = diagram.findNodeForKey(stateMachine).data;
-    diagram.model.setDataProperty(stateMachineData, "numberOfInstances", numberOfInstances);
-    diagram.model.setDataProperty(stateMachineData, "text", `${stateMachineData.key} (${stateMachineData.numberOfInstances})`);
     for (let i = 0; i < finalStatesToClear.length; i++) {
         const stateData = diagram.findNodeForKey(finalStatesToClear[i]).data;
         // change number in state
         diagram.model.setDataProperty(stateData, "numberOfStates", 0);
         diagram.model.setDataProperty(stateData, "text", `${stateData.stateName} (${stateData.numberOfStates})`);
     }
+
+    const errorFatalStateData = diagram.findNodeForKey(stateMachine + modelTags.Separator + "FatalError").data;
+    const stateMachineData = diagram.findNodeForKey(stateMachine).data;
+    diagram.model.setDataProperty(stateMachineData, "numberOfInstances", numberOfInstances - errorFatalStateData.numberOfStates);
+    diagram.model.setDataProperty(stateMachineData, "text", `${stateMachineData.key} (${stateMachineData.numberOfInstances})`);
+
+    diagram.model.setDataProperty(errorFatalStateData, "numberOfStates", 0);
+    diagram.model.setDataProperty(errorFatalStateData, "visible", false);
+    diagram.model.setDataProperty(errorFatalStateData, "text", "FatalError (0)");
+
     diagram.model.commitTransaction(CLEAR_FINAL_STATES);
 };
 
@@ -91,12 +101,12 @@ export const componentsReducer: Reducer<ComponentsState> = (state: ComponentsSta
             if (instances[stateMachineId]) {
                 const oldState = instances[stateMachineId].stateMachineRef.StateName;
                 if (oldState !== newState) {
-                    updateState(diagram, newStateKey, finalStates, entryPointState, +1);
-                    updateState(diagram, updateGraphicAction.stateMachine + modelTags.Separator + oldState, finalStates, entryPointState, -1);
+                    updateState(diagram, newStateKey, finalStates, entryPointState, +1, state.autoClear);
+                    updateState(diagram, updateGraphicAction.stateMachine + modelTags.Separator + oldState, finalStates, entryPointState, -1, state.autoClear);
                 }
             } else {
-                diagram.model.setDataProperty(nodeData, "numberOfInstances", nodeData.numberOfInstances + 1);
-                updateState(diagram, newStateKey, finalStates, entryPointState, +1);
+                diagram.model.setDataProperty(nodeData, "numberOfInstances", nodeData.numberOfInstances + 1, );
+                updateState(diagram, newStateKey, finalStates, entryPointState, +1, state.autoClear);
             }
             const instance: Instance = {
                 jsonMessage: updateGraphicAction.data.jsonMessage,
@@ -118,7 +128,7 @@ export const componentsReducer: Reducer<ComponentsState> = (state: ComponentsSta
             diagram = componentProperties[clearFinalStatesAction.component].diagram;
             const stateMachineInstances = componentProperties[clearFinalStatesAction.component].stateMachineProperties[clearFinalStatesAction.stateMachine];
             for (const id in stateMachineInstances) {
-                if (stateMachineInstances[id].isFinal) {
+                if (stateMachineInstances[id].isFinal || stateMachineInstances[id].stateMachineRef.StateName === "FatalError") {
                     const stateKey = clearFinalStatesAction.stateMachine + modelTags.Separator + stateMachineInstances[id].stateMachineRef.StateName;
                     finalStatesToClear.push(stateKey);
                     delete stateMachineInstances[id];

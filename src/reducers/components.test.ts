@@ -1,6 +1,6 @@
 import * as deepFreeze from "deep-freeze";
-import { INITIALIZATION, SET_AUTO_CLEAR } from "actions";
-import { componentsReducer } from "reducers/components";
+import { INITIALIZATION, SET_AUTO_CLEAR } from "../actions";
+import { componentsReducer } from "./components";
 
 describe("Test components reducer", () => {
     it("When an INITIALIZATION action is received, it should initialize the state", () => {

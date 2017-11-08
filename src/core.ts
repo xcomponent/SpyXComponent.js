@@ -1,11 +1,11 @@
-import sessionXCSpy, { SessionXCSpy } from "utils/sessionXCSpy";
+import sessionXCSpy, { SessionXCSpy } from "./utils/sessionXCSpy";
 import { Dispatch } from "redux";
-import { updateGraphic, INIT_COMPOSITION_MODEL, initCompositionModelAction } from "actions";
-import { XCSpyState } from "reducers/SpyReducer";
+import { updateGraphic, INIT_COMPOSITION_MODEL, initCompositionModelAction } from "./actions";
+import { XCSpyState } from "reducers/spyReducer";
 import xcomponentapi, { Session, xcMessages, Connection } from "reactivexcomponent.js";
 
 export const getCompositionModel = (dispatch: Dispatch<XCSpyState>, xcApiName: string, serverUrl: string): void => {
-    xcomponentapi.getModel(xcApiName, serverUrl, (connection: Connection, compositionModel: xcMessages.CompositionModel) => {
+    xcomponentapi.getModel(xcApiName, serverUrl, (error: Error, compositionModel: xcMessages.CompositionModel) => {
         dispatch(initCompositionModelAction(compositionModel));
     });
 };

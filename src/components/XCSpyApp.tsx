@@ -1,20 +1,20 @@
 import { Provider, connect } from "react-redux";
 import * as React from "react";
 import Components from "./Components";
-import SideBar from "components/SideBar";
+import SideBar from "./SideBar";
 import * as Split from "grommet/components/Split";
 import * as Box from "grommet/components/Box";
-import AppHeader from "components/AppHeader";
-import Footer from "components/Footer";
-import TransitionProperties from "components/TransitionProperties";
-import StateMachineProperties from "components/StateMachineProperties";
-import { XCSpyState } from "reducers/SpyReducer";
+import AppHeader from "./AppHeader";
+import Footer from "./Footer";
+import TransitionProperties from "./TransitionProperties";
+import StateMachineProperties from "./StateMachineProperties";
+import { XCSpyState } from "../reducers/spyReducer";
 import { Dispatch } from "redux";
-import { setCompositionModel, initSession } from "actions";
+import { setCompositionModel, initSession } from "../actions";
 import { withRouter, Redirect } from "react-router-dom";
 import { } from "types/react-router-dom";
-import sessionXCSpy from "utils/sessionXCSpy";
-import { routes } from "utils/routes";
+import sessionXCSpy from "../utils/sessionXCSpy";
+import { routes } from "../utils/routes";
 
 interface XCSpyAppGlobalProps extends XCSpyAppProps, XCSpyAppCallbackProps {
 };
@@ -96,4 +96,4 @@ const mapDispatchToProps = (dispatch: Dispatch<XCSpyState>): XCSpyAppCallbackPro
     };
 };
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(XCSpyApp));
+export default connect(mapStateToProps, mapDispatchToProps)(XCSpyApp);
