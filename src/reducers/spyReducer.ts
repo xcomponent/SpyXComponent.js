@@ -6,6 +6,7 @@ import { stateMachinePropertiesReducer, StateMachinePropertiesState } from "./st
 import { sideBarReducer, SideBarState } from "./sideBar";
 import { transitionPropertiesReducer, TransitionPropertiesState } from "./transitionProperties";
 import { sessionReducer, SessionState } from "./session";
+import { LOGOUT } from "../actions";
 
 export interface XCSpyState {
     configForm: ConfigFormState;
@@ -26,3 +27,10 @@ export const SpyReducer = combineReducers({
     transitionProperties: transitionPropertiesReducer,
     session: sessionReducer
 });
+
+export const RootReducer = (state, action) => {
+    if (action.type === LOGOUT) {
+        state = undefined;
+    }
+    return SpyReducer(state, action);
+};

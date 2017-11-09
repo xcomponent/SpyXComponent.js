@@ -1,7 +1,7 @@
 import { graphicalTags, modelTags, fatalErrorState } from "./configurationParser";
 import { LinkLabelTemplate, TransitionTemplate, TriggerableTransitionTemplate, StateMachineTemplate, StateTemplate, LinkDataArrayTemplate, NodeDataArrayTemplate } from "./gojsTemplates";
 import { Point, Curve, StateMachine, State, ComponentGraphicalModel } from "./parserObjects";
-import { finalStateColor, stateColor, transitionPatternStateColor, entryPointStateColor, fatalErrorStateColor } from "./graphicColors";
+import { finalStateColor, stateColor, transitionPatternStateColor, entryPointStateColor, fatalErrorStateColor, transitionColor, forkTransitionColor } from "./graphicColors";
 
 export class Parser {
     private locations: { [key: string]: Point };
@@ -236,6 +236,8 @@ export class Parser {
             to = this.states[linksDom[i].getAttribute(modelTags.ToKey)];
             text = linksDom[i].getAttribute(modelTags.Name);
             key = linksDom[i].getAttribute(modelTags.Id);
+            const isForkTransition = from.group === to.key.split(modelTags.Separator)[0];
+            const color = (isForkTransition) ? transitionColor : forkTransitionColor;
             this.linkDataArray.push({
                 "key": key,
                 "from": from.key,
@@ -245,7 +247,10 @@ export class Parser {
                 "messageType": linksDom[i].getAttribute(modelTags.TriggeringEvent),
                 "labelKeys": [key],
                 "triggerable": false,
-                "controls": null
+                "controls": null,
+                "strokeLink": color,
+                "strokeArrow": color,
+                "fillArrow": color
             });
             this.linksLabel.push({
                 "key": key,
