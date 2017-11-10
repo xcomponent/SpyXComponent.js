@@ -1,7 +1,7 @@
 {
   "name": "spyxcomponent",
   "version": "1.0.1",
-  "description": "",
+  "description": "XComponent Spy",
   "main": "index.html",
   "files": [
     "LICENSE",
