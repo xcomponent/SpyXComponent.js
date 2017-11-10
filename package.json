@@ -3,6 +3,11 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.html",
+  "files": [
+    "LICENSE",
+    "Readme.md",
+    "build"
+  ],
   "scripts": {
     "start": "react-scripts-ts start",
     "build": "react-scripts-ts build",
