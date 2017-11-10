@@ -1,7 +1,7 @@
 {
   "name": "spyxcomponent",
   "version": "1.0.0",
-  "description": "",
+  "description": "XComponent Spy",
   "main": "index.html",
   "scripts": {
     "start": "react-scripts-ts start",
