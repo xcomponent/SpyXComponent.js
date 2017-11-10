@@ -1,8 +1,13 @@
 {
   "name": "spyxcomponent",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "XComponent Spy",
   "main": "index.html",
+  "files": [
+    "LICENSE",
+    "Readme.md",
+    "build"
+  ],
   "scripts": {
     "start": "react-scripts-ts start",
     "build": "react-scripts-ts build",
