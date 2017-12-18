@@ -8,7 +8,7 @@ export interface InitSessionAction extends Action {
     serverUrl: string;
     api: string;
     init: (xcApi: string, serverUrl: string) => Promise<any>;
-};
+}
 
 export const initSession = (api: string, serverUrl: string, init: (xcApi: string, serverUrl: string) => Promise<any>): InitSessionAction => {
     return {

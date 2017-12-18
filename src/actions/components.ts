@@ -17,22 +17,22 @@ export type GlobalComponentsAction = InitializationAction | UpdateGraphicAction 
 export interface InitializationAction extends Action {
     componentProperties: { [componentName: string]: ComponentProperties };
     projectName: string;
-};
+}
 
 export interface UpdateGraphicAction extends Action {
     data: xcMessages.Packet;
     component: string;
     stateMachine: string;
-};
+}
 
 export interface ClearFinalStatesAction extends Action {
     component: string;
     stateMachine: string;
-};
+}
 
 export interface SetAutoClearAction extends Action {
     autoClear: boolean;
-};
+}
 
 export const initialization = (componentProperties: { [componentName: string]: ComponentProperties }, currentComponent: string, projectName: string): InitializationAction => {
     return {

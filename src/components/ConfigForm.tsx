@@ -21,21 +21,21 @@ import { routes } from "../utils/routes";
 import { withRouter } from "react-router-dom";
 
 interface ConfigFormGlobalProps extends ConfigFormProps, ConfigFormCallbackProps {
-};
+}
 
 interface ConfigFormProps {
     intl?: InjectedIntl;
     apis: string[];
     selectedApi: string;
     serverUrlState: string;
-};
+}
 
 interface ConfigFormCallbackProps {
     onClickGetApiList: (serverUrl: string) => void;
     onChangeSelectedApi: (selectedApi: string) => void;
     onClickSubmit: () => void;
     onSetServerUrl: (serverUrl: string) => void;
-};
+}
 
 const mapStateToProps = (state: XCSpyState, ownProps): ConfigFormProps => {
     return {
@@ -99,7 +99,7 @@ let ConfigForm = ({
                                 }}
                                 suggestions={["wss://localhost:443"]} />
                             </Box>
-                                
+
                             <Box align="end">
                                 <Button
                                     primary={true}

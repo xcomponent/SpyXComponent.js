@@ -11,7 +11,7 @@ export interface TransitionPropertiesState {
     id: string;
     defaultPrivateTopic: string;
     privateTopics: string[];
-};
+}
 
 const initialState: TransitionPropertiesState = {
     active: false,

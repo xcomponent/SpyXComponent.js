@@ -10,15 +10,15 @@ export type GlobalConfigFormAction = GetApiListAction | SelectApiAction | SetSer
 export interface GetApiListAction extends Action {
     serverUrl: string;
     apis: string[];
-};
+}
 
 export interface SelectApiAction extends Action {
     selectedApi: string;
-};
+}
 
 export interface SetServerUrlAction extends Action {
     serverUrl: string;
-};
+}
 
 export const getApiList = (serverUrl: string) => {
     return (dispatch) => {

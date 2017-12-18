@@ -6,7 +6,7 @@ export interface ConfigFormState {
     selectedApi: string;
     serverUrl: string;
     formSubmited: boolean;
-};
+}
 
 const initialState = {
     apis: [],

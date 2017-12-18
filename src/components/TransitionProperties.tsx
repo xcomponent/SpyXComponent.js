@@ -26,7 +26,7 @@ import * as CloseIcon from "grommet/components/icons/base/Close";
 import { injectIntl, InjectedIntl } from "react-intl";
 
 interface TransitionPropertiesGlobalProps extends TransitionPropertiesProps, TransitionPropertiesCallbackProps {
-};
+}
 
 interface TransitionPropertiesProps {
     intl?: InjectedIntl;
@@ -40,7 +40,7 @@ interface TransitionPropertiesProps {
     currentComponent: string;
     stateMachineRef: xcMessages.StateMachineRef;
     instances: { [id: number]: Instance };
-};
+}
 
 interface TransitionPropertiesCallbackProps {
     setPrivateTopic: (privateSend: string) => void;
@@ -49,7 +49,7 @@ interface TransitionPropertiesCallbackProps {
     hideTransitionProperties: () => void;
     send: (component: string, stateMachine: string, messageType: string, jsonMessageString: string, privateTopic: string) => void;
     sendContext: (stateMachineRef: xcMessages.StateMachineRef, messageType: string, jsonMessageString: string, privateTopic: string) => void;
-};
+}
 
 
 const mapStateToProps = (state: XCSpyState, ownProps): TransitionPropertiesProps => {

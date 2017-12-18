@@ -13,11 +13,11 @@ export type GlobalStateMachinePropertiesAction = ShowStateMachinePropertiesActio
 export interface ShowStateMachinePropertiesAction extends Action {
     stateMachine: string;
     id: string;
-};
+}
 
 export interface SetStateMachineIdAction extends Action {
     id: string;
-};
+}
 
 export const showStateMachineProperties = (component: string, stateMachine: string): ThunkAction<void, XCSpyState, void> => {
     return (dispatch: Dispatch<XCSpyState>, getState: () => XCSpyState) => {

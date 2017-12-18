@@ -349,30 +349,30 @@ export class Parser {
 
     public getFinalStates(): Array<String> {
         return this.finalStates;
-    };
+    }
 
     public getEntryPointState(): string {
         return this.entryPointState;
-    };
+    }
 
     public getEntryPointStateMachine(): string {
         return this.entryPointStateMachine;
-    };
+    }
 
     public getStateMachineNames(): Array<string> {
         return this.stateMachineNames;
-    };
+    }
 
     public getLinkDataArray(): Array<LinkDataArrayTemplate> {
         return this.linkDataArray;
-    };
+    }
 
     public getNodeDataArray(): Array<NodeDataArrayTemplate> {
         return this.nodeDataArray;
-    };
+    }
 
     public getComponentName(): string {
         return this.componentName;
-    };
+    }
 
 }

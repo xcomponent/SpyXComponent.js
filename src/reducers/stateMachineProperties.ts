@@ -5,7 +5,7 @@ export interface StateMachinePropertiesState {
     active: boolean;
     stateMachine: string;
     id: string;
-};
+}
 
 const initialState = {
     active: false,

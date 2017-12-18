@@ -19,7 +19,7 @@ import { injectIntl, InjectedIntl } from "react-intl";
 import sessionXCSpy from "../utils/sessionXCSpy";
 
 interface AppHeaderGlobalProps extends AppHeaderProps, AppHeaderCallbackProps {
-};
+}
 
 interface AppHeaderProps {
     intl?: InjectedIntl;
@@ -28,7 +28,7 @@ interface AppHeaderProps {
     components: string[];
     autoClear: boolean;
     sideBar: boolean;
-};
+}
 
 interface AppHeaderCallbackProps {
     returnHome: () => void;
@@ -37,7 +37,7 @@ interface AppHeaderCallbackProps {
     hideSideBar: () => void;
     snapshotAll: (component: string, stateMachines: string[]) => void;
     setAutoClear: (autoClear: boolean) => void;
-};
+}
 
 const mapStateToProps = (state: XCSpyState, ownProps): AppHeaderProps => {
     const initialized = state.components.initialized;
