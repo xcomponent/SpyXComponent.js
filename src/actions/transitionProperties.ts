@@ -22,22 +22,22 @@ export interface ShowTransitionPropertiesAction extends Action {
     id: string;
     privateTopic: string;
     privateTopics: string[];
-};
+}
 
 export interface HideTransitionPropertiesAction extends Action {
-};
+}
 
 export interface SetJsonMessageStringAction extends Action {
     jsonMessageString: string;
-};
+}
 
 export interface SetCurrentIdAction extends Action {
     id: string;
-};
+}
 
 export interface SetPrivateTopicAction extends Action {
     privateTopic: string;
-};
+}
 
 export interface SendAction extends Action {
     component: string;
@@ -45,14 +45,14 @@ export interface SendAction extends Action {
     messageType: string;
     jsonMessageString: string;
     privateTopic: string;
-};
+}
 
 export interface SendContextAction extends Action {
     stateMachineRef: xcMessages.StateMachineRef;
     messageType: string;
     jsonMessageString: string;
     privateTopic: string;
-};
+}
 
 export const showTransitionProperties = (component: string, stateMachine: string, messageType: string, jsonMessageString: string): ThunkAction<void, XCSpyState, void> => {
     return (dispatch: Dispatch<XCSpyState>, getState: () => XCSpyState) => {

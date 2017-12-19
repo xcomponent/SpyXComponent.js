@@ -10,21 +10,21 @@ export interface Instance {
     jsonMessage: any;
     stateMachineRef: xcMessages.StateMachineRef;
     isFinal: boolean;
-};
+}
 
 export interface ComponentProperties {
     diagram: go.Diagram;
     stateMachineProperties: { [name: string]: { [id: number]: Instance } };
     finalStates: string[];
     entryPointState: string;
-};
+}
 
 export interface ComponentsState {
     componentProperties: { [componentName: string]: ComponentProperties };
     projectName: string;
     initialized: boolean;
     autoClear: boolean;
-};
+}
 
 const initialState: ComponentsState = {
     componentProperties: {},

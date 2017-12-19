@@ -6,16 +6,16 @@ import { Dispatch } from "redux";
 import { stateColor, finalStateInstanceColor, fatalErrorStateInstanceColor } from "../utils/graphicColors";
 
 interface InstancesGlobalProps extends InstancesProps, InstancesCallbackProps {
-};
+}
 
 interface InstancesProps {
     instances: { [id: number]: Instance };
     onChangeOwnProps: (id: string) => void;
     id: string;
-};
+}
 
 interface InstancesCallbackProps {
-};
+}
 
 const mapStateToProps = (state: XCSpyState, ownProps): InstancesProps => {
     const id = (state.transitionProperties.active) ? state.transitionProperties.id : state.stateMachineProperties.id;

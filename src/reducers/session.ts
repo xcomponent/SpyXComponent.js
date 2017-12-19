@@ -4,7 +4,7 @@ import sessionXCSpy from "../utils/sessionXCSpy";
 
 export interface SessionState {
     initialized: boolean;
-};
+}
 
 const initialState: SessionState = {
     initialized: false

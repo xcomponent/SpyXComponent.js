@@ -9,7 +9,7 @@ export const INIT_COMPOSITION_MODEL = "INIT_COMPOSITION_MODEL";
 
 export interface GlobalCompositionModelAction extends Action {
     compositionModel: xcMessages.CompositionModel;
-};
+}
 
 export const initCompositionModelAction = (compositionModel): GlobalCompositionModelAction => {
     return {

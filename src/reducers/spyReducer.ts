@@ -16,7 +16,7 @@ export interface XCSpyState {
     sideBar: SideBarState;
     transitionProperties: TransitionPropertiesState;
     session: SessionState;
-};
+}
 
 export const SpyReducer = combineReducers({
     configForm: configFormReducer,

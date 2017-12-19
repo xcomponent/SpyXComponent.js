@@ -18,7 +18,7 @@ import { Link, withRouter } from "react-router-dom";
 import { routes } from "../utils/routes";
 
 interface SideBarGlobalProps extends SideBarProps, SideBarCallbackProps {
-};
+}
 
 interface SideBarProps {
     isVisible: boolean;
@@ -28,11 +28,11 @@ interface SideBarProps {
     projectName: string;
     serverUrl: string;
     api: string;
-};
+}
 
 interface SideBarCallbackProps {
     hideSideBar: () => void;
-};
+}
 
 const mapStateToProps = (state: XCSpyState, ownProps): SideBarProps => {
     const urlSearchParams = new URLSearchParams(ownProps.location.search);

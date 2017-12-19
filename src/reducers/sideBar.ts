@@ -3,7 +3,7 @@ import { SHOW_SIDE_BAR, HIDE_SIDE_BAR, GlobalSideBarAction } from "../actions";
 
 export interface SideBarState {
     isVisible: boolean;
-};
+}
 
 const initialState: SideBarState = {
     isVisible: true

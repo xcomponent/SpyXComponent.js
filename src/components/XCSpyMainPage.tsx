@@ -14,7 +14,7 @@ import { xcMessages } from "reactivexcomponent.js/lib/types";
 import { CompositionModelState } from "../reducers/compositionModel";
 
 interface XCSpyGlobalProps extends XCSpyProps, XCSpyCallbackProps {
-};
+}
 
 interface XCSpyProps {
   submitted: boolean;
@@ -22,13 +22,13 @@ interface XCSpyProps {
   serverUrl: string;
   serverUrlParams: string;
   compositionModel: CompositionModelState;
-};
+}
 
 interface XCSpyCallbackProps {
   setCompositionModel: (xcApiName: string, serverUrl: string) => void;
   initSession: (xcApiName: string, serverUrl: string, init: (xcApi: string, serverUrl: string) => Promise<any>) => void;
   onSetServerUrl: (serverUrl: string) => void;
-};
+}
 
 class XCSpyMainPage extends React.Component<XCSpyGlobalProps, XCSpyState> {
 

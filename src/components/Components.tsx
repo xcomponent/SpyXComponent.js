@@ -19,13 +19,13 @@ import { routes } from "../utils/routes";
 import { xcMessages } from "reactivexcomponent.js/lib/types";
 
 interface ComponentsGlobalProps extends ComponentsProps, ComponentsCallbackProps {
-};
+}
 
 interface ComponentsProps {
     currentComponent: string;
     diagram: go.Diagram;
     compositionModel: xcMessages.CompositionModel;
-};
+}
 
 interface ComponentsCallbackProps {
     initialization: (componentProperties: { [componentName: string]: ComponentProperties }, currentComponent: string, projectName: string) => void;
@@ -35,7 +35,7 @@ interface ComponentsCallbackProps {
     clearFinalStates: (component: string, stateMachines: string[]) => void;
     subscribeAllStateMachines: (component: string, stateMachines: string[]) => void;
     snapshotEntryPoint: (component: string, entryPoint: string) => void;
-};
+}
 
 const mapStateToProps = (state: XCSpyState, ownProps): ComponentsProps => {
     const urlSearchParams = new URLSearchParams(ownProps.location.search);

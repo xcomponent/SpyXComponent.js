@@ -23,7 +23,7 @@ import { injectIntl, InjectedIntl } from "react-intl";
 import * as CloseIcon from "grommet/components/icons/base/Close";
 
 interface StateMachinePropertiesGlobalProps extends StateMachinePropertiesProps, StateMachinePropertiesCallbackProps {
-};
+}
 
 interface StateMachinePropertiesProps {
     intl?: InjectedIntl;
@@ -35,14 +35,14 @@ interface StateMachinePropertiesProps {
     instances: { [id: number]: Instance };
     publicMember: string;
     stateMachineRef: xcMessages.StateMachineRef;
-};
+}
 
 interface StateMachinePropertiesCallbackProps {
     clearFinalStates: (component: string, stateMachine: string) => void;
     setStateMachineId: (id: string) => void;
     hideStateMachineProperties: () => void;
     snapshot: (currentComponent: string, stateMachine: string) => void;
-};
+}
 
 const mapStateToProps = (state: XCSpyState, ownProps): StateMachinePropertiesProps => {
     const urlSearchParams = new URLSearchParams(ownProps.location.search);

@@ -17,19 +17,19 @@ import sessionXCSpy from "../utils/sessionXCSpy";
 import { routes } from "../utils/routes";
 
 interface XCSpyAppGlobalProps extends XCSpyAppProps, XCSpyAppCallbackProps {
-};
+}
 
 interface XCSpyAppProps {
     initialized: boolean;
     api: string;
     serverUrl: string;
     currentComponent: string;
-};
+}
 
 interface XCSpyAppCallbackProps {
     setCompositionModel: (xcApiName: string, serverUrl: string) => void;
     initSession: (xcApiName: string, serverUrl: string, init: (xcApi: string, serverUrl: string) => Promise<any>) => void;
-};
+}
 
 class XCSpyApp extends React.Component<XCSpyAppGlobalProps, XCSpyState> {
     constructor(props: XCSpyAppGlobalProps) {

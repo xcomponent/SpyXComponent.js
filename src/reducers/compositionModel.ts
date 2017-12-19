@@ -6,7 +6,7 @@ import { xcMessages } from "reactivexcomponent.js/lib/types";
 export interface CompositionModelState {
     initialized: boolean;
     value: xcMessages.CompositionModel;
-};
+}
 
 const initialState = {
     initialized: false,
