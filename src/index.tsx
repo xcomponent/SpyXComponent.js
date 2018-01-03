@@ -9,7 +9,6 @@ import * as logger from "redux-logger";
 import thunk from "redux-thunk";
 import Components from "./components/Components";
 import { setCompositionModel } from "actions/compositionModel";
-import sessionXCSpy from "utils/sessionXCSpy";
 import { Dispatch } from "redux";
 import { Parser } from "utils/parser";
 import { subscribeAllStateMachines, snapshotEntryPoint } from "core";

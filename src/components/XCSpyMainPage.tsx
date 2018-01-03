@@ -3,14 +3,12 @@ import * as React from "react";
 import ConfigForm from "./ConfigForm";
 import Components from "./Components";
 import { setCompositionModel } from "../actions/compositionModel";
-import sessionXCSpy from "../utils/sessionXCSpy";
 import { Dispatch } from "redux";
 import { Parser } from "../utils/parser";
 import { BrowserRouter as Router, Route, Link, withRouter, Redirect } from "react-router-dom";
 import { routes } from "../utils/routes";
 import { XCSpyState } from "reducers/spyReducer";
 import { initSession, setServerUrl } from "../actions";
-import { xcMessages } from "reactivexcomponent.js/lib/types";
 import { CompositionModelState } from "../reducers/compositionModel";
 
 interface XCSpyGlobalProps extends XCSpyProps, XCSpyCallbackProps {
@@ -26,7 +24,7 @@ interface XCSpyProps {
 
 interface XCSpyCallbackProps {
   setCompositionModel: (xcApiName: string, serverUrl: string) => void;
-  initSession: (xcApiName: string, serverUrl: string, init: (xcApi: string, serverUrl: string) => Promise<any>) => void;
+  initSession: (xcApiName: string, serverUrl: string) => void;
   onSetServerUrl: (serverUrl: string) => void;
 }
 
@@ -45,7 +43,7 @@ class XCSpyMainPage extends React.Component<XCSpyGlobalProps, XCSpyState> {
       props.setCompositionModel(props.selectedApi, props.serverUrl);
     }
     if (props.compositionModel.initialized) {
-      props.initSession(props.selectedApi, props.serverUrl, sessionXCSpy.init);
+      props.initSession(props.selectedApi, props.serverUrl);
     }
   }
   render() {
@@ -80,8 +78,8 @@ const mapDispatchToProps = (dispatch: Dispatch<XCSpyState>): XCSpyCallbackProps 
     setCompositionModel: (xcApiName: string, serverUrl: string) => {
       dispatch(setCompositionModel(xcApiName, serverUrl));
     },
-    initSession: (xcApiName: string, serverUrl: string, init: (xcApi: string, serverUrl: string) => Promise<any>): void => {
-      dispatch(initSession(xcApiName, serverUrl, init));
+    initSession: (xcApiName: string, serverUrl: string): void => {
+      dispatch(initSession(xcApiName, serverUrl));
     },
     onSetServerUrl: (serverUrl: string) => {
       dispatch(setServerUrl(serverUrl));

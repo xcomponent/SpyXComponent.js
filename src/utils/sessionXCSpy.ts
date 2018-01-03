@@ -1,34 +1,58 @@
 import xcomponentapi from "reactivexcomponent.js";
-import { Session } from "reactivexcomponent.js";
+import { Session, LogLevel, CompositionModel } from "reactivexcomponent.js";
 
 export class SessionXCSpy {
-    private promiseCreateSession: Promise<Object> = null;
+    private promiseCreateSession: Promise<Session> = null;
 
     constructor() {
+        xcomponentapi.setLogLevel(LogLevel.ERROR);
     }
 
-    init(xcApiFileName: string, serverUrl: string): Promise<Object> {
-        const promiseCreateSession = new Promise((resolve, reject) => {
-            xcomponentapi.createSession(xcApiFileName, serverUrl, (error, session: Session) => {
-                xcomponentapi.setLogLevel(5);
-                if (error) {
+    public init(api: string, serverUrl: string): void {
+        this.promiseCreateSession = new Promise((resolve, reject) => {
+            xcomponentapi.connect(serverUrl).then(connection => {
+                connection.createSession(api).then(session => {
+                    resolve(session);
+                }).catch(error => {
+                    console.error(error);
                     reject(error);
-                    return;
-                }
-                resolve(session);
+                });
+            }).catch(error => {
+                console.error(error);
+                reject(error);
             });
         });
-        return promiseCreateSession;
     }
 
-    set PromiseCreateSession(promiseCreateSession) {
-        this.promiseCreateSession = promiseCreateSession;
+    public getXcApiList(serverUrl: string): Promise<string []> {
+        return new Promise((resolve, reject) => {
+            xcomponentapi.connect(serverUrl).then(connection => {
+                connection.getXcApiList().then(apiList => {
+                    resolve(apiList);
+                    connection.dispose();
+                });
+            }).catch(error => {
+                reject(error);
+            });
+        });
     }
 
-    get PromiseCreateSession(): Promise<any> {
+    public getCompositionModel(serverUrl: string, api: string): Promise<CompositionModel> {
+        return new Promise((resolve, reject) => {
+            xcomponentapi.connect(serverUrl).then(connection => {
+                connection.getCompositionModel(api).then(compositionModel => {
+                    resolve(compositionModel);
+                    connection.dispose();
+                });
+            }).catch(error => {
+                reject(error);
+            });
+        });
+    }
+
+    get PromiseCreateSession(): Promise<Session> {
         return this.promiseCreateSession;
     }
-
 }
 
 export default new SessionXCSpy();

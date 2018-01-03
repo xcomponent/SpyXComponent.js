@@ -19,6 +19,7 @@ import { Dispatch } from "redux";
 import { injectIntl, InjectedIntl } from "react-intl";
 import { routes } from "../utils/routes";
 import { withRouter } from "react-router-dom";
+import { Action } from "redux";
 
 interface ConfigFormGlobalProps extends ConfigFormProps, ConfigFormCallbackProps {
 }
@@ -45,7 +46,7 @@ const mapStateToProps = (state: XCSpyState, ownProps): ConfigFormProps => {
     };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<XCSpyState>, ownProps): ConfigFormCallbackProps => {
+const mapDispatchToProps = (dispatch: Dispatch<Action>, ownProps): ConfigFormCallbackProps => {
     return {
         onClickGetApiList: (serverUrl: string): void => {
             dispatch(getApiList(serverUrl));

@@ -1,5 +1,6 @@
-import xcomponentapi from "reactivexcomponent.js";
-import { Action } from "redux";
+import sessionXCSpy from "../utils/sessionXCSpy";
+import { Action, Dispatch } from "redux";
+import { XCSpyState } from "reducers/spyReducer";
 
 export const GET_API_LIST = "GET_API_LIST";
 export const SELECT_API = "SELECT_API";
@@ -22,7 +23,7 @@ export interface SetServerUrlAction extends Action {
 
 export const getApiList = (serverUrl: string) => {
     return (dispatch) => {
-        xcomponentapi.getXcApiList(serverUrl, (connection, apis) => {
+        sessionXCSpy.getXcApiList(serverUrl).then(apis => {
             dispatch({
                 type: GET_API_LIST,
                 serverUrl,

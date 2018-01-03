@@ -4,11 +4,11 @@ import { DrawComponent } from "../utils/drawComponent";
 import { modelTags } from "../utils/configurationParser";
 import { activeStateColor, stateColor } from "../utils/graphicColors";
 import { Reducer } from "redux";
-import { xcMessages } from "reactivexcomponent.js/lib/types";
+import { StateMachineRef } from "reactivexcomponent.js";
 
 export interface Instance {
     jsonMessage: any;
-    stateMachineRef: xcMessages.StateMachineRef;
+    stateMachineRef: StateMachineRef;
     isFinal: boolean;
 }
 

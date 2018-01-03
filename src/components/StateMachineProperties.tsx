@@ -8,7 +8,6 @@ import * as Form from "grommet/components/Form";
 import * as FormField from "grommet/components/FormField";
 import * as Button from "grommet/components/Button";
 import * as Footer from "grommet/components/Footer";
-import sessionXCSpy from "../utils/sessionXCSpy";
 import * as Select from "grommet/components/Select";
 import * as Box from "grommet/components/Box";
 import Instances from "./Instances";
@@ -18,7 +17,7 @@ import { snapshot } from "core";
 import { Instance } from "../reducers/components";
 import { withRouter } from "react-router-dom";
 import { routes } from "../utils/routes";
-import { xcMessages } from "reactivexcomponent.js/lib/types";
+import { StateMachineRef } from "reactivexcomponent.js";
 import { injectIntl, InjectedIntl } from "react-intl";
 import * as CloseIcon from "grommet/components/icons/base/Close";
 
@@ -34,7 +33,7 @@ interface StateMachinePropertiesProps {
     ids: string[];
     instances: { [id: number]: Instance };
     publicMember: string;
-    stateMachineRef: xcMessages.StateMachineRef;
+    stateMachineRef: StateMachineRef;
 }
 
 interface StateMachinePropertiesCallbackProps {

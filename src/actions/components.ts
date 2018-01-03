@@ -4,7 +4,7 @@ import { ThunkAction } from "redux-thunk";
 import { Dispatch } from "redux";
 import { XCSpyState } from "reducers/spyReducer";
 import { snapshotEntryPoint, subscribeAllStateMachines } from "../core";
-import { xcMessages } from "reactivexcomponent.js";
+import { StateMachineInstance } from "reactivexcomponent.js";
 
 export const INITIALIZATION = "INITIALIZATION";
 export const SET_CURRENT_COMPONENT = "SET_CURRENT_COMPONENT";
@@ -20,7 +20,7 @@ export interface InitializationAction extends Action {
 }
 
 export interface UpdateGraphicAction extends Action {
-    data: xcMessages.Packet;
+    data: StateMachineInstance;
     component: string;
     stateMachine: string;
 }
@@ -43,7 +43,7 @@ export const initialization = (componentProperties: { [componentName: string]: C
 };
 
 
-export const updateGraphic = (component: string, stateMachine: string, data: xcMessages.Packet): ThunkAction<void, XCSpyState, void> => {
+export const updateGraphic = (component: string, stateMachine: string, data: StateMachineInstance): ThunkAction<void, XCSpyState, void> => {
     return (dispatch: Dispatch<XCSpyState>, getState: () => XCSpyState): void => {
         dispatch({
             type: UPDATE_GRAPHIC,

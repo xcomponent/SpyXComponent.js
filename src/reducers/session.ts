@@ -13,7 +13,7 @@ const initialState: SessionState = {
 export const sessionReducer: Reducer<SessionState> = (state: SessionState = initialState, action: InitSessionAction): SessionState => {
     switch (action.type) {
         case INIT_SESSION:
-            sessionXCSpy.PromiseCreateSession = action.init(action.api, action.serverUrl);
+            sessionXCSpy.init(action.api, action.serverUrl);
             return {
                 ...state,
                 initialized: true
