@@ -68,7 +68,7 @@ export const showTransitionProperties = (component: string, stateMachine: string
                         messageType,
                         jsonMessageString,
                         id: firstId,
-                        privateTopic: (privateTopic) ? privateTopic : session.privateTopics.getdefaultPublisherTopic(),
+                        privateTopic: (privateTopic) ? privateTopic : session.privateTopics.getDefaultPublisherTopic(),
                         privateTopics: session.privateTopics.getSubscriberTopics()
                     });
                 } else {
