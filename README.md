@@ -1,5 +1,6 @@
 [![](http://slack.xcomponent.com/badge.svg)](http://slack.xcomponent.com/)
 [![Build Status](https://travis-ci.org/xcomponent/SpyXComponent.js.svg?branch=master)](https://travis-ci.org/xcomponent/SpyXComponent.js)
+[![TypeScript](https://badges.frapsoft.com/typescript/love/typescript.png?v=101)](https://github.com/ellerbrock/typescript-badges/)
 
 # SpyXComponent.js
 
@@ -8,14 +9,14 @@ SpyXComponent is web application made with TypeScript/ReactJS/Redux to monitor i
 ## Build from source
 Download the source code and execute the following commands:
 ``` 
-npm install
-npm start
+yarn install
+yarn start
 ```
 Then connect via the browser to localhost:8080 and don't forget to ignore certificate errors by connecting to https://localhost:443 if the address of thr websocket server is wss://localhost:443
 ## Run unit tests
 Execute the following command:
 ``` 
-npm test
+yarn test
 ```
 
 ## Contributing

@@ -8,7 +8,6 @@ import * as Form from "grommet/components/Form";
 import * as FormField from "grommet/components/FormField";
 import * as Button from "grommet/components/Button";
 import * as Footer from "grommet/components/Footer";
-import { SessionXCSpy } from "utils/sessionXCSpy";
 import { updateGraphic, setStateMachineId, hideTransitionProperties, setJsonMessageString, setCurrentId, setPrivateTopic, send, sendContext } from "../actions";
 import * as Select from "grommet/components/Select";
 import * as Box from "grommet/components/Box";
@@ -20,10 +19,10 @@ import { Dispatch } from "redux";
 import { Instance } from "../reducers/components";
 import { withRouter } from "react-router-dom";
 import { routes } from "../utils/routes";
-import { xcMessages } from "reactivexcomponent.js/lib/types";
 import * as HomeIcon from "grommet/components/icons/base/Home";
 import * as CloseIcon from "grommet/components/icons/base/Close";
 import { injectIntl, InjectedIntl } from "react-intl";
+import { StateMachineRef } from "reactivexcomponent.js";
 
 interface TransitionPropertiesGlobalProps extends TransitionPropertiesProps, TransitionPropertiesCallbackProps {
 }
@@ -38,7 +37,7 @@ interface TransitionPropertiesProps {
     active: boolean;
     stateMachine: string;
     currentComponent: string;
-    stateMachineRef: xcMessages.StateMachineRef;
+    stateMachineRef: StateMachineRef;
     instances: { [id: number]: Instance };
 }
 
@@ -48,7 +47,7 @@ interface TransitionPropertiesCallbackProps {
     setJsonMessageString: (jsonMessageString: string) => void;
     hideTransitionProperties: () => void;
     send: (component: string, stateMachine: string, messageType: string, jsonMessageString: string, privateTopic: string) => void;
-    sendContext: (stateMachineRef: xcMessages.StateMachineRef, messageType: string, jsonMessageString: string, privateTopic: string) => void;
+    sendContext: (stateMachineRef: StateMachineRef, messageType: string, jsonMessageString: string, privateTopic: string) => void;
 }
 
 
@@ -96,7 +95,7 @@ const mapDispatchToProps = (dispatch: Dispatch<XCSpyState>): TransitionPropertie
         send: (component: string, stateMachine: string, messageType: string, jsonMessageString: string, privateTopic: string): void => {
             dispatch(send(component, stateMachine, messageType, jsonMessageString, privateTopic));
         },
-        sendContext: (stateMachineRef: xcMessages.StateMachineRef, messageType: string, jsonMessageString: string, privateTopic: string): void => {
+        sendContext: (stateMachineRef: StateMachineRef, messageType: string, jsonMessageString: string, privateTopic: string): void => {
             dispatch(sendContext(stateMachineRef, messageType, jsonMessageString, privateTopic));
         }
     };

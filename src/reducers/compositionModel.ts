@@ -1,11 +1,11 @@
 import * as go from "../gojs/go";
 import { INIT_COMPOSITION_MODEL, GlobalCompositionModelAction } from "../actions";
 import { Reducer } from "redux";
-import { xcMessages } from "reactivexcomponent.js/lib/types";
+import { CompositionModel } from "reactivexcomponent.js";
 
 export interface CompositionModelState {
     initialized: boolean;
-    value: xcMessages.CompositionModel;
+    value: CompositionModel;
 }
 
 const initialState = {

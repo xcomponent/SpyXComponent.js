@@ -3,7 +3,7 @@ import { Dispatch } from "redux";
 import { XCSpyState } from "reducers/spyReducer";
 import sessionXCSpy, { SessionXCSpy } from "../utils/sessionXCSpy";
 import { ThunkAction } from "redux-thunk";
-import { xcMessages, Session } from "reactivexcomponent.js/lib/types";
+import { StateMachineRef, Session } from "reactivexcomponent.js";
 
 export const SHOW_TRANSITION_PROPERTIES = "SHOW_TRANSITION_PROPERTIES";
 export const HIDE_TRANSITION_PROPERTIES = "HIDE_TRANSITION_PROPERTIES";
@@ -48,7 +48,7 @@ export interface SendAction extends Action {
 }
 
 export interface SendContextAction extends Action {
-    stateMachineRef: xcMessages.StateMachineRef;
+    stateMachineRef: StateMachineRef;
     messageType: string;
     jsonMessageString: string;
     privateTopic: string;
@@ -58,7 +58,7 @@ export const showTransitionProperties = (component: string, stateMachine: string
     return (dispatch: Dispatch<XCSpyState>, getState: () => XCSpyState) => {
         sessionXCSpy.PromiseCreateSession
             .then((session: Session) => {
-                if (session.createPublisher().canPublish(component, stateMachine, messageType)) {
+                if (session.canSend(component, stateMachine, messageType)) {
                     const componentProperties = getState().components.componentProperties;
                     const firstId = Object.keys(componentProperties[component].stateMachineProperties[stateMachine])[0];
                     const privateTopic = getState().transitionProperties.defaultPrivateTopic;
@@ -68,8 +68,8 @@ export const showTransitionProperties = (component: string, stateMachine: string
                         messageType,
                         jsonMessageString,
                         id: firstId,
-                        privateTopic: (privateTopic) ? privateTopic : session.getDefaultPrivateTopic(),
-                        privateTopics: session.getPrivateTopics()
+                        privateTopic: (privateTopic) ? privateTopic : session.privateTopics.getdefaultPublisherTopic(),
+                        privateTopics: session.privateTopics.getSubscriberTopics()
                     });
                 } else {
                     alert(`API cannot send ${messageType} event to ${stateMachine}`);
@@ -116,7 +116,7 @@ export const send = (component: string, stateMachine: string, messageType: strin
     };
 };
 
-export const sendContext = (stateMachineRef: xcMessages.StateMachineRef, messageType: string, jsonMessageString: string, privateTopic: string): SendContextAction => {
+export const sendContext = (stateMachineRef: StateMachineRef, messageType: string, jsonMessageString: string, privateTopic: string): SendContextAction => {
     return {
         type: SEND_CONTEXT,
         stateMachineRef,

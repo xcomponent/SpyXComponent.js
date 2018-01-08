@@ -1,5 +1,4 @@
 import { HIDE_TRANSITION_PROPERTIES, SHOW_TRANSITION_PROPERTIES, SET_JSON_MESSAGE_STRING, SET_CURRENT_ID, SET_PRIVATE_TOPIC, SEND, SEND_CONTEXT, GlobalTransitionPropertiesAction, ShowTransitionPropertiesAction, HideTransitionPropertiesAction, SetJsonMessageStringAction, SetCurrentIdAction, SetPrivateTopicAction, SendAction, SendContextAction } from "../actions";
-import sessionXCSpy from "../utils/sessionXCSpy";
 import { Reducer } from "redux";
 import { send, sendContext } from "../core";
 

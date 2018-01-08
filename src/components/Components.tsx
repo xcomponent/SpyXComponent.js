@@ -16,7 +16,7 @@ import { ComponentProperties } from "../reducers/components";
 import * as Box from "grommet/components/Box";
 import { withRouter } from "react-router-dom";
 import { routes } from "../utils/routes";
-import { xcMessages } from "reactivexcomponent.js/lib/types";
+import { StateMachineInstance, CompositionModel } from "reactivexcomponent.js";
 
 interface ComponentsGlobalProps extends ComponentsProps, ComponentsCallbackProps {
 }
@@ -24,13 +24,13 @@ interface ComponentsGlobalProps extends ComponentsProps, ComponentsCallbackProps
 interface ComponentsProps {
     currentComponent: string;
     diagram: go.Diagram;
-    compositionModel: xcMessages.CompositionModel;
+    compositionModel: CompositionModel;
 }
 
 interface ComponentsCallbackProps {
     initialization: (componentProperties: { [componentName: string]: ComponentProperties }, currentComponent: string, projectName: string) => void;
     showStateMachineProperties: (component: string, stateMachine: string) => void;
-    updateGraphic: (component: string, stateMachine: string, data: xcMessages.Packet) => void;
+    updateGraphic: (component: string, stateMachine: string, data: StateMachineInstance) => void;
     showTransitionProperties: (component: string, stateMachine: string, messageType: string, jsonMessageString: string) => void;
     clearFinalStates: (component: string, stateMachines: string[]) => void;
     subscribeAllStateMachines: (component: string, stateMachines: string[]) => void;
@@ -57,7 +57,7 @@ const mapDispatchToProps = (dispatch: Dispatch<XCSpyState>): ComponentsCallbackP
         showStateMachineProperties: (component: string, stateMachine: string): void => {
             dispatch(showStateMachineProperties(component, stateMachine));
         },
-        updateGraphic: (component: string, stateMachine: string, data: xcMessages.Packet): void => {
+        updateGraphic: (component: string, stateMachine: string, data: StateMachineInstance): void => {
             dispatch(updateGraphic(component, stateMachine, data));
         },
         showTransitionProperties: (component: string, stateMachine: string, messageType: string, jsonMessageString: string): void => {
