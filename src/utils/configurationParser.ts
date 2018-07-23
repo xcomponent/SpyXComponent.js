@@ -18,6 +18,7 @@ export const modelTags: { [key: string]: string } = {
     FromKey: "FromKey",
     ToKey: "ToKey",
     TransversalTransitionData: "TransversalTransitionData",
+    Type: "Type",
     // state
     IsEntryPoint: "IsEntryPoint",
     State: "State",
