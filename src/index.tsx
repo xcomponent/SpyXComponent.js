@@ -28,7 +28,7 @@ import { getLocalizedResources } from "./locales/localeConfiguration";
 import { ComponentClass } from "react";
 import registerServiceWorker from "./registerServiceWorker";
 
-const middleware = applyMiddleware(thunk, logger());
+const middleware = applyMiddleware(thunk, logger.createLogger());
 const store = createStore(RootReducer, middleware);
 const locale = "en";
 
