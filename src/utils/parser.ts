@@ -1,7 +1,7 @@
 import { graphicalTags, modelTags, fatalErrorState } from "./configurationParser";
 import { LinkLabelTemplate, TransitionTemplate, TriggerableTransitionTemplate, StateMachineTemplate, StateTemplate, LinkDataArrayTemplate, NodeDataArrayTemplate } from "./gojsTemplates";
 import { Point, Curve, StateMachine, State, ComponentGraphicalModel } from "./parserObjects";
-import { finalStateColor, stateColor, transitionPatternStateColor, entryPointStateColor, fatalErrorStateColor, transitionColor, forkTransitionColor } from "./graphicColors";
+import { finalStateColor, stateColor, transitionPatternStateColor, entryPointStateColor, fatalErrorStateColor, transitionColor, forkTransitionColor, TimeoutTransitionColor } from "./graphicColors";
 
 export class Parser {
     private locations: { [key: string]: Point };
@@ -20,13 +20,17 @@ export class Parser {
     private stateMachineNames: Array<string>;
     private linkDataArray: Array<LinkDataArrayTemplate>;
     private nodeDataArray: Array<NodeDataArrayTemplate>;
+    private graphical: boolean;
 
     constructor(componentGraphicalModel: ComponentGraphicalModel) {
         this.componentGraphicalModel = componentGraphicalModel;
     }
 
     parse() {
-        this.parseGraphical();
+        this.graphical = this.componentGraphicalModel.graphical !== undefined;
+        if (this.graphical) {
+            this.parseGraphical();
+        }
         this.parseModel();
     }
 
@@ -72,7 +76,9 @@ export class Parser {
         this.entryPointState = this.getEntyPointState();
         this.nodeDataArray = this.setNodeDataArray();
         this.nodeDataArray = this.nodeDataArray.concat(this.linksLabel);
-        this.addControlPoint();
+        if (this.graphical) {
+            this.addControlPoint();
+        }
     }
 
     private setComponentName(scxmlDom: Document): void {
@@ -118,13 +124,13 @@ export class Parser {
             let loc, color, text;
             if (!this.states[ids[j]]) {
                 id = ids[j].substring(modelTags.TP_State.length, ids[j].length);
-                loc = this.locations[id].x + " " + this.locations[id].y;
+                loc = (this.locations && this.locations[id]) ? this.locations[id].x + " " + this.locations[id].y : undefined;
                 color = transitionPatternStateColor;
                 state = this.transitionPatternStates[ids[j]];
                 text = state.name;
             } else {
                 id = ids[j].substring(modelTags.State.length, ids[j].length);
-                loc = this.locations[id].x + " " + this.locations[id].y;
+                loc = (this.locations && this.locations[id]) ? this.locations[id].x + " " + this.locations[id].y : undefined;
                 text = state.name + " (0)";
                 if (state.isFinal) {
                     color = finalStateColor;
@@ -236,8 +242,14 @@ export class Parser {
             to = this.states[linksDom[i].getAttribute(modelTags.ToKey)];
             text = linksDom[i].getAttribute(modelTags.Name);
             key = linksDom[i].getAttribute(modelTags.Id);
-            const isForkTransition = from.group === to.key.split(modelTags.Separator)[0];
-            const color = (isForkTransition) ? transitionColor : forkTransitionColor;
+            const isForkTransition = from.group !== to.key.split(modelTags.Separator)[0];
+            let color = transitionColor;
+            if (isForkTransition) {
+                color = forkTransitionColor;
+            } else if (linksDom[i].getAttribute(modelTags.Type) === "TimeOut") {
+                color = TimeoutTransitionColor;
+            }
+
             this.linkDataArray.push({
                 "key": key,
                 "from": from.key,
