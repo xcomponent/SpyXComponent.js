@@ -12,7 +12,6 @@ import { XCSpyState } from "../reducers/spyReducer";
 import { Dispatch } from "redux";
 import { setCompositionModel, initSession } from "../actions";
 import { withRouter, Redirect } from "react-router-dom";
-import { } from "types/react-router-dom";
 import { routes } from "../utils/routes";
 
 interface XCSpyAppGlobalProps extends XCSpyAppProps, XCSpyAppCallbackProps {
@@ -72,15 +71,16 @@ class XCSpyApp extends React.Component<XCSpyAppGlobalProps, XCSpyState> {
 }
 
 const mapStateToProps = (state: XCSpyState, ownProps): XCSpyAppProps => {
-    const urlSearchParams = new URLSearchParams(ownProps.location.search);
-    const currentComponent = urlSearchParams.get(routes.params.currentComponent);
-    const serverUrl = urlSearchParams.get(routes.params.serverUrl);
-    const api = urlSearchParams.get(routes.params.api);
+    const values = {};
+    ownProps.location.search.replace("?", "").split("&").forEach(element => {
+       const s = element.split("=");
+       values[s[0]] = s[1];
+    });
     return {
         initialized: state.compositionModel.initialized,
-        api,
-        serverUrl,
-        currentComponent
+        api: values[routes.params.api],
+        serverUrl: values[routes.params.serverUrl],
+        currentComponent: values[routes.params.currentComponent]
     };
 };
 
