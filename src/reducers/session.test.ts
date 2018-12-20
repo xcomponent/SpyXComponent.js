@@ -18,6 +18,7 @@ describe("Test session reducer", () => {
         const stateAfter = {
             initialized: true
         };
+        (window as any).WebSocket = Object;
         expect(
             sessionReducer(stateBefore, action)
         ).toEqual(stateAfter);
