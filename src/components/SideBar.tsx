@@ -16,6 +16,7 @@ import { XCSpyState } from "../reducers/spyReducer";
 import { Dispatch } from "redux";
 import { Link, withRouter } from "react-router-dom";
 import { routes } from "../utils/routes";
+import { Action } from "redux";
 
 interface SideBarGlobalProps extends SideBarProps, SideBarCallbackProps {
 }
@@ -50,7 +51,7 @@ const mapStateToProps = (state: XCSpyState, ownProps): SideBarProps => {
     };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<XCSpyState>): SideBarCallbackProps => {
+const mapDispatchToProps = (dispatch: Dispatch<Action>): SideBarCallbackProps => {
     return {
         hideSideBar: () => {
             dispatch(hideSideBar());
