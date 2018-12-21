@@ -10,7 +10,7 @@ import * as go from "../gojs/go";
 import * as Title from "grommet/components/Title";
 import * as Button from "grommet/components/Button";
 import { backgroundColor } from "../utils/graphicColors";
-import { Dispatch } from "redux";
+import { Dispatch, Action } from "redux";
 import { XCSpyState } from "../reducers/spyReducer";
 import { ComponentProperties } from "../reducers/components";
 import * as Box from "grommet/components/Box";
@@ -49,7 +49,7 @@ const mapStateToProps = (state: XCSpyState, ownProps): ComponentsProps => {
     };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<XCSpyState>): ComponentsCallbackProps => {
+const mapDispatchToProps = (dispatch): ComponentsCallbackProps => {
     return {
         initialization: (componentProperties: { [componentName: string]: ComponentProperties }, currentComponent: string, projectName: string): void => {
             dispatch(initialization(componentProperties, currentComponent, projectName));

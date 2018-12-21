@@ -11,7 +11,7 @@ import { connect } from "react-redux";
 import { showSideBar, hideSideBar } from "../actions/sideBar";
 import { updateGraphic, clearFinalStates, setAutoClear, snapshotAllAction, logout } from "../actions";
 import { XCSpyState } from "../reducers/spyReducer";
-import { Dispatch } from "redux";
+import { Dispatch, Action } from "redux";
 import { snapshotAll } from "core";
 import { BrowserRouter as Router, Route, Link, withRouter, Redirect } from "react-router-dom";
 import { routes } from "../utils/routes";
@@ -57,7 +57,7 @@ const mapStateToProps = (state: XCSpyState, ownProps): AppHeaderProps => {
     };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<XCSpyState>, ownProps): AppHeaderCallbackProps => {
+const mapDispatchToProps = (dispatch, ownProps): AppHeaderCallbackProps => {
     return {
         returnHome: (): void => {
             dispatch(logout());

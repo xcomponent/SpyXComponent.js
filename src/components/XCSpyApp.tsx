@@ -13,6 +13,7 @@ import { Dispatch } from "redux";
 import { setCompositionModel, initSession } from "../actions";
 import { withRouter, Redirect } from "react-router-dom";
 import { routes } from "../utils/routes";
+import { Action } from "redux";
 
 interface XCSpyAppGlobalProps extends XCSpyAppProps, XCSpyAppCallbackProps {
 }
@@ -84,7 +85,7 @@ const mapStateToProps = (state: XCSpyState, ownProps): XCSpyAppProps => {
     };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<XCSpyState>): XCSpyAppCallbackProps => {
+const mapDispatchToProps = (dispatch): XCSpyAppCallbackProps => {
     return {
         setCompositionModel: (xcApiName: string, serverUrl: string): void => {
             dispatch(setCompositionModel(xcApiName, serverUrl));
