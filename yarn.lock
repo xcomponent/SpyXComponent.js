@@ -1845,11 +1845,7 @@ concat-map@0.0.1:
 
 concat-stream@^1.5.0:
   version "1.6.2"
-<<<<<<< HEAD
-  resolved "https://registry.yarnpkg.com/concat-stream/-/concat-stream-1.6.2.tgz#904bdf194cd3122fc675c77fc4ac3d4ff0fd1a34"
-=======
   resolved "http://registry.npmjs.org/concat-stream/-/concat-stream-1.6.2.tgz#904bdf194cd3122fc675c77fc4ac3d4ff0fd1a34"
->>>>>>> 9dc8859db6483e3268d8ced3891ec928122b6c41
   dependencies:
     buffer-from "^1.0.0"
     inherits "^2.0.3"
@@ -4690,11 +4686,7 @@ js-tokens@^3.0.0, js-tokens@^3.0.2:
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/js-tokens/-/js-tokens-3.0.2.tgz#9866df395102130e38f7f996bceb65443209c25b"
 
-<<<<<<< HEAD
-js-tokens@^4.0.0:
-=======
 "js-tokens@^3.0.0 || ^4.0.0", js-tokens@^4.0.0:
->>>>>>> 9dc8859db6483e3268d8ced3891ec928122b6c41
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/js-tokens/-/js-tokens-4.0.0.tgz#19203fb59991df98e3a287050d4647cdeaf32499"
 
@@ -8183,6 +8175,10 @@ typedarray-to-buffer@^3.1.5:
 typedarray@^0.0.6:
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
+
+typescript@^3.2.2:
+  version "3.2.2"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.2.2.tgz#fe8101c46aa123f8353523ebdcf5730c2ae493e5"
 
 ua-parser-js@^0.7.9:
   version "0.7.14"

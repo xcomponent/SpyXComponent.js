@@ -38,6 +38,7 @@
     "jasmine-reporters": "^2.2.0",
     "node-sass": "^4.7.2",
     "react-scripts-ts": "^3.0.0",
-    "tslint": "^5.0.0"
+    "tslint": "^5.0.0",
+    "typescript": "^3.2.2"
   }
 }
