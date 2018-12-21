@@ -2,7 +2,6 @@ import { Action } from "redux";
 import { Dispatch } from "redux";
 import { XCSpyState } from "reducers/spyReducer";
 import sessionXCSpy, { SessionXCSpy } from "../utils/sessionXCSpy";
-import { ThunkAction } from "redux-thunk";
 import { StateMachineRef, Session } from "reactivexcomponent.js";
 
 export const SHOW_TRANSITION_PROPERTIES = "SHOW_TRANSITION_PROPERTIES";
@@ -54,8 +53,8 @@ export interface SendContextAction extends Action {
     privateTopic: string;
 }
 
-export const showTransitionProperties = (component: string, stateMachine: string, messageType: string, jsonMessageString: string): ThunkAction<void, XCSpyState, void> => {
-    return (dispatch: Dispatch<XCSpyState>, getState: () => XCSpyState) => {
+export const showTransitionProperties = (component: string, stateMachine: string, messageType: string, jsonMessageString: string): (dispatch: Dispatch<Action<any>>, getState: () => XCSpyState) => void => {
+    return (dispatch: Dispatch<Action>, getState: () => XCSpyState) => {
         sessionXCSpy.PromiseCreateSession
             .then((session: Session) => {
                 if (session.canSend(component, stateMachine, messageType)) {

@@ -46,7 +46,7 @@ const mapStateToProps = (state: XCSpyState, ownProps): ConfigFormProps => {
     };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<Action>, ownProps): ConfigFormCallbackProps => {
+const mapDispatchToProps = (dispatch, ownProps): ConfigFormCallbackProps => {
     return {
         onClickGetApiList: (serverUrl: string): void => {
             dispatch(getApiList(serverUrl));

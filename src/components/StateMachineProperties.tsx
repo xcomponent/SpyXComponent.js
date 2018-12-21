@@ -20,6 +20,7 @@ import { routes } from "../utils/routes";
 import { StateMachineRef } from "reactivexcomponent.js";
 import { injectIntl, InjectedIntl } from "react-intl";
 import * as CloseIcon from "grommet/components/icons/base/Close";
+import { Action } from "redux";
 
 interface StateMachinePropertiesGlobalProps extends StateMachinePropertiesProps, StateMachinePropertiesCallbackProps {
 }
@@ -66,7 +67,7 @@ const mapStateToProps = (state: XCSpyState, ownProps): StateMachinePropertiesPro
     };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<XCSpyState>): StateMachinePropertiesCallbackProps => {
+const mapDispatchToProps = (dispatch): StateMachinePropertiesCallbackProps => {
     return {
         clearFinalStates: (component: string, stateMachine: string): void => {
             dispatch(clearFinalStates(component, stateMachine));

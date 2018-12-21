@@ -1,16 +1,16 @@
 import sessionXCSpy, { SessionXCSpy } from "./utils/sessionXCSpy";
-import { Dispatch } from "redux";
+import { Dispatch, Action } from "redux";
 import { updateGraphic, INIT_COMPOSITION_MODEL, initCompositionModelAction } from "./actions";
 import { XCSpyState } from "reducers/spyReducer";
 import xcomponentapi, { Session, Connection, StateMachineRef, CompositionModel } from "reactivexcomponent.js";
 
-export const getCompositionModel = (dispatch: Dispatch<XCSpyState>, api: string, serverUrl: string): void => {
+export const getCompositionModel = (dispatch: Dispatch<Action>, api: string, serverUrl: string): void => {
     sessionXCSpy.getCompositionModel(serverUrl, api).then(compositionModel => {
         dispatch(initCompositionModelAction(compositionModel));
     });
 };
 
-export const subscribeAllStateMachines = (dispatch: Dispatch<XCSpyState>, component: string, stateMachines: string[]): void => {
+export const subscribeAllStateMachines = (dispatch, component: string, stateMachines: string[]): void => {
     sessionXCSpy.PromiseCreateSession
         .then((session: Session) => {
             for (let j = 0; j < stateMachines.length; j++) {
@@ -25,11 +25,11 @@ export const subscribeAllStateMachines = (dispatch: Dispatch<XCSpyState>, compon
         });
 };
 
-export const snapshotEntryPoint = (dispatch: Dispatch<XCSpyState>, component: string, entryPoint: string): void => {
+export const snapshotEntryPoint = (dispatch: Dispatch<Action>, component: string, entryPoint: string): void => {
     snapshot(dispatch, component, entryPoint);
 };
 
-export const snapshot = (dispatch: Dispatch<XCSpyState>, component: string, stateMachine: string): void => {
+export const snapshot = (dispatch, component: string, stateMachine: string): void => {
     sessionXCSpy.PromiseCreateSession
         .then((session: Session) => {
             session.getSnapshot(component, stateMachine).then(snapshot => {
@@ -40,7 +40,7 @@ export const snapshot = (dispatch: Dispatch<XCSpyState>, component: string, stat
         });
 };
 
-export const snapshotAll = (dispatch: Dispatch<XCSpyState>, component: string, stateMachines: string[]): void => {
+export const snapshotAll = (dispatch: Dispatch<Action>, component: string, stateMachines: string[]): void => {
     stateMachines.forEach(stateMachine => {
         snapshot(dispatch, component, stateMachine);
     });

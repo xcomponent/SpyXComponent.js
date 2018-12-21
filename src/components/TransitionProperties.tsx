@@ -23,6 +23,7 @@ import * as HomeIcon from "grommet/components/icons/base/Home";
 import * as CloseIcon from "grommet/components/icons/base/Close";
 import { injectIntl, InjectedIntl } from "react-intl";
 import { StateMachineRef } from "reactivexcomponent.js";
+import { Action } from "redux";
 
 interface TransitionPropertiesGlobalProps extends TransitionPropertiesProps, TransitionPropertiesCallbackProps {
 }
@@ -78,7 +79,7 @@ const mapStateToProps = (state: XCSpyState, ownProps): TransitionPropertiesProps
     };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<XCSpyState>): TransitionPropertiesCallbackProps => {
+const mapDispatchToProps = (dispatch: Dispatch<Action>): TransitionPropertiesCallbackProps => {
     return {
         setPrivateTopic: (privateSend: string): void => {
             dispatch(setPrivateTopic(privateSend));

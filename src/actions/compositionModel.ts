@@ -1,6 +1,5 @@
 import xcomponentapi from "reactivexcomponent.js";
 import { Action } from "redux";
-import { ThunkAction } from "redux-thunk";
 import { getCompositionModel } from "../core";
 import { Dispatch } from "redux";
 import { XCSpyState } from "reducers/spyReducer";
@@ -19,8 +18,8 @@ export const initCompositionModelAction = (compositionModel): GlobalCompositionM
     };
 };
 
-export const setCompositionModel = (xcApiName: string, serverUrl: string): ThunkAction<void, void, void> => {
-    return (dispatch: Dispatch<XCSpyState>): void => {
+export const setCompositionModel = (xcApiName: string, serverUrl: string): (dispatch: Dispatch<Action<any>>) => void => {
+    return (dispatch: Dispatch<Action>): void => {
         getCompositionModel(dispatch, xcApiName, serverUrl);
     };
 };

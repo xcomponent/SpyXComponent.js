@@ -3,7 +3,7 @@ import * as React from "react";
 import ConfigForm from "./ConfigForm";
 import Components from "./Components";
 import { setCompositionModel } from "../actions/compositionModel";
-import { Dispatch } from "redux";
+import { Dispatch, Action } from "redux";
 import { Parser } from "../utils/parser";
 import { BrowserRouter as Router, Route, Link, withRouter, Redirect } from "react-router-dom";
 import { routes } from "../utils/routes";
@@ -73,7 +73,7 @@ const mapStateToProps = (state: XCSpyState, ownProps): XCSpyProps => {
   };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<XCSpyState>): XCSpyCallbackProps => {
+const mapDispatchToProps = (dispatch): XCSpyCallbackProps => {
   return {
     setCompositionModel: (xcApiName: string, serverUrl: string) => {
       dispatch(setCompositionModel(xcApiName, serverUrl));

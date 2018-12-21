@@ -1,6 +1,5 @@
 import { Action } from "redux";
 import { ComponentProperties } from "reducers/components";
-import { ThunkAction } from "redux-thunk";
 import { Dispatch } from "redux";
 import { XCSpyState } from "reducers/spyReducer";
 import { snapshotEntryPoint, subscribeAllStateMachines } from "../core";
@@ -43,8 +42,8 @@ export const initialization = (componentProperties: { [componentName: string]: C
 };
 
 
-export const updateGraphic = (component: string, stateMachine: string, data: StateMachineInstance): ThunkAction<void, XCSpyState, void> => {
-    return (dispatch: Dispatch<XCSpyState>, getState: () => XCSpyState): void => {
+export const updateGraphic = (component: string, stateMachine: string, data: StateMachineInstance): (dispatch: Dispatch<Action<any>>, getState: () => XCSpyState) => void => {
+    return (dispatch: Dispatch<Action>, getState: () => XCSpyState): void => {
         dispatch({
             type: UPDATE_GRAPHIC,
             component,
@@ -72,14 +71,14 @@ export const setAutoClear = (autoClear: boolean): SetAutoClearAction => {
     };
 };
 
-export const subscribeAllStateMachinesAction = (component: string, stateMachines: string[]): ThunkAction<void, XCSpyState, void> => {
-    return (dispatch: Dispatch<XCSpyState>): void => {
+export const subscribeAllStateMachinesAction = (component: string, stateMachines: string[]): (dispatch: Dispatch<Action>) => void => {
+    return (dispatch: Dispatch<Action>): void => {
         subscribeAllStateMachines(dispatch, component, stateMachines);
     };
 };
 
-export const snapshotEntryPointAction = (component: string, entryPoint: string): ThunkAction<void, XCSpyState, void> => {
-    return (dispatch: Dispatch<XCSpyState>): void => {
+export const snapshotEntryPointAction = (component: string, entryPoint: string): (dispatch: Dispatch<Action>) => void => {
+    return (dispatch: Dispatch<Action>): void => {
         snapshotEntryPoint(dispatch, component, entryPoint);
     };
 };
