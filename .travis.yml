@@ -1,35 +1,25 @@
 language: node_js
 node_js:
-- '8'
+  - "10"
 sudo: false
-branches:
-  only:
-  - master
 os:
-- linux
+  - linux
+cache:
+  directories:
+    - node_modules
 install:
-- yarn install
-- yarn build
+  - yarn install
 script:
-- yarn test --silent
+  - yarn build
+  - yarn test --silent
 deploy:
   - provider: npm
     email: dev@xcomponent.com
     skip_cleanup: true
-    api_key:
-      secure: dajqLCZzFOAf3QZ2ZLF5ontjaduVzFJN2SjP0SK+aGiIHq7G+kWg1shj6stAzh17xUMl7K1L8xn16zKMT3zM9KTt30KpByoUJwVKEuvHdEaY5y3n8PtRx9YUoNotOscu1p1gx4raEfJY8gtfeyA0RS/n1oQPE3YPW9J/Vx9UOJkXdynEECmP7Onzsz1/GS4SfZCS/gt58dOp9hcIpOiSqs9H5fh8R0SvMHa1cfh6JAYt46pJZZClXvrpzMeZ/Hg2p4dWmoVREe5E3MtRw+JQfS5kFbi9JYH8NTNiAwOPiaknUlidXLaLvLzlOQOy0f8u5R8m9IZApRxDLcHTGMVYsPsxscL0fEwT8G2/r6EZqVQDtDxAoZZQg7+/nuvejSVtcnU8P6lU+T44ljGn6dkHZcrnNOY9co8Lk2wYJd6pI60DgMICDzMk937s7eSmOADM1RMjQ59D8EfNDj4+Xd8fFy4hbTeNZMttsCQ1ViqD4cKWsJ257zoimllSNBVnTg3tgmZLJzlyYCAZ6dAw/+7kwgT40qUhjmwkFyWHyOiAyDGQu9faL4U+6JprtZZuuUlOb7wRaRFSGorsSIhX1hdc1LRClWsV/IXV7ppvg75CWZSF1QA/SGZYn/LTYZ+zyawUFcf+yA53FI5dX9hSoYv4FPLrDMW4jOQaXOh3q6XbMj0=
     on:
-      branch: master
-      condition: "`./checkTag.sh` = RELEASE"
-  - provider: npm
-    email: dev@xcomponent.com
-    skip_cleanup: true
-    tag: next
+      tags: true
     api_key:
-      secure: dajqLCZzFOAf3QZ2ZLF5ontjaduVzFJN2SjP0SK+aGiIHq7G+kWg1shj6stAzh17xUMl7K1L8xn16zKMT3zM9KTt30KpByoUJwVKEuvHdEaY5y3n8PtRx9YUoNotOscu1p1gx4raEfJY8gtfeyA0RS/n1oQPE3YPW9J/Vx9UOJkXdynEECmP7Onzsz1/GS4SfZCS/gt58dOp9hcIpOiSqs9H5fh8R0SvMHa1cfh6JAYt46pJZZClXvrpzMeZ/Hg2p4dWmoVREe5E3MtRw+JQfS5kFbi9JYH8NTNiAwOPiaknUlidXLaLvLzlOQOy0f8u5R8m9IZApRxDLcHTGMVYsPsxscL0fEwT8G2/r6EZqVQDtDxAoZZQg7+/nuvejSVtcnU8P6lU+T44ljGn6dkHZcrnNOY9co8Lk2wYJd6pI60DgMICDzMk937s7eSmOADM1RMjQ59D8EfNDj4+Xd8fFy4hbTeNZMttsCQ1ViqD4cKWsJ257zoimllSNBVnTg3tgmZLJzlyYCAZ6dAw/+7kwgT40qUhjmwkFyWHyOiAyDGQu9faL4U+6JprtZZuuUlOb7wRaRFSGorsSIhX1hdc1LRClWsV/IXV7ppvg75CWZSF1QA/SGZYn/LTYZ+zyawUFcf+yA53FI5dX9hSoYv4FPLrDMW4jOQaXOh3q6XbMj0=
-    on:
-      branch: master
-      condition: "`./checkTag.sh` = BETA"
+      secure: iv48Xnhe4LtFONBvkwvlcP3Z8MD/NcY6hvzbHJkfi3KaJC5g5kkXKZ3lNhVnTzheMwEPWd11NGHi4vv6oetDObV0GCXItuC8xrC/grN+uKyKHnxK+tvaLQ7vqvtu+ZqO83Fy+KR27DN0F64j7pZ8RZeYmr7g70tucNw4JSJMnAO9GhgmuFxIDtGpkqAk8z0v9Ljh+8Z+6ONS4k5iWsB4COhj9QaicCiewYh/iYCEHVRbpBUAsz2Dye2nIFnBXpNUFkGcaDeCLRzjnAbtGBWSUymhwcMjUprbDu6vXGn8xsJ/n3YnlaFsnxw6MXyo+btuMBwRIkKymQIzqfyL5bLTpIchORmjwcI8q9CFdc2wDrqw3JoXX63vAWsd+B0OuRWuMOdk7Xg1SZ4l4vFzXou4pPeAVBdzcQY92Qfyt8sLdcQliA+L+aaaTBxHa/u+cUmvjLh+Fic1ptrko3XAXieZ8Fkte7u7U+ECiyUwr1zfjiT3qeBF0xfJC2mQlSWFH5vILQ9IMZwnpzdEBxhE6vt7mrFFLI6dfpzqukjjHwaiUF0/mcwTxSmiGkwHMCasYAWNdse0aWsXr4vJWoTCROnILnD/U5JUoWpw4OSrKB9PjLjaF/txq+TvQubSdiDgUbj0UFHdk7Eth5iniE8h6EAHfh4fZNqCaeNbv/oLvAhGJJo=
 notifications:
   slack:
     secure: WL4G9ndyWEvkZl5njQF8gReRsbczVPEFI0KjNv4Z51iKoOb2M+VHsO75TRf1luBbG9c8971aV15uLIyMzzheOVtMCkeezarnu/YjdOizSBO4AtQooAar2rmcVD6yVuSESDuxv+faI7Y/NM6ORMnd3eul96yJNyS9mtsYblr898ZwN1eFJrYeYFWiObZWHKZjSx6CCRewqwNlHwfR8sG+gn+0XjvN7h4YK5re978fRVp6lWZ9E9PFy0NXuPUB1YrlQBrBqRAqj6gV28AUbAbTFYrQwmf4ygLgCUgxoW4JHfHqJvTVXYtcGXa/WtrwtApvpMKGE2WAmNl5jvRaBtMxfJH4zR/6UoNO9N8oNlqic2YpT4XdpYjOM2ne2IuE1ES/auKfkk/jU9XLQ82ORl3CeSpGFEfi8jQdp1MljmmU3eq42XWbN2mba+D4VJ/yVBKa1KmQNDkRDAdN01FJawQF1GDv+lQiEaBRjUifATe+9jl/iggWZecHvbz6fzVuETwlxgn68+UqhIdmC0ggOvuSjelKa0RJ8+b+JubJnWZfLK21ZHhOunaAGRv4FBTBLmjOlL4kSS+K2L1Bq6y19R7EC9ubPv6owK37Z2Q5qMWkHyqZ+iep3dPnRhgjKnJ8tfxAkknbpczJwKnyziJ5MzJT5FqPdjSp8SfI8B4zB0tbfBY=
