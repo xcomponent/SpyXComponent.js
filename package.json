@@ -36,7 +36,7 @@
   },
   "devDependencies": {
     "jasmine-reporters": "^2.2.0",
-    "node-sass": "^4.11.0",
+    "node-sass": "^5.0.0",
     "react-scripts-ts": "^2.8.0",
     "tslint": "^5.0.0"
   }
