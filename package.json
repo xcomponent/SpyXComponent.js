@@ -35,7 +35,7 @@
     "redux-thunk": "^2.3.0"
   },
   "devDependencies": {
-    "jasmine-reporters": "2.2.1",
+    "jasmine-reporters": "2.4.0",
     "node-sass": "^4.11.0",
     "react-scripts-ts": "2.8.0",
     "tslint": "5.9.1"
